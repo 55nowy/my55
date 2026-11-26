@@ -1,0 +1,2468 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="crimson-55" style="--text-scale: 1; --prose-line-height: 1.75; --prose-letter-spacing: 0em;"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>my55.pl — Kolektyw Miłośników 55</title>
+    <link rel="icon" type="image/png" href="my55.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        void: 'var(--bg-void)',
+                        obsidian: 'var(--bg-obsidian)',
+                        panel: 'var(--bg-panel)',
+                        ink: 'var(--text-ink)',
+                        muted: 'var(--text-muted)',
+                        crimson: {
+                            DEFAULT: 'var(--accent)',
+                            bright: 'var(--accent-bright)',
+                            muted: 'var(--accent-muted)',
+                            dark: 'var(--accent-dark)',
+                            border: 'var(--border-subtle)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                        mono: ['Space Mono', 'monospace']
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        /* Domyślny motyw: Czarny-Czerwony 55 */
+        :root {
+            --bg-void: #050505;
+            --bg-obsidian: #0c0c0e;
+            --bg-panel: #141417;
+            --text-ink: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --accent: #ef4444;
+            --accent-bright: #ffffff;
+            --accent-muted: #b91c1c;
+            --accent-dark: rgba(220, 38, 38, 0.16);
+            --border-subtle: rgba(239, 68, 68, 0.28);
+            --border-strong: rgba(239, 68, 68, 0.72);
+            --grid-line: rgba(239, 68, 68, 0.08);
+            --text-scale: 1;
+            --prose-line-height: 1.75;
+            --prose-letter-spacing: 0em;
+        }
+
+        /* Motyw 2: Kontrastowy Ciemny (wysoki kontrast biel / czerń / czerwień) */
+        html[data-theme="high-contrast-dark"] {
+            --bg-void: #000000;
+            --bg-obsidian: #070707;
+            --bg-panel: #111111;
+            --text-ink: #ffffff;
+            --text-muted: #e4e4e7;
+            --accent: #ff2a2a;
+            --accent-bright: #ffffff;
+            --accent-muted: #ff6b6b;
+            --accent-dark: rgba(255, 42, 42, 0.22);
+            --border-subtle: rgba(255, 255, 255, 0.34);
+            --border-strong: #ff2a2a;
+            --grid-line: rgba(255, 255, 255, 0.06);
+        }
+
+        /* Motyw 3: Jasny Czytelny (czysty biały/jasnoszary z głęboką czerwienią i czernią) */
+        html[data-theme="light-readable"] {
+            --bg-void: #f8f7f7;
+            --bg-obsidian: #ffffff;
+            --bg-panel: #f1efef;
+            --text-ink: #111113;
+            --text-muted: #52525b;
+            --accent: #c81e1e;
+            --accent-bright: #09090b;
+            --accent-muted: #991b1b;
+            --accent-dark: rgba(200, 30, 30, 0.1);
+            --border-subtle: rgba(24, 24, 27, 0.16);
+            --border-strong: #c81e1e;
+            --grid-line: rgba(200, 30, 30, 0.06);
+        }
+
+        html {
+            font-size: calc(16px * var(--text-scale));
+        }
+
+        body {
+            background-color: var(--bg-void);
+            color: var(--text-ink);
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: #ffffff;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-void);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-muted);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        .bg-archival-grid {
+            background-size: 36px 36px;
+            background-image:
+                linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+        }
+
+        .wiki-input {
+            background-color: var(--bg-void);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-ink);
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .wiki-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1px var(--accent);
+        }
+
+        .wiki-prose p {
+            margin-bottom: 1.1rem;
+            line-height: var(--prose-line-height);
+            letter-spacing: var(--prose-letter-spacing);
+            color: var(--text-ink);
+        }
+        .wiki-prose h2 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 0.35rem;
+            margin-top: 1.75rem;
+            margin-bottom: 0.85rem;
+        }
+        .wiki-prose h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--accent-bright);
+            margin-top: 1.35rem;
+            margin-bottom: 0.6rem;
+        }
+        .wiki-prose blockquote {
+            border-left: 3px solid var(--accent);
+            padding: 0.65rem 1rem;
+            margin: 1.15rem 0;
+            font-style: italic;
+            color: var(--accent-bright);
+            background: var(--accent-dark);
+        }
+        .wiki-prose ul {
+            list-style-type: square;
+            padding-left: 1.4rem;
+            margin-bottom: 1.1rem;
+            color: var(--text-ink);
+            line-height: var(--prose-line-height);
+            letter-spacing: var(--prose-letter-spacing);
+        }
+        .wiki-prose li {
+            margin-bottom: 0.35rem;
+        }
+
+        body:not(.editor-mode) .editor-only {
+            display: none !important;
+        }
+
+        @keyframes logo-breathe {
+            0%, 100% {
+                transform: translateY(0px);
+                filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.35));
+            }
+            50% {
+                transform: translateY(-2px);
+                filter: drop-shadow(0 0 18px rgba(239, 68, 68, 0.65));
+            }
+        }
+        .logo-mark {
+            animation: logo-breathe 3s ease-in-out infinite;
+        }
+
+        @keyframes discord-pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.55);
+            }
+            50% {
+                box-shadow: 0 0 0 7px rgba(239, 68, 68, 0);
+            }
+        }
+        .discord-cta {
+            background-color: var(--accent);
+            color: #ffffff;
+            border: 1px solid var(--accent);
+            animation: discord-pulse 2s infinite;
+        }
+        .discord-cta:hover {
+            filter: brightness(1.08);
+        }
+
+        /* Ukrywanie paska przewijania dla mobilnych pigułek */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* ===== Pasek sekcji: zwijanie (działa też na desktopie) ===== */
+        #nav-tabs-bar { position: relative; max-height: 160px; transition: max-height .4s cubic-bezier(.2,.7,.2,1), opacity .3s ease, padding .3s ease; }
+        #nav-tabs-bar.nav-hidden { max-height: 0; opacity: 0; padding-top: 0; padding-bottom: 0; overflow: hidden; pointer-events: none; visibility: hidden; transition: max-height .4s cubic-bezier(.2,.7,.2,1), opacity .25s ease, padding .3s ease, visibility 0s .4s; }
+        .nav-tab { position: relative; overflow: hidden; }
+        .nav-tab > * { position: relative; z-index: 1; }
+        .nav-tab::before { content: ''; position: absolute; inset: 0; background: var(--accent-dark); transform: scaleX(0); transform-origin: left; transition: transform .35s cubic-bezier(.2,.7,.2,1); }
+        .nav-tab:hover::before { transform: scaleX(1); }
+        #nav-indicator { position: absolute; height: 2px; left: 0; width: 0; background: var(--accent); box-shadow: 0 0 10px var(--accent); pointer-events: none; z-index: 2; transition: left .45s cubic-bezier(.2,.7,.2,1), width .45s cubic-bezier(.2,.7,.2,1); }
+
+        /* ===== Ruch: wejście sekcji, hero, okna ===== */
+        @keyframes viewIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+        @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popIn { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: none; } }
+        main > section:not(#view-home):not(.hidden) { animation: viewIn .45s cubic-bezier(.2,.7,.2,1); }
+        .hero-seq > * { animation: rise .8s cubic-bezier(.2,.7,.2,1) both; }
+        .hero-seq > *:nth-child(2) { animation-delay: .12s; }
+        .hero-seq > *:nth-child(3) { animation-delay: .24s; }
+        #confirm-modal:not(.hidden), #auth-modal:not(.hidden), #export-modal:not(.hidden), #search-modal:not(.hidden) { animation: fadeIn .2s ease; }
+        #confirm-modal:not(.hidden) > div, #auth-modal:not(.hidden) > div, #export-modal:not(.hidden) > div, #search-modal:not(.hidden) > div { animation: popIn .3s cubic-bezier(.2,.8,.2,1); }
+        #accessibility-popover:not(.hidden) { animation: popIn .2s ease; }
+        #toast-container > * { animation: popIn .3s cubic-bezier(.2,.8,.2,1); }
+
+        /* ===== Kafelki strony głównej ===== */
+        .home-tile { position: relative; display: flex; flex-direction: column; gap: .3rem; text-align: left; padding: 1.15rem 1.25rem; background: var(--bg-obsidian); border: 1px solid var(--border-subtle); overflow: hidden; cursor: pointer; transition: border-color .25s ease, background .25s ease; }
+        .home-tile::after { content: ''; position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .45s cubic-bezier(.2,.7,.2,1); }
+        .home-tile:hover { border-color: var(--accent); background: var(--bg-panel); }
+        .home-tile:hover::after { transform: scaleX(1); }
+        .home-tile .tile-arrow { position: absolute; top: 1rem; right: 1.1rem; color: var(--accent); transition: transform .3s ease; }
+        .home-tile:hover .tile-arrow { transform: translateX(4px); }
+
+        /* ===== Wyszukiwarka (paleta) ===== */
+        .kbd { font-family: 'Space Mono', monospace; font-size: 10px; padding: 1px 6px; border: 1px solid var(--border-subtle); color: var(--text-muted); }
+        .search-item { display: block; width: 100%; text-align: left; padding: .6rem .8rem; border-left: 2px solid transparent; cursor: pointer; transition: background .15s ease, border-color .15s ease; }
+        .search-item.active { background: var(--accent-dark); border-left-color: var(--accent); }
+        #search-results mark { background: var(--accent); color: #fff; padding: 0 2px; }
+        .search-group { padding: .7rem .8rem .25rem; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); }
+
+        /* ===== Pliki ===== */
+        .drop-zone { border: 1px dashed var(--border-strong); background: var(--bg-void); transition: background .2s ease, border-color .2s ease; }
+        .drop-zone.drag, .drop-zone:hover { background: var(--accent-dark); border-color: var(--accent); }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; animation-delay: 0s !important; transition-duration: .01ms !important; }
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Inter, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:Space Mono, monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.bottom-5{bottom:1.25rem}.right-0{right:0px}.right-5{right:1.25rem}.top-0{top:0px}.top-12{top:3rem}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}.z-\[60\]{z-index:60}.col-span-full{grid-column:1 / -1}.mx-2{margin-left:0.5rem;margin-right:0.5rem}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-1\.5{margin-bottom:0.375rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.ml-auto{margin-left:auto}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-12{margin-top:3rem}.mt-2{margin-top:0.5rem}.mb-2{margin-bottom:0.5rem}.mb-3\.5{margin-bottom:0.875rem}.ml-2{margin-left:0.5rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-10{height:2.5rem}.h-12{height:3rem}.h-2{height:0.5rem}.h-3{height:0.75rem}.h-3\.5{height:0.875rem}.h-4{height:1rem}.max-h-60{max-height:15rem}.max-h-\[75vh\]{max-height:75vh}.min-h-\[55vh\]{min-height:55vh}.min-h-screen{min-height:100vh}.w-2{width:0.5rem}.w-3{width:0.75rem}.w-3\.5{width:0.875rem}.w-4{width:1rem}.w-80{width:20rem}.w-auto{width:auto}.w-full{width:100%}.min-w-0{min-width:0px}.max-w-2xl{max-width:42rem}.max-w-4xl{max-width:56rem}.max-w-7xl{max-width:80rem}.max-w-\[calc\(100vw-2\.5rem\)\]{max-width:calc(100vw - 2.5rem)}.max-w-\[calc\(100vw-2rem\)\]{max-width:calc(100vw - 2rem)}.max-w-lg{max-width:32rem}.max-w-md{max-width:28rem}.max-w-xs{max-width:20rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.space-y-1\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.375rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.375rem * var(--tw-space-y-reverse))}.space-y-10 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2.5rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rounded-full{border-radius:9999px}.border{border-width:1px}.border-0{border-width:0px}.border-b{border-bottom-width:1px}.border-l{border-left-width:1px}.border-l-2{border-left-width:2px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-\[var\(--border-strong\)\]{border-color:var(--border-strong)}.border-black\/40{border-color:rgb(0 0 0 / 0.4)}.border-crimson{border-color:var(--accent)}.border-crimson-border{border-color:var(--border-subtle)}.border-white{--tw-border-opacity:1;border-color:rgb(255 255 255 / var(--tw-border-opacity, 1))}.border-white\/30{border-color:rgb(255 255 255 / 0.3)}.border-transparent{border-color:transparent}.bg-\[\#050505\]{--tw-bg-opacity:1;background-color:rgb(5 5 5 / var(--tw-bg-opacity, 1))}.bg-\[\#c81e1e\]{--tw-bg-opacity:1;background-color:rgb(200 30 30 / var(--tw-bg-opacity, 1))}.bg-\[\#ef4444\]{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-black\/75{background-color:rgb(0 0 0 / 0.75)}.bg-black\/80{background-color:rgb(0 0 0 / 0.8)}.bg-black\/85{background-color:rgb(0 0 0 / 0.85)}.bg-crimson{background-color:var(--accent)}.bg-crimson-dark{background-color:var(--accent-dark)}.bg-obsidian{background-color:var(--bg-obsidian)}.bg-panel{background-color:var(--bg-panel)}.bg-transparent{background-color:transparent}.bg-void{background-color:var(--bg-void)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.object-contain{object-fit:contain}.p-0{padding:0px}.p-0\.5{padding:0.125rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-2\.5{padding:0.625rem}.p-8{padding:2rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-1{padding-bottom:0.25rem}.pb-2{padding-bottom:0.5rem}.pb-2\.5{padding-bottom:0.625rem}.pb-3{padding-bottom:0.75rem}.pb-4{padding-bottom:1rem}.pl-3{padding-left:0.75rem}.pl-4{padding-left:1rem}.pr-1{padding-right:0.25rem}.pt-1{padding-top:0.25rem}.pt-2{padding-top:0.5rem}.pt-3{padding-top:0.75rem}.text-left{text-align:left}.text-center{text-align:center}.font-mono{font-family:Space Mono, monospace}.font-serif{font-family:Playfair Display, serif}.font-sans{font-family:Inter, sans-serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-5xl{font-size:3rem;line-height:1}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-normal{font-weight:400}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.italic{font-style:italic}.leading-\[1\.05\]{line-height:1.05}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.leading-snug{line-height:1.375}.tracking-\[0\.2em\]{letter-spacing:0.2em}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-crimson{color:var(--accent)}.text-crimson-bright{color:var(--accent-bright)}.text-ink{color:var(--text-ink)}.text-muted{color:var(--text-muted)}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.outline-none{outline:2px solid transparent;outline-offset:2px}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-200{transition-duration:200ms}.placeholder\:text-muted::placeholder{color:var(--text-muted)}.hover\:border-crimson:hover{border-color:var(--accent)}.hover\:border-crimson-border:hover{border-color:var(--border-subtle)}.hover\:bg-crimson:hover{background-color:var(--accent)}.hover\:text-crimson:hover{color:var(--accent)}.hover\:text-ink:hover{color:var(--text-ink)}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.hover\:opacity-90:hover{opacity:0.9}.group:hover .group-hover\:scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@media (min-width: 640px){.sm\:col-span-2{grid-column:span 2 / span 2}.sm\:inline{display:inline}.sm\:flex{display:flex}.sm\:h-16{height:4rem}.sm\:max-w-md{max-width:28rem}.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}.sm\:gap-2{gap:0.5rem}.sm\:gap-2\.5{gap:0.625rem}.sm\:gap-4{gap:1rem}.sm\:p-6{padding:1.5rem}.sm\:p-8{padding:2rem}.sm\:p-5{padding:1.25rem}.sm\:px-4{padding-left:1rem;padding-right:1rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:py-10{padding-top:2.5rem;padding-bottom:2.5rem}.sm\:py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.sm\:py-4{padding-top:1rem;padding-bottom:1rem}.sm\:py-8{padding-top:2rem;padding-bottom:2rem}.sm\:pt-\[12vh\]{padding-top:12vh}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}.sm\:text-5xl{font-size:3rem;line-height:1}.sm\:text-6xl{font-size:3.75rem;line-height:1}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}}@media (min-width: 768px){.md\:block{display:block}.md\:h-\[72px\]{height:72px}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:items-center{align-items:center}.md\:pb-0{padding-bottom:0px}}@media (min-width: 1024px){.lg\:col-span-4{grid-column:span 4 / span 4}.lg\:col-span-8{grid-column:span 8 / span 8}.lg\:flex{display:flex}.lg\:grid{display:grid}.lg\:hidden{display:none}.lg\:max-h-\[55vh\]{max-height:55vh}.lg\:shrink{flex-shrink:1}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.lg\:grid-cols-5{grid-template-columns:repeat(5, minmax(0, 1fr))}.lg\:flex-row{flex-direction:row}.lg\:items-center{align-items:center}.lg\:px-8{padding-left:2rem;padding-right:2rem}.lg\:text-7xl{font-size:4.5rem;line-height:1}}@media (min-width: 1280px){.xl\:col-span-3{grid-column:span 3 / span 3}.xl\:col-span-9{grid-column:span 9 / span 9}}</style></head>
+<body class="min-h-screen flex flex-col bg-archival-grid antialiased">
+
+    <!-- Powiadomienia Toast -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-[calc(100vw-2.5rem)]"></div>
+
+    <!-- Wyszukiwarka (paleta) -->
+    <div id="search-modal" class="fixed inset-0 z-[60] hidden items-start justify-center bg-black/75 backdrop-blur-sm p-3 sm:pt-[12vh]" onclick="if(event.target===this) closeSearch()">
+        <div class="w-full max-w-2xl bg-obsidian border border-[var(--border-strong)] shadow-2xl flex flex-col max-h-[75vh]" role="dialog" aria-modal="true" aria-label="Wyszukiwarka">
+            <div class="flex items-center gap-3 px-4 border-b border-crimson-border">
+                <svg class="w-4 h-4 shrink-0 text-crimson" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4.5 4.5" stroke-linecap="round"></path></svg>
+                <input id="search-input" type="text" autocomplete="off" spellcheck="false" placeholder="Szukaj dekretów, haseł, plików..." oninput="runSearch()" onkeydown="searchKeydown(event)" class="flex-1 min-w-0 bg-transparent py-4 text-sm font-mono text-ink outline-none placeholder:text-muted">
+                <button type="button" onclick="closeSearch()" class="kbd cursor-pointer hover:text-crimson">Esc</button>
+            </div>
+            <div id="search-results" class="overflow-y-auto py-1" role="listbox"></div>
+            <div class="hidden sm:flex items-center gap-4 px-4 py-2 border-t border-crimson-border font-mono text-[11px] text-muted">
+                <span><kbd class="kbd">↑</kbd> <kbd class="kbd">↓</kbd> wybierz</span>
+                <span><kbd class="kbd">Enter</kbd> otwórz</span>
+                <span class="ml-auto">Wyszukiwanie ignoruje polskie znaki</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal potwierdzenia -->
+    <div id="confirm-modal" class="fixed inset-0 z-50 items-center justify-center bg-black/80 p-4 hidden">
+        <div class="w-full max-w-md bg-obsidian border border-[var(--border-strong)] p-6 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-crimson-border pb-3 mb-4 font-mono text-xs">
+                <span class="uppercase tracking-widest text-crimson font-bold">POTWIERDZENIE // KOIKL-55</span>
+                <span class="text-muted">[my55.pl]</span>
+            </div>
+            <p id="confirm-message" class="text-sm leading-relaxed text-ink mb-6">Usunąć to hasło?</p>
+            <div class="flex justify-end gap-3 font-mono text-xs">
+                <button id="confirm-cancel" type="button" class="px-4 py-2 border border-crimson-border text-ink hover:border-crimson uppercase cursor-pointer">
+                    Anuluj
+                </button>
+                <button id="confirm-accept" type="button" class="px-4 py-2 bg-crimson text-white font-bold hover:opacity-90 uppercase cursor-pointer">
+                    Zatwierdź
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal logowania Przewodniczącego -->
+    <div id="auth-modal" class="fixed inset-0 z-50 items-center justify-center bg-black/85 p-4 hidden">
+        <div class="w-full max-w-md bg-obsidian border border-[var(--border-strong)] p-6 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-crimson-border pb-3 mb-4 font-mono text-xs">
+                <span class="uppercase tracking-widest text-crimson font-bold">AUTORYZACJA PRZEWODNICZĄCEGO</span>
+                <span class="text-muted">my55.pl</span>
+            </div>
+            <p class="font-mono text-xs text-muted mb-4 leading-relaxed">
+                Wprowadź klucz dostępu Komitetu Ochrony i Kultu Liczby 55, aby odblokować tryb redaktorski.
+            </p>
+            <div class="mb-5">
+                <label class="block font-mono text-[10px] uppercase tracking-wider text-crimson mb-1.5">Klucz dostępu</label>
+                <input type="password" id="auth-password-input" onkeydown="if(event.key==='Enter') submitChairmanAuth()" placeholder="Wpisz hasło..." class="wiki-input w-full px-3 py-2.5 font-mono text-sm">
+            </div>
+            <div class="flex justify-end gap-3 font-mono text-xs">
+                <button type="button" onclick="closeAuthModal()" class="px-4 py-2 border border-crimson-border text-ink hover:border-crimson uppercase cursor-pointer">
+                    Zamknij
+                </button>
+                <button type="button" onclick="submitChairmanAuth()" class="px-5 py-2 bg-crimson text-white font-bold hover:opacity-90 uppercase cursor-pointer">
+                    Odblokuj
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal eksportu index.html -->
+    <div id="export-modal" class="fixed inset-0 z-50 items-center justify-center bg-black/85 p-4 hidden">
+        <div class="w-full max-w-lg bg-obsidian border border-[var(--border-strong)] p-6 shadow-2xl space-y-5">
+            <div class="flex items-center justify-between border-b border-crimson-border pb-3 font-mono text-xs">
+                <span class="uppercase tracking-widest text-crimson font-bold">PUBLIKACJA MY55.PL // EKSPORT INDEX.HTML</span>
+                <span class="text-muted">[KOiKL-55]</span>
+            </div>
+            <p class="font-mono text-xs text-muted leading-relaxed">
+                Wygenerowany plik <strong class="text-crimson-bright">index.html</strong> zapisze bieżącą zawartość strony głównej, ogłoszeń, encyklopedii, plików i linków.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-mono text-[10px] uppercase tracking-wider text-crimson mb-1.5">Hasło Przewodniczącego</label>
+                    <input type="text" id="export-password-input" class="wiki-input w-full px-3 py-2 font-mono text-xs">
+                </div>
+                <div>
+                    <label class="block font-mono text-[10px] uppercase tracking-wider text-crimson mb-1.5">Zaproszenie Discord (URL)</label>
+                    <input type="text" id="export-discord-input" class="wiki-input w-full px-3 py-2 font-mono text-xs">
+                </div>
+            </div>
+            <div class="flex flex-wrap justify-between items-center gap-3 pt-3 border-t border-crimson-border font-mono text-xs">
+                <button type="button" onclick="exportJSON()" class="px-3 py-2 border border-crimson-border text-ink hover:border-crimson uppercase cursor-pointer">
+                    Kopia JSON
+                </button>
+                <div class="flex gap-2">
+                    <button type="button" onclick="closeExportModal()" class="px-4 py-2 border border-crimson-border text-ink hover:border-crimson uppercase cursor-pointer">
+                        Anuluj
+                    </button>
+                    <button type="button" onclick="confirmExportHTML()" class="px-4 py-2 bg-crimson text-white font-bold hover:opacity-90 uppercase cursor-pointer">
+                        Pobierz index.html
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pasek trybu redaktora -->
+    <div id="chairman-control-bar" class="editor-only bg-crimson-dark border-b border-crimson py-2 px-4">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 font-mono text-xs">
+            <div class="flex items-center gap-2">
+                <span class="inline-block w-2 h-2 bg-crimson"></span>
+                <span class="font-bold uppercase tracking-wider text-crimson-bright">TRYB PRZEWODNICZĄCEGO // MY55.PL</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+                <button type="button" onclick="openExportModal()" class="px-3 py-1 bg-crimson text-white font-bold hover:opacity-90 uppercase cursor-pointer">
+                    Eksportuj index.html
+                </button>
+                <label class="px-3 py-1 border border-crimson-border bg-obsidian hover:border-crimson uppercase cursor-pointer">
+                    Wczytaj JSON
+                    <input type="file" id="import-json-input" accept=".json" class="hidden" onchange="importJSON(event)">
+                </label>
+                <button type="button" onclick="resetToDefaults()" class="px-2.5 py-1 border border-crimson-border text-muted hover:text-ink uppercase cursor-pointer">
+                    Reset
+                </button>
+                <button type="button" onclick="lockAdminMode()" class="px-3 py-1 border border-crimson bg-obsidian text-crimson-bright hover:bg-crimson hover:text-white uppercase cursor-pointer">
+                    Wyloguj
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nagłówek główny -->
+    <header class="border-b border-crimson-border bg-obsidian/95 sticky top-0 z-30 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Górny wiersz: Powiększone logo my55 bez ramki + tytuł + akcje -->
+            <div class="flex items-center justify-between py-3 sm:py-4 gap-3">
+                <button type="button" onclick="switchTab('home')" class="flex items-center gap-3 sm:gap-4 text-left bg-transparent border-0 p-0 cursor-pointer shrink-0 group" title="my55.pl — Strona główna">
+                    <img src="my55.png" alt="my55" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" class="h-12 sm:h-16 md:h-[72px] w-auto object-contain logo-mark transition-transform duration-200 group-hover:scale-105">
+                    <span class="hidden font-serif italic font-extrabold text-3xl sm:text-5xl text-crimson tracking-tight logo-mark">my55</span>
+                    <div class="hidden md:block border-l border-crimson-border pl-4">
+                        <div class="font-mono text-[10px] uppercase tracking-[0.2em] text-crimson font-bold">KOIKL-55 // KM-55</div>
+                        <div class="font-serif text-lg font-bold text-crimson-bright leading-tight">Kolektyw Miłośników 55</div>
+                    </div>
+                </button>
+
+                <!-- Wyszukiwarka (otwiera paletę) -->
+                <button type="button" onclick="openSearch()" aria-label="Szukaj w my55.pl" class="hidden lg:flex flex-1 max-w-xs mx-2 items-center gap-2.5 h-10 px-3 border border-crimson-border bg-void/60 hover:border-crimson text-muted hover:text-ink font-mono text-xs cursor-pointer transition-colors">
+                    <svg class="w-4 h-4 shrink-0 text-crimson" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4.5 4.5" stroke-linecap="round"></path></svg>
+                    <span class="flex-1 text-left">Szukaj w my55.pl</span>
+                    <kbd class="kbd">/</kbd>
+                </button>
+
+                <!-- Przyciski po prawej: Ustawienia czytelności (ikona + popover) + Discord -->
+                <div class="flex items-center gap-2 sm:gap-2.5 relative">
+                    <!-- Przycisk ustawień czytelności -->
+                    <button id="accessibility-toggle-btn" type="button" onclick="toggleAccessibilityPopover(event)" aria-expanded="false" aria-controls="accessibility-popover" class="h-10 px-3 border border-crimson-border bg-panel hover:border-crimson text-ink font-mono text-xs flex items-center gap-2 transition-colors cursor-pointer" title="Ustawienia czytelności, motyw i rozmiar tekstu">
+                        <!-- Ikona Aa / czytelności -->
+                        <svg class="w-4 h-4 text-crimson shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M4 19L9.5 5h1L16 19" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M5.8 14.5h8.4" stroke-linecap="round"></path>
+                            <circle cx="19" cy="7" r="2.2"></circle>
+                            <path d="M19 9.2V17" stroke-linecap="round"></path>
+                        </svg>
+                        <span class="hidden sm:inline uppercase tracking-wider font-bold">Czytelność</span>
+                    </button>
+
+                    <!-- Przycisk zwijania kategorii / nawigacji na urządzeniach mobilnych -->
+                    <button id="mobile-nav-toggle-btn" type="button" onclick="toggleMobileNav()" aria-expanded="true" aria-controls="primary-nav-drawer" class="lg:hidden h-10 px-3 border border-crimson-border bg-panel hover:border-crimson text-ink font-mono text-xs flex items-center gap-1.5 transition-colors cursor-pointer" title="Pokaż lub ukryj kategorie">
+                        <svg id="mobile-nav-icon" class="w-4 h-4 text-crimson" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round"></path>
+                        </svg>
+                        <span id="mobile-nav-toggle-label" class="uppercase tracking-wider font-bold">Ukryj</span>
+                    </button>
+
+                    <!-- Przycisk Discord -->
+                    <a id="header-discord-btn" href="https://discord.gg/sXFHZYu6Px" target="_blank" rel="noopener noreferrer" class="discord-cta h-10 px-3 sm:px-4 font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 shrink-0">
+                        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028z"></path>
+                        </svg>
+                        <span class="hidden sm:inline">Discord</span>
+                        <span aria-hidden="true">↗</span>
+                    </a>
+
+                    <!-- Popover ustawień czytelności -->
+                    <div id="accessibility-popover" class="absolute right-0 top-12 w-80 max-w-[calc(100vw-2rem)] bg-obsidian border border-[var(--border-strong)] p-4 shadow-2xl z-40 space-y-4 font-mono text-xs hidden">
+                        <div class="flex items-center justify-between border-b border-crimson-border pb-2">
+                            <span class="font-bold uppercase tracking-wider text-crimson">Ustawienia czytelności</span>
+                            <button type="button" onclick="resetAccessibilitySettings()" class="text-[10px] text-muted hover:text-crimson uppercase underline cursor-pointer">Domyślne</button>
+                        </div>
+
+                        <!-- Wybór motywu -->
+                        <div class="space-y-1.5">
+                            <div class="text-[10px] uppercase tracking-wider text-muted">Motyw kolorystyczny</div>
+                            <div class="grid grid-cols-1 gap-1.5">
+                                <button type="button" data-theme-option="crimson-55" onclick="setThemeMode('crimson-55')" class="theme-opt-btn flex items-center justify-between px-3 py-2 border bg-panel hover:border-crimson text-left cursor-pointer border-crimson bg-crimson-dark text-crimson-bright font-bold">
+                                    <span>Czarny-Czerwony 55</span>
+                                    <span class="inline-flex items-center gap-1">
+                                        <span class="w-3 h-3 bg-[#050505] border border-white/30"></span>
+                                        <span class="w-3 h-3 bg-[#ef4444]"></span>
+                                    </span>
+                                </button>
+                                <button type="button" data-theme-option="high-contrast-dark" onclick="setThemeMode('high-contrast-dark')" class="theme-opt-btn flex items-center justify-between px-3 py-2 border bg-panel hover:border-crimson text-left cursor-pointer border-crimson-border">
+                                    <span>Kontrastowy Ciemny</span>
+                                    <span class="inline-flex items-center gap-1">
+                                        <span class="w-3 h-3 bg-black border border-white"></span>
+                                        <span class="w-3 h-3 bg-white"></span>
+                                    </span>
+                                </button>
+                                <button type="button" data-theme-option="light-readable" onclick="setThemeMode('light-readable')" class="theme-opt-btn flex items-center justify-between px-3 py-2 border border-crimson-border bg-panel hover:border-crimson text-left cursor-pointer">
+                                    <span>Jasny Czytelny</span>
+                                    <span class="inline-flex items-center gap-1">
+                                        <span class="w-3 h-3 bg-white border border-black/40"></span>
+                                        <span class="w-3 h-3 bg-[#c81e1e]"></span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Skala tekstu -->
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between text-[10px] uppercase tracking-wider text-muted">
+                                <span>Skala tekstu</span>
+                                <span id="current-scale-label" class="text-crimson font-bold">100%</span>
+                            </div>
+                            <div class="grid grid-cols-4 gap-1.5">
+                                <button type="button" data-scale-option="0.9" onclick="setTextScale(0.9)" class="scale-opt-btn py-1.5 border border-crimson-border bg-panel hover:border-crimson text-center cursor-pointer">90%</button>
+                                <button type="button" data-scale-option="1" onclick="setTextScale(1)" class="scale-opt-btn py-1.5 border bg-panel hover:border-crimson text-center cursor-pointer border-crimson bg-crimson-dark text-crimson-bright font-bold">100%</button>
+                                <button type="button" data-scale-option="1.15" onclick="setTextScale(1.15)" class="scale-opt-btn py-1.5 border border-crimson-border bg-panel hover:border-crimson text-center cursor-pointer">115%</button>
+                                <button type="button" data-scale-option="1.3" onclick="setTextScale(1.3)" class="scale-opt-btn py-1.5 border border-crimson-border bg-panel hover:border-crimson text-center cursor-pointer">130%</button>
+                            </div>
+                        </div>
+
+                        <!-- Odstępy czytania -->
+                        <div class="flex items-center justify-between pt-1 border-t border-crimson-border/60">
+                            <div>
+                                <div class="text-xs font-bold text-crimson-bright">Luźniejsze odstępy</div>
+                                <div class="text-[10px] text-muted">Większa interlinia w tekstach</div>
+                            </div>
+                            <button id="btn-loose-spacing" type="button" onclick="toggleLooseSpacing()" class="px-3 py-1.5 border border-crimson-border bg-panel hover:border-crimson uppercase text-[11px] font-bold cursor-pointer">Wył.</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:hidden pb-2.5">
+                <button type="button" onclick="openSearch()" aria-label="Szukaj w my55.pl" class="w-full flex items-center gap-2.5 h-10 px-3 border border-crimson-border bg-void/60 text-muted font-mono text-xs cursor-pointer">
+                    <svg class="w-4 h-4 shrink-0 text-crimson" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4.5 4.5" stroke-linecap="round"></path></svg>
+                    <span>Szukaj hasła, dekretu, pliku...</span>
+                </button>
+            </div>
+
+            <!-- Elegancka, zwijalna nawigacja sekcji / kategorii -->
+            <div id="primary-nav-drawer" class="pb-2.5">
+                <div class="flex items-center justify-between gap-2 mb-1.5 font-mono text-[10px] uppercase tracking-widest text-muted">
+                    <span class="flex items-center gap-2">
+                        <span>NAWIGACJA // KATEGORIE</span>
+                        <span class="hidden sm:inline text-crimson">• 55</span>
+                    </span>
+                    <button id="nav-collapse-btn" type="button" onclick="toggleNavCollapsed()" class="inline-flex items-center gap-1 px-2 py-0.5 border border-crimson-border/70 hover:border-crimson text-ink hover:text-crimson transition-colors cursor-pointer" title="Zwiń lub rozwiń pasek sekcji">
+                        <span id="nav-collapse-label">Schowaj pasek</span>
+                        <span id="nav-collapse-arrow">▴</span>
+                    </button>
+                </div>
+
+                <nav id="nav-tabs-bar" aria-label="Główne sekcje my55.pl" class="flex lg:grid lg:grid-cols-5 gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-1" aria-hidden="false">
+                    <span id="nav-indicator" aria-hidden="true" style="left: 0px; width: 237px; top: 39px;"></span>
+                    <button type="button" onclick="switchTab('home')" id="tab-btn-home" class="nav-tab shrink-0 lg:shrink flex items-center justify-between gap-2.5 px-3.5 py-2 sm:px-4 sm:py-2.5 border transition-all cursor-pointer border-crimson bg-crimson-dark text-crimson-bright">
+                        <span class="font-mono text-xs font-bold uppercase tracking-wider">Strona główna</span>
+                        <span class="font-mono text-[10px] text-crimson font-bold">01</span>
+                    </button>
+
+                    <button type="button" onclick="switchTab('announcements')" id="tab-btn-announcements" class="nav-tab shrink-0 lg:shrink flex items-center justify-between gap-2.5 px-3.5 py-2 sm:px-4 sm:py-2.5 border transition-all cursor-pointer hover:border-crimson border-crimson-border bg-panel/70 text-ink">
+                        <span class="font-mono text-xs font-bold uppercase tracking-wider">Ogłoszenia</span>
+                        <span id="count-announcements" class="font-mono text-[10px] px-1.5 py-0.5 bg-crimson-dark text-crimson font-bold">02</span>
+                    </button>
+
+                    <button type="button" onclick="switchTab('wiki')" id="tab-btn-wiki" class="nav-tab shrink-0 lg:shrink flex items-center justify-between gap-2.5 px-3.5 py-2 sm:px-4 sm:py-2.5 border transition-all cursor-pointer hover:border-crimson border-crimson-border bg-panel/70 text-ink">
+                        <span class="font-mono text-xs font-bold uppercase tracking-wider">Encyklopedia</span>
+                        <span id="count-wiki" class="font-mono text-[10px] px-1.5 py-0.5 bg-crimson-dark text-crimson font-bold">05</span>
+                    </button>
+
+                    <button type="button" onclick="switchTab('files')" id="tab-btn-files" class="nav-tab shrink-0 lg:shrink flex items-center justify-between gap-2.5 px-3.5 py-2 sm:px-4 sm:py-2.5 border transition-all cursor-pointer hover:border-crimson border-crimson-border bg-panel/70 text-ink">
+                        <span class="font-mono text-xs font-bold uppercase tracking-wider">Pliki</span>
+                        <span id="count-files" class="font-mono text-[10px] px-1.5 py-0.5 bg-crimson-dark text-crimson font-bold">00</span>
+                    </button>
+
+                    <button type="button" onclick="switchTab('links')" id="tab-btn-links" class="nav-tab shrink-0 lg:shrink flex items-center justify-between gap-2.5 px-3.5 py-2 sm:px-4 sm:py-2.5 border transition-all cursor-pointer hover:border-crimson border-crimson-border bg-panel/70 text-ink">
+                        <span class="font-mono text-xs font-bold uppercase tracking-wider">Discord i Linki</span>
+                        <span class="font-mono text-[10px] text-crimson font-bold">↗</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Główna zawartość -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+        <!-- ========================================================= -->
+        <!-- STRONA GŁÓWNA: Układ redakcyjny bez ciężkich ram wokół hero -->
+        <!-- ========================================================= -->
+        <section id="view-home" class="space-y-10">
+            <div class="flex flex-wrap items-center justify-between gap-3 font-mono text-xs">
+                <span class="inline-flex items-center gap-2 text-crimson font-bold">
+                    <span class="w-2 h-2 rounded-full bg-crimson animate-pulse"></span>
+                    <span id="home-stat-status">AKTYWNY</span>
+                    <span id="home-badge-text" class="text-muted font-normal">OFICJALNA WITRYNA KOLEKTYWU MIŁOŚNIKÓW 55</span>
+                </span>
+                <div id="home-admin-controls" class="editor-only"><button type="button" onclick="openHomeEdit()" class="px-3 py-1 border border-crimson bg-crimson-dark text-crimson-bright hover:bg-crimson hover:text-white font-mono text-[11px] font-bold uppercase cursor-pointer">Edytuj</button></div>
+            </div>
+
+            <!-- Hero na całą szerokość -->
+            <div id="home-display-block" class="hero-seq max-w-4xl space-y-6 py-4 sm:py-10">
+                <h1 id="home-hero-title" class="font-serif text-5xl sm:text-6xl lg:text-7xl font-extrabold text-crimson-bright leading-[1.05] tracking-tight">Witamy na my55.pl</h1>
+                <div id="home-hero-body" class="wiki-prose text-base sm:text-lg max-w-2xl"><p>Centralny portal informacyjny oraz archiwum Kolektywu Miłośników 55 (KM-55), działającego pod patronatem Komitetu Ochrony i Kultu Liczby 55 (KOIKL-55).</p><p>Tutaj publikujemy oficjalne dekrety, statut, dokumenty oraz hasła encyklopedyczne. Codzienne rozmowy i rekrutacja odbywają się na naszym serwerze Discord.</p></div>
+                <div class="pt-1 flex flex-wrap items-center gap-3 font-mono text-xs">
+                    <a id="home-discord-cta" href="https://discord.gg/sXFHZYu6Px" target="_blank" rel="noopener noreferrer" class="discord-cta px-6 py-3.5 font-bold uppercase tracking-wider inline-flex items-center gap-2.5 text-sm">
+                        <span>Dołącz na Discord</span><span>↗</span>
+                    </a>
+                    <button type="button" onclick="switchTab('announcements')" class="px-5 py-3.5 border border-[var(--border-strong)] bg-obsidian text-crimson-bright hover:border-crimson transition-colors uppercase tracking-wider font-bold cursor-pointer">Ogłoszenia Komitetu</button>
+                    <button type="button" onclick="switchTab('wiki')" class="px-5 py-3.5 border border-crimson-border text-ink hover:border-crimson transition-colors uppercase tracking-wider cursor-pointer">Encyklopedia</button>
+                </div>
+            </div>
+
+            <!-- Skróty -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <button type="button" onclick="switchTab('announcements')" class="home-tile">
+                    <span class="tile-arrow">→</span>
+                    <span class="font-serif text-xl font-bold text-crimson-bright">Ogłoszenia</span>
+                    <span class="text-xs text-muted">Dekrety i komunikaty Komitetu.</span>
+                    <span class="font-mono text-[11px] text-crimson mt-2"><span id="home-count-announcements">2</span> wpisów</span>
+                </button>
+                <button type="button" onclick="switchTab('wiki')" class="home-tile">
+                    <span class="tile-arrow">→</span>
+                    <span class="font-serif text-xl font-bold text-crimson-bright">Encyklopedia 55</span>
+                    <span class="text-xs text-muted">Manifest, statut i rejestr obserwacji.</span>
+                    <span class="font-mono text-[11px] text-crimson mt-2"><span id="home-count-wiki">4</span> haseł</span>
+                </button>
+                <button type="button" onclick="switchTab('files')" class="home-tile">
+                    <span class="tile-arrow">→</span>
+                    <span class="font-serif text-xl font-bold text-crimson-bright">Pliki i dokumenty</span>
+                    <span class="text-xs text-muted">Uchwały, wzory i materiały do pobrania.</span>
+                    <span class="font-mono text-[11px] text-crimson mt-2"><span id="home-count-files">0</span> plików</span>
+                </button>
+                <a href="https://discord.gg/sXFHZYu6Px" target="_blank" rel="noopener noreferrer" id="home-discord-tile" class="home-tile">
+                    <span class="tile-arrow">↗</span>
+                    <span class="font-serif text-xl font-bold text-crimson-bright">Discord</span>
+                    <span class="text-xs text-muted">Rozmowy, obserwacje i rekrutacja.</span>
+                    <span class="font-mono text-[11px] text-crimson mt-2">Dołącz do serwera</span>
+                </a>
+            </div>
+
+<!-- Edytor strony głównej (tryb Przewodniczącego) -->
+            <div id="home-editor-block" class="bg-obsidian border border-[var(--border-strong)] p-6 space-y-4 hidden">
+                <div class="font-mono text-xs font-bold uppercase text-crimson border-b border-crimson-border pb-2">
+                    Edycja strony głównej my55.pl
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-mono text-[11px] uppercase text-muted mb-1">Nadtytuł</label>
+                        <input type="text" id="edit-home-badge" class="wiki-input w-full px-3 py-2 font-mono text-xs uppercase">
+                    </div>
+                    <div>
+                        <label class="block font-mono text-[11px] uppercase text-muted mb-1">Status</label>
+                        <input type="text" id="edit-home-status" class="wiki-input w-full px-3 py-2 font-mono text-xs uppercase">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-mono text-[11px] uppercase text-muted mb-1">Nagłówek główny</label>
+                    <input type="text" id="edit-home-title" class="wiki-input w-full px-3 py-2 font-serif text-lg font-bold">
+                </div>
+                <div>
+                    <label class="block font-mono text-[11px] uppercase text-muted mb-1">Treść wprowadzenia</label>
+                    <textarea id="edit-home-body" rows="6" class="wiki-input w-full p-3 font-mono text-sm leading-relaxed"></textarea>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-mono text-[11px] uppercase text-muted mb-1">Organ naczelny</label>
+                        <input type="text" id="edit-home-organ" class="wiki-input w-full px-3 py-2 font-mono text-xs">
+                    </div>
+                    <div>
+                        <label class="block font-mono text-[11px] uppercase text-muted mb-1">Kolektyw</label>
+                        <input type="text" id="edit-home-base" class="wiki-input w-full px-3 py-2 font-mono text-xs">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 font-mono text-xs pt-2">
+                    <button type="button" onclick="cancelHomeEdit()" class="px-4 py-2 border border-crimson-border text-ink hover:border-crimson uppercase cursor-pointer">Anuluj</button>
+                    <button type="button" onclick="saveHomeEdit()" class="px-5 py-2 bg-crimson text-white font-bold hover:opacity-90 uppercase cursor-pointer">Zapisz</button>
+                </div>
+            </div>
+
+            <!-- Najnowsze ogłoszenia -->
+            <div class="space-y-4">
+                <div class="flex items-end justify-between border-b border-crimson-border pb-2.5">
+                    <h2 class="font-serif text-2xl font-bold text-crimson-bright">Najnowsze ogłoszenia</h2>
+                    <button type="button" onclick="switchTab('announcements')" class="font-mono text-xs uppercase text-crimson hover:underline font-bold cursor-pointer">Wszystkie →</button>
+                </div>
+                <div id="home-latest-announcements" class="grid grid-cols-1 md:grid-cols-3 gap-4"><article class="bg-obsidian border border-crimson-border hover:border-crimson p-4 flex flex-col justify-between gap-3 transition-colors">
+                    <div class="space-y-1.5">
+                        <div class="flex items-center justify-between gap-2 font-mono text-[10px]">
+                            <span class="px-1.5 py-0.5 bg-crimson text-white font-bold">DEKRET NR 01/55</span>
+                            <span class="text-muted">24.11.2026</span>
+                        </div>
+                        <h3 class="font-serif text-base font-bold text-crimson-bright leading-snug">Uruchomienie Centralnego Portalu my55.pl oraz Encyklopedii KM-55</h3>
+                        <p class="text-xs text-muted leading-relaxed">Komitet Ochrony i Kultu Liczby 55 (KOIKL 55) ogłasza uruchomienie oficjalnego portalu my55.pl oraz bazy w...</p>
+                    </div>
+                    <button type="button" onclick="switchTab('announcements')" class="text-left font-mono text-[11px] text-crimson hover:underline font-bold uppercase cursor-pointer">
+                        Czytaj →
+                    </button>
+                </article><article class="bg-obsidian border border-crimson-border hover:border-crimson p-4 flex flex-col justify-between gap-3 transition-colors">
+                    <div class="space-y-1.5">
+                        <div class="flex items-center justify-between gap-2 font-mono text-[10px]">
+                            <span class="px-1.5 py-0.5 bg-crimson text-white font-bold">KOMUNIKAT NR 01/55</span>
+                            <span class="text-muted">26.11.2026</span>
+                        </div>
+                        <h3 class="font-serif text-base font-bold text-crimson-bright leading-snug">Nabór otwarty do Kolektywu Miłośników 55</h3>
+                        <p class="text-xs text-muted leading-relaxed">Osoby chcące dołączyć do Kolektywu Miłośników 55 (KM 55) zapraszamy na oficjalny serwer Discord oraz do z...</p>
+                    </div>
+                    <button type="button" onclick="switchTab('announcements')" class="text-left font-mono text-[11px] text-crimson hover:underline font-bold uppercase cursor-pointer">
+                        Czytaj →
+                    </button>
+                </article></div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- SEKCJA 2: OGŁOSZENIA (KAFELKI / LISTA, SORTOWANIE, FILTRY) -->
+        <!-- ========================================================= -->
+        <section id="view-announcements" class="space-y-6 hidden">
+            <div class="bg-obsidian border border-crimson-border p-5 sm:p-6 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-crimson-border pb-4">
+                    <div>
+                        <span class="font-mono text-[10px] uppercase tracking-widest text-crimson font-bold">BIULETYN OFICJALNY // MY55.PL</span>
+                        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-crimson-bright mt-0.5">Ogłoszenia i Dekrety Komitetu</h2>
+                    </div>
+                    <div id="announcements-header-actions" class="editor-only"><button type="button" onclick="openAnnouncementEditor()" class="px-4 py-2 border border-crimson bg-crimson-dark hover:bg-crimson hover:text-white text-crimson-bright font-mono text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer">+ Nowe ogłoszenie</button></div>
+                </div>
+
+                <!-- Pasek sterowania: Widok (Kafelki / Lista), Sortowanie, Filtr kategorii -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 font-mono text-xs">
+                    <!-- Filtr kategorii / rang -->
+                    <div id="announcements-category-filters" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 md:pb-0"><button type="button" class="px-2.5 py-1 border font-mono text-[10px] uppercase tracking-wider shrink-0 cursor-pointer transition-colors border-crimson bg-crimson-dark text-crimson-bright font-bold">WSZYSTKIE</button><button type="button" class="px-2.5 py-1 border font-mono text-[10px] uppercase tracking-wider shrink-0 cursor-pointer transition-colors border-crimson-border bg-void text-muted hover:border-crimson hover:text-ink">NACZELNE</button><button type="button" class="px-2.5 py-1 border font-mono text-[10px] uppercase tracking-wider shrink-0 cursor-pointer transition-colors border-crimson-border bg-void text-muted hover:border-crimson hover:text-ink">ORGANIZACYJNE</button></div>
+
+                    <div class="flex flex-wrap items-center gap-2 shrink-0">
+                        <!-- Sortowanie -->
+                        <label class="flex items-center gap-1.5 text-[11px] text-muted">
+                            <span>Sortuj:</span>
+                            <select id="announcements-sort-select" onchange="renderAnnouncements()" class="wiki-input px-2.5 py-1.5 font-mono text-xs cursor-pointer">
+                                <option value="newest">Najnowsze</option>
+                                <option value="oldest">Najstarsze</option>
+                                <option value="priority">Priorytet / Ważne</option>
+                            </select>
+                        </label>
+
+                        <!-- Przełącznik układu: Kafelki vs Lista -->
+                        <div class="inline-flex border border-crimson-border bg-void p-0.5" role="group" aria-label="Tryb wyświetlania ogłoszeń">
+                            <button id="btn-layout-grid" type="button" onclick="setAnnouncementsLayout('grid')" class="px-2.5 py-1 flex items-center gap-1.5 font-mono text-[11px] uppercase cursor-pointer bg-crimson text-white font-bold" title="Widok kafelków">
+                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z"></path>
+                                </svg>
+                                <span>Kafelki</span>
+                            </button>
+                            <button id="btn-layout-list" type="button" onclick="setAnnouncementsLayout('list')" class="px-2.5 py-1 flex items-center gap-1.5 font-mono text-[11px] uppercase cursor-pointer text-muted hover:text-ink" title="Widok listy">
+                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M4 5h17v2H4V5zm0 6h17v2H4v-2zm0 6h17v2H4v-2z"></path>
+                                </svg>
+                                <span>Lista</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="announcement-editor-container"></div>
+            <div id="announcements-list" class="grid grid-cols-1 md:grid-cols-2 gap-5"><article class="bg-obsidian border border-crimson-border hover:border-crimson p-5 sm:p-6 flex flex-col justify-between transition-colors">
+                    <div>
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-crimson-border/70 pb-3 mb-3.5">
+                            <div class="flex flex-wrap items-center gap-2 font-mono text-[10px]">
+                                <span class="px-2 py-0.5 bg-crimson text-white font-bold">DEKRET NR 01/55</span>
+                                <span class="px-2 py-0.5 border border-crimson-border bg-panel text-crimson-bright">NACZELNE</span>
+                                
+                                <span class="text-muted">24.11.2026</span>
+                            </div>
+                            <div class="flex items-center gap-2 font-mono text-xs">
+                           <button type="button" onclick="openAnnouncementEditor('ann-1')" class="px-2.5 py-1 border border-crimson text-crimson-bright hover:bg-crimson hover:text-white uppercase cursor-pointer">Edytuj</button>
+                           <button type="button" onclick="deletePost('ann-1')" class="px-2.5 py-1 border border-crimson-border text-muted hover:text-crimson uppercase cursor-pointer">Usuń</button>
+                       </div>
+                        </div>
+                        <h3 class="font-serif text-xl font-bold text-crimson-bright mb-3 leading-snug">Uruchomienie Centralnego Portalu my55.pl oraz Encyklopedii KM-55</h3>
+                        <div class="wiki-prose text-sm">
+                            <p>Komitet Ochrony i Kultu Liczby 55 (KOIKL-55) ogłasza uruchomienie oficjalnego portalu my55.pl oraz bazy wiedzy Kolektywu Miłośników 55.</p><h2>Zasady</h2><ul><li>Portal my55.pl gromadzi oficjalne dekrety, statut oraz zatwierdzone hasła encyklopedyczne.</li><li>Bieżące dyskusje oraz zgłaszanie obserwacji liczby 55 odbywają się na Discordzie.</li></ul><blockquote>Symetria pięć pięć wyznacza nasz kierunek.</blockquote>
+                        </div>
+                    </div>
+                </article><article class="bg-obsidian border border-crimson-border hover:border-crimson p-5 sm:p-6 flex flex-col justify-between transition-colors">
+                    <div>
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-crimson-border/70 pb-3 mb-3.5">
+                            <div class="flex flex-wrap items-center gap-2 font-mono text-[10px]">
+                                <span class="px-2 py-0.5 bg-crimson text-white font-bold">KOMUNIKAT NR 01/55</span>
+                                <span class="px-2 py-0.5 border border-crimson-border bg-panel text-crimson-bright">ORGANIZACYJNE</span>
+                                <span class="px-1.5 py-0.5 border border-crimson text-crimson font-bold">WAŻNE</span>
+                                <span class="text-muted">26.11.2026</span>
+                            </div>
+                            <div class="flex items-center gap-2 font-mono text-xs">
+                           <button type="button" onclick="openAnnouncementEditor('ann-2')" class="px-2.5 py-1 border border-crimson text-crimson-bright hover:bg-crimson hover:text-white uppercase cursor-pointer">Edytuj</button>
+                           <button type="button" onclick="deletePost('ann-2')" class="px-2.5 py-1 border border-crimson-border text-muted hover:text-crimson uppercase cursor-pointer">Usuń</button>
+                       </div>
+                        </div>
+                        <h3 class="font-serif text-xl font-bold text-crimson-bright mb-3 leading-snug">Nabór otwarty do Kolektywu Miłośników 55</h3>
+                        <div class="wiki-prose text-sm">
+                            <p>Osoby chcące dołączyć do Kolektywu Miłośników 55 (KM-55) zapraszamy na oficjalny serwer Discord oraz do zapoznania się z hasłami w Encyklopedii.</p><blockquote>Stwórz z nami silniejsze 55</blockquote>
+                        </div>
+                    </div>
+                </article></div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- SEKCJA 3: ENCYKLOPEDIA 55 (ZWALNIANIE / KATEGORIE NA MOBILE) -->
+        <!-- ========================================================= -->
+        <section id="view-wiki" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start hidden">
+            <!-- Panel kategorii i spisu haseł -->
+            <aside class="lg:col-span-4 xl:col-span-3 bg-obsidian border border-crimson-border p-4 flex flex-col gap-3">
+                <div class="flex items-center justify-between border-b border-crimson-border pb-2">
+                    <div>
+                        <span class="font-mono text-xs font-bold uppercase tracking-wider text-crimson-bright">Kategorie i Hasła</span>
+                        <span class="block font-mono text-[10px] text-muted">ENCYKLOPEDIA KM-55</span>
+                    </div>
+                    <button id="wiki-drawer-toggle-btn" type="button" onclick="toggleWikiDrawer()" class="lg:hidden px-2.5 py-1 border border-crimson-border bg-panel hover:border-crimson font-mono text-[10px] uppercase text-crimson font-bold cursor-pointer">
+                        <span id="wiki-drawer-label">Zwiń</span>
+                    </button>
+                </div>
+
+                <div id="wiki-drawer-content" class="space-y-3">
+                    <input type="text" id="wiki-search" oninput="renderWikiList()" placeholder="Szukaj hasła..." class="wiki-input w-full px-3 py-2 text-xs font-mono placeholder:text-muted">
+
+                    <!-- Pigułki kategorii -->
+                    <div id="wiki-category-pills" class="flex flex-wrap gap-1.5 font-mono text-[10px]"><button type="button" class="px-2 py-1 border uppercase cursor-pointer transition-colors border-crimson bg-crimson-dark text-crimson-bright font-bold">WSZYSTKIE</button><button type="button" class="px-2 py-1 border uppercase cursor-pointer transition-colors border-crimson-border bg-void text-muted hover:border-crimson hover:text-ink">DOKTRYNA</button><button type="button" class="px-2 py-1 border uppercase cursor-pointer transition-colors border-crimson-border bg-void text-muted hover:border-crimson hover:text-ink">STRUKTURA</button><button type="button" class="px-2 py-1 border uppercase cursor-pointer transition-colors border-crimson-border bg-void text-muted hover:border-crimson hover:text-ink">STATUT</button><button type="button" class="px-2 py-1 border uppercase cursor-pointer transition-colors border-crimson-border bg-void text-muted hover:border-crimson hover:text-ink">REJESTR</button><button type="button" class="px-2 py-1 border uppercase cursor-pointer transition-colors border-crimson-border bg-void text-muted hover:border-crimson hover:text-ink">ANOMALIE</button></div>
+
+                    <div id="wiki-sidebar-admin-actions" class="editor-only"><button type="button" onclick="createNewArticle()" class="w-full py-2 px-3 border border-crimson bg-crimson-dark hover:bg-crimson hover:text-white text-crimson-bright font-mono text-xs font-bold uppercase cursor-pointer">+ Nowe hasło</button></div>
+                    <nav id="wiki-sidebar-list" class="flex flex-col gap-1.5 max-h-60 lg:max-h-[55vh] overflow-y-auto pr-1"><button type="button" class="w-full text-left p-2.5 border transition-colors cursor-pointer border-crimson bg-crimson-dark text-crimson-bright">
+                    <div class="flex items-center justify-between font-mono text-[10px] text-muted">
+                        <span>HASŁO-01</span>
+                        <span>DOKTRYNA</span>
+                    </div>
+                    <div class="font-sans text-xs font-semibold mt-0.5 truncate">Manifest Liczby 55</div>
+                </button><button type="button" class="w-full text-left p-2.5 border transition-colors cursor-pointer border-transparent hover:border-crimson-border bg-panel/70 text-ink">
+                    <div class="flex items-center justify-between font-mono text-[10px] text-muted">
+                        <span>HASŁO-02</span>
+                        <span>STRUKTURA</span>
+                    </div>
+                    <div class="font-sans text-xs font-semibold mt-0.5 truncate">Struktura KOIKL-55 i Kolektywu</div>
+                </button><button type="button" class="w-full text-left p-2.5 border transition-colors cursor-pointer border-transparent hover:border-crimson-border bg-panel/70 text-ink">
+                    <div class="flex items-center justify-between font-mono text-[10px] text-muted">
+                        <span>HASŁO-03</span>
+                        <span>STATUT</span>
+                    </div>
+                    <div class="font-sans text-xs font-semibold mt-0.5 truncate">Statut i Hierarchia Stopni</div>
+                </button><button type="button" class="w-full text-left p-2.5 border transition-colors cursor-pointer border-transparent hover:border-crimson-border bg-panel/70 text-ink">
+                    <div class="flex items-center justify-between font-mono text-[10px] text-muted">
+                        <span>HASŁO-04</span>
+                        <span>REJESTR</span>
+                    </div>
+                    <div class="font-sans text-xs font-semibold mt-0.5 truncate">Rejestr Zjawisk i Obserwacji 55</div>
+                </button><button type="button" class="w-full text-left p-2.5 border transition-colors cursor-pointer border-transparent hover:border-crimson-border bg-panel/70 text-ink">
+                    <div class="flex items-center justify-between font-mono text-[10px] text-muted">
+                        <span>HASŁO-06</span>
+                        <span>ANOMALIE</span>
+                    </div>
+                    <div class="font-sans text-xs font-semibold mt-0.5 truncate">Równoleżnik 55°N</div>
+                </button></nav>
+                </div>
+            </aside>
+
+            <!-- Treść wybranego hasła -->
+            <article class="lg:col-span-8 xl:col-span-9 bg-obsidian border border-crimson-border min-h-[55vh] flex flex-col">
+                <div class="border-b border-crimson-border px-5 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3 bg-panel font-mono text-xs">
+                    <div class="text-muted flex flex-wrap items-center gap-2">
+                        <span id="article-code" class="text-crimson font-bold">HASŁO-01</span>
+                        <span>//</span>
+                        <span id="article-category" class="text-crimson-bright">DOKTRYNA</span>
+                        <span class="hidden sm:inline">//</span>
+                        <span id="article-updated" class="hidden sm:inline">AKTUALIZACJA: 26.11.2026</span>
+                    </div>
+                    <div id="wiki-article-admin-actions" class="editor-only flex items-center gap-2"><button id="btn-toggle-edit" type="button" onclick="toggleEditMode()" class="px-3 py-1 border border-crimson bg-crimson-dark text-crimson-bright hover:bg-crimson hover:text-white uppercase font-bold cursor-pointer">Edytuj</button>
+                   <button type="button" onclick="deleteArticle()" class="px-3 py-1 border border-crimson-border text-muted hover:text-crimson uppercase cursor-pointer">Usuń</button></div>
+                </div>
+
+                <div id="article-view-mode" class="p-5 sm:p-8 flex-1">
+                    <h2 id="view-article-title" class="font-serif text-2xl sm:text-4xl font-bold text-crimson-bright tracking-tight mb-3">Manifest Liczby 55</h2>
+                    <div id="view-article-summary" class="font-mono text-xs sm:text-sm text-muted border-l-2 border-crimson pl-3 py-1.5 mb-6 bg-crimson-dark">Podstawowy dokument programowy Kolektywu Miłośników 55 oraz Komitetu Ochrony i Kultu Liczby 55.</div>
+                    <div id="view-article-body" class="wiki-prose text-base"><p>Liczba 55 (czyt. pięć pięć) łączy w sobie równowagę, powtórzenie i wyrazistość. Dla Kolektywu stanowi stały punkt odniesienia.</p><h2>Założenia</h2><ul><li>Dokumentujemy wystąpienia liczby 55 w codziennym otoczeniu.</li><li>Integrujemy członków KM-55 wokół wspólnej estetyki i porządku.</li><li>Dbamy o dobre imię liczby 55.</li></ul><blockquote>55 pozostaje naszym znakiem rozpoznawczym.</blockquote></div>
+                </div>
+
+                <div id="article-edit-container"></div>
+            </article>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- SEKCJA 4: PLIKI I DOKUMENTY                               -->
+        <!-- ========================================================= -->
+        <section id="view-files" class="space-y-6 hidden">
+            <div class="bg-obsidian border border-crimson-border p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <span class="font-mono text-[10px] uppercase tracking-widest text-crimson font-bold">REPOZYTORIUM // MY55.PL</span>
+                    <h2 class="font-serif text-2xl sm:text-3xl font-bold text-crimson-bright mt-0.5">Dokumenty i Pliki</h2>
+                    <p class="font-mono text-xs text-muted mt-1">Uchwały, szablony oraz materiały identyfikacyjne KM-55.</p>
+                </div>
+                <div id="files-header-actions" class="editor-only"><button type="button" onclick="toggleNewFileForm()" class="px-4 py-2 border border-crimson bg-crimson-dark text-crimson-bright hover:bg-crimson hover:text-white font-mono text-xs font-bold uppercase cursor-pointer transition-colors">+ Dodaj plik</button></div>
+            </div>
+
+            <div id="new-file-form-container"></div>
+            <div id="files-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"><div class="col-span-full bg-obsidian border border-dashed border-crimson-border p-8 text-center font-mono text-xs text-muted">Brak dokumentów do pobrania.</div></div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- SEKCJA 5: DISCORD I LINKI                                 -->
+        <!-- ========================================================= -->
+        <section id="view-links" class="space-y-6 hidden">
+            <div class="bg-obsidian border border-[var(--border-strong)] p-6 sm:p-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div class="space-y-2 max-w-2xl">
+                    <div class="inline-block font-mono text-[10px] uppercase tracking-[0.2em] px-2 py-0.5 bg-crimson text-white font-bold">
+                        SPOŁECZNOŚĆ MY55.PL
+                    </div>
+                    <h2 class="font-serif text-2xl sm:text-3xl font-bold text-crimson-bright">
+                        Serwer Discord Kolektywu Miłośników 55
+                    </h2>
+                    <p class="text-sm text-muted leading-relaxed">
+                        Portal my55.pl przechowuje oficjalne komunikaty, encyklopedię oraz dokumenty. Codzienne rozmowy, obserwacje liczby 55 oraz rekrutacja odbywają się na naszym serwerze Discord.
+                    </p>
+                </div>
+                <div class="shrink-0 flex flex-col gap-2.5 font-mono text-xs">
+                    <a id="main-discord-cta" href="https://discord.gg/sXFHZYu6Px" target="_blank" rel="noopener noreferrer" class="discord-cta px-6 py-3.5 font-bold uppercase tracking-wider text-center inline-flex items-center justify-center gap-2">
+                        <span>Dołącz na Discord</span>
+                        <span>↗</span>
+                    </a>
+                    <div id="links-discord-admin-action" class="editor-only"></div>
+                </div>
+            </div>
+
+            <div class="bg-obsidian border border-crimson-border p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <span class="font-mono text-[10px] uppercase tracking-widest text-crimson font-bold">WYKAZ</span>
+                    <h3 class="font-serif text-xl font-bold text-crimson-bright">Pozostałe kanały i zasoby</h3>
+                </div>
+                <div id="links-header-actions" class="editor-only"><button type="button" onclick="toggleNewLinkForm()" class="px-4 py-2 border border-crimson bg-crimson-dark text-crimson-bright hover:bg-crimson hover:text-white font-mono text-xs font-bold uppercase cursor-pointer">+ Dodaj link</button></div>
+            </div>
+
+            <div id="new-link-form-container"></div>
+            <div id="links-list" class="space-y-3"><div class="bg-obsidian border border-crimson-border hover:border-crimson p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 font-mono text-[10px]">
+                            <span class="px-1.5 py-0.5 bg-crimson-dark text-crimson font-bold">MEDIA</span>
+                            <span class="text-muted truncate max-w-xs sm:max-w-md">https://www.instagram.com/my55.pl/</span>
+                        </div>
+                        <h4 class="font-serif text-lg font-bold text-crimson-bright">Instagram</h4>
+                        
+                    </div>
+                    <div class="flex items-center gap-2 font-mono text-xs shrink-0">
+                        <button type="button" onclick="deleteLink('link-1795719309417')" class="px-2.5 py-2 border border-crimson-border text-muted hover:text-crimson uppercase cursor-pointer">Usuń</button>
+                        <a href="https://www.instagram.com/my55.pl/" target="_blank" rel="noopener noreferrer" class="px-4 py-2 border border-crimson bg-crimson-dark text-crimson-bright hover:bg-crimson hover:text-white uppercase font-bold">Przejdź ↗</a>
+                    </div>
+                </div></div>
+        </section>
+
+    </main>
+
+    <!-- Stopka -->
+    <footer class="border-t border-crimson-border bg-obsidian py-4 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 font-mono text-[11px] text-muted">
+            <div>MY55.PL // KOMITET OCHRONY I KULTU LICZBY 55 (KOIKL-55)</div>
+            <div class="flex items-center gap-4">
+                <span>KM-55</span>
+                <button type="button" onclick="openAuthModal()" class="text-muted hover:text-crimson transition-colors uppercase cursor-pointer">
+                    [ DOSTĘP KOMITETU ]
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Dane startowe -->
+    <script id="wiki-seed-data" type="application/json">
+{
+    "config": {
+        "adminPassword": "wkAzbEyC9nu3ylRk",
+        "discordUrl": "https://discord.gg/sXFHZYu6Px"
+    },
+    "home": {
+        "badge": "OFICJALNA WITRYNA KOLEKTYWU MIŁOŚNIKÓW 55",
+        "title": "Witamy na my55.pl",
+        "body": "Centralny portal informacyjny oraz archiwum Kolektywu Miłośników 55 (KM-55), działającego pod patronatem Komitetu Ochrony i Kultu Liczby 55 (KOIKL-55).\n\nTutaj publikujemy oficjalne dekrety, statut, dokumenty oraz hasła encyklopedyczne. Codzienne rozmowy i rekrutacja odbywają się na naszym serwerze Discord.",
+        "status": "AKTYWNY",
+        "organ": "KOIKL-55",
+        "base": "KM-55"
+    },
+    "announcements": [
+        {
+            "id": "ann-1",
+            "signature": "DEKRET NR 01/55",
+            "date": "24.11.2026",
+            "timestamp": 1795478400000,
+            "priority": 1,
+            "tag": "NACZELNE",
+            "title": "Uruchomienie Centralnego Portalu my55.pl oraz Encyklopedii KM-55",
+            "body": "Komitet Ochrony i Kultu Liczby 55 (KOIKL-55) ogłasza uruchomienie oficjalnego portalu my55.pl oraz bazy wiedzy Kolektywu Miłośników 55.\n\n## Zasady\n\n- Portal my55.pl gromadzi oficjalne dekrety, statut oraz zatwierdzone hasła encyklopedyczne.\n- Bieżące dyskusje oraz zgłaszanie obserwacji liczby 55 odbywają się na Discordzie.\n\n> Symetria pięć pięć wyznacza nasz kierunek."
+        },
+        {
+            "id": "ann-2",
+            "signature": "KOMUNIKAT NR 01/55",
+            "date": "26.11.2026",
+            "timestamp": 1795132800000,
+            "priority": 3,
+            "tag": "ORGANIZACYJNE",
+            "title": "Nabór otwarty do Kolektywu Miłośników 55",
+            "body": "Osoby chcące dołączyć do Kolektywu Miłośników 55 (KM-55) zapraszamy na oficjalny serwer Discord oraz do zapoznania się z hasłami w Encyklopedii.\n\n> Stwórz z nami silniejsze 55"
+        }
+    ],
+    "articles": [
+        {
+            "id": "art-1",
+            "code": "HASŁO-01",
+            "category": "DOKTRYNA",
+            "title": "Manifest Liczby 55",
+            "summary": "Podstawowy dokument programowy Kolektywu Miłośników 55 oraz Komitetu Ochrony i Kultu Liczby 55.",
+            "updated": "AKTUALIZACJA: 26.11.2026",
+            "body": "Liczba 55 (czyt. pięć pięć) łączy w sobie równowagę, powtórzenie i wyrazistość. Dla Kolektywu stanowi stały punkt odniesienia.\n\n## Założenia\n\n- Dokumentujemy wystąpienia liczby 55 w codziennym otoczeniu.\n- Integrujemy członków KM-55 wokół wspólnej estetyki i porządku.\n- Dbamy o dobre imię liczby 55.\n\n> 55 pozostaje naszym znakiem rozpoznawczym."
+        },
+        {
+            "id": "art-2",
+            "code": "HASŁO-02",
+            "category": "STRUKTURA",
+            "title": "Struktura KOIKL-55 i Kolektywu",
+            "summary": "Relacja pomiędzy Kolektywem Miłośników 55 (KM-55) a Komitetem Ochrony i Kultu Liczby 55 (KOIKL-55).",
+            "updated": "AKTUALIZACJA: 26.11.2026",
+            "body": "Organizacja opiera się na współpracy szerokiej społeczności oraz organu redakcyjno-nadzorczego.\n\n## Zadania Komitetu\n\n- Publikacja dekretów i komunikatów w serwisie my55.pl.\n- Rozbudowa Encyklopedii oraz archiwum dokumentów.\n- Popularyzacja liczby 55.\n"
+        },
+        {
+            "id": "art-3",
+            "code": "HASŁO-03",
+            "category": "STATUT",
+            "title": "Statut i Hierarchia Stopni",
+            "summary": "Zasady uczestnictwa, obowiązki oraz stopnie w strukturze KM-55.",
+            "updated": "AKTUALIZACJA: 26.11.2026",
+            "body": "Każdy członek wspiera porządek na serwerze Discord oraz dba o rzetelność zgłaszanych wpisów.\n\n## Stopnie\n\n- Założyciel Kolektywu\n- Rzecznik Członków\n- Radny Komitetu Ochrony i Kultu Liczby 55\n- Członek Kolektywu\n- Sympatyk"
+        },
+        {
+            "id": "art-4",
+            "code": "HASŁO-04",
+            "category": "REJESTR",
+            "title": "Rejestr Zjawisk i Obserwacji 55",
+            "summary": "Zestawienie najważniejszych wydarzeń i obserwacji związanych z liczbą 55.",
+            "updated": "ZATWIERDZONO PRZEZ KOIKL-55",
+            "body": "W tym rejestrze gromadzone są wybrane obserwacje i kamienie milowe ruchu my55.pl.\n\n## Wpis #001\n\nPowołanie Komitetu oraz uruchomienie domeny my55.pl."
+        },
+        {
+            "id": "art-1795720477254",
+            "code": "HASŁO-06",
+            "category": "ANOMALIE",
+            "title": "Równoleżnik 55°N",
+            "summary": "Równoleżnik leżący na północ od równika, w odległości około 6100 km od niego. W przeciwieństwie do wielu innych równoleżników przechodzi głównie przez tereny lądowe i chłodniejsze szerokości geograficzne.",
+            "updated": "AKTUALIZACJA: 26.11.2026",
+            "body": "## Gdzie przebiega:\n\n   Europa: zahacza o północne wyspy Danii (m.in. rejon cieśnin duńskich), przechodzi przez Morze Bałtyckie, obrzeża Rosji / obwodu królewieckiego (w pobliżu, nieco na północ od samej linii) i dalej w głąb Rosji.\n\n    Azja: ciągnie się przez południową i środkową Syberię (m.in. okolice Omska i Nowosybirska leżą na południe od niego, a pas linii idzie przez rozległe lasy, stepy i rejony północne), dalej przez Morze Ochockie i północny Pacyfik.\n\n    Ameryka Północna: przecina m.in. Alaskę (wschodnią część / archipelagi) oraz środkową i północną Kanadę m.in. przez Kolumbię Brytyjską, Albertę, Saskatchewan, Manitobę, północne Ontario i wybrzeże Labradoru, a następnie wchodzi w północny Atlantyk.\n\n## Co go charakteryzuje:\n\n    Bardzo wyraźna różnica długości dnia między latem a zimą w czerwcu dni są długie i jasne, a w grudniu krótkie i ponure.\n\n    Dominacja chłodnego klimatu umiarkowanego i subpolarnego, tajgi, tundry oraz dużych połaci mało zaludnionego terenu, szczególnie w Kanadzie i na Syberii.\n\n> To linia, przy której w naturalny sposób pojawia się 55 w szerokości geograficznej."
+        }
+    ],
+    "files": [],
+    "links": [
+        {
+            "id": "link-1795719309417",
+            "title": "Instagram",
+            "category": "MEDIA",
+            "url": "https://www.instagram.com/my55.pl/",
+            "desc": ""
+        }
+    ]
+}
+</script>
+
+    <script>
+        const STORAGE_KEY = 'my55_pl_db_v4';
+        const PREFS_KEY = 'my55_pl_prefs_v1';
+
+        let isEditor = false;
+        let isEditingArticle = false;
+        let currentArticleId = null;
+        let activeTabName = 'home';
+        let announcementsLayout = 'grid'; // 'grid' | 'list'
+        let activeAnnouncementTag = 'WSZYSTKIE';
+        let activeWikiCategory = 'WSZYSTKIE';
+        let navCollapsedOnDesktop = false;
+        let mobileNavOpen = true;
+        let wikiDrawerOpenOnMobile = true;
+
+        let prefs = {
+            theme: 'crimson-55', // 'crimson-55' | 'high-contrast-dark' | 'light-readable'
+            scale: 1, // 0.9 | 1 | 1.15 | 1.3
+            looseSpacing: false
+        };
+
+        let db = {
+            config: { adminPassword: '55', discordUrl: 'https://discord.gg/sXFHZYu6Px' },
+            home: {
+                badge: 'OFICJALNA WITRYNA KOLEKTYWU MIŁOŚNIKÓW 55',
+                title: 'Witamy na my55.pl',
+                body: '',
+                status: 'AKTYWNY',
+                organ: 'KOIKL-55',
+                base: 'KM-55'
+            },
+            announcements: [],
+            articles: [],
+            files: [],
+            links: []
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadPrefs();
+            applyAccessibilityPrefs();
+            loadDatabase();
+            applyDiscordUrls();
+            if (db.articles.length > 0) {
+                currentArticleId = db.articles[0].id;
+            }
+            // Na wąskich ekranach domyślnie zwijamy panel encyklopedii, aby nie zajmował połowy ekranu
+            if (window.innerWidth < 1024) {
+                wikiDrawerOpenOnMobile = false;
+            }
+            updateCounters();
+            renderAll();
+            syncMobileNavVisibility();
+            syncWikiDrawerVisibility();
+            moveNavIndicator();
+            typeTitle(TAB_TITLES[activeTabName]);
+            if (document.fonts) document.fonts.ready.then(moveNavIndicator);
+        });
+
+        window.addEventListener('resize', () => {
+            syncMobileNavVisibility();
+            moveNavIndicator();
+            syncWikiDrawerVisibility();
+        });
+
+        // Zamykanie popovera czytelności po kliknięciu poza nim
+        document.addEventListener('click', (e) => {
+            const pop = document.getElementById('accessibility-popover');
+            const btn = document.getElementById('accessibility-toggle-btn');
+            if (pop && btn && !pop.classList.contains('hidden')) {
+                if (!pop.contains(e.target) && !btn.contains(e.target)) {
+                    pop.classList.add('hidden');
+                    btn.setAttribute('aria-expanded', 'false');
+                }
+            }
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && (e.key === 'E' || e.key === 'e')) {
+                e.preventDefault();
+                if (!isEditor) openAuthModal();
+            }
+        });
+
+        // ==========================================
+        // USTAWIENIA CZYTELNOŚCI (MOTYW, SKALA, ODSTĘPY)
+        // ==========================================
+        function loadPrefs() {
+            try {
+                const raw = localStorage.getItem(PREFS_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    prefs = { ...prefs, ...parsed };
+                }
+            } catch (_) {}
+        }
+
+        function savePrefs() {
+            try {
+                localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
+            } catch (_) {}
+        }
+
+        function applyAccessibilityPrefs() {
+            document.documentElement.setAttribute('data-theme', prefs.theme);
+            document.documentElement.style.setProperty('--text-scale', String(prefs.scale));
+            document.documentElement.style.setProperty('--prose-line-height', prefs.looseSpacing ? '2.05' : '1.75');
+            document.documentElement.style.setProperty('--prose-letter-spacing', prefs.looseSpacing ? '0.015em' : '0em');
+
+            document.querySelectorAll('.theme-opt-btn').forEach(btn => {
+                const active = btn.getAttribute('data-theme-option') === prefs.theme;
+                btn.classList.toggle('border-crimson', active);
+                btn.classList.toggle('bg-crimson-dark', active);
+                btn.classList.toggle('text-crimson-bright', active);
+                btn.classList.toggle('font-bold', active);
+                btn.classList.toggle('border-crimson-border', !active);
+            });
+
+            document.querySelectorAll('.scale-opt-btn').forEach(btn => {
+                const val = parseFloat(btn.getAttribute('data-scale-option'));
+                const active = Math.abs(val - prefs.scale) < 0.01;
+                btn.classList.toggle('border-crimson', active);
+                btn.classList.toggle('bg-crimson-dark', active);
+                btn.classList.toggle('text-crimson-bright', active);
+                btn.classList.toggle('font-bold', active);
+                btn.classList.toggle('border-crimson-border', !active);
+            });
+
+            const scaleLabel = document.getElementById('current-scale-label');
+            if (scaleLabel) scaleLabel.textContent = `${Math.round(prefs.scale * 100)}%`;
+
+            const spacingBtn = document.getElementById('btn-loose-spacing');
+            if (spacingBtn) {
+                spacingBtn.textContent = prefs.looseSpacing ? 'Wł.' : 'Wył.';
+                spacingBtn.classList.toggle('bg-crimson', prefs.looseSpacing);
+                spacingBtn.classList.toggle('text-white', prefs.looseSpacing);
+                spacingBtn.classList.toggle('border-crimson', prefs.looseSpacing);
+            }
+        }
+
+        function toggleAccessibilityPopover(e) {
+            e.stopPropagation();
+            const pop = document.getElementById('accessibility-popover');
+            const btn = document.getElementById('accessibility-toggle-btn');
+            const willOpen = pop.classList.contains('hidden');
+            pop.classList.toggle('hidden', !willOpen);
+            btn.setAttribute('aria-expanded', String(willOpen));
+        }
+
+        function setThemeMode(theme) {
+            prefs.theme = theme;
+            savePrefs();
+            applyAccessibilityPrefs();
+        }
+
+        function setTextScale(scale) {
+            prefs.scale = scale;
+            savePrefs();
+            applyAccessibilityPrefs();
+        }
+
+        function toggleLooseSpacing() {
+            prefs.looseSpacing = !prefs.looseSpacing;
+            savePrefs();
+            applyAccessibilityPrefs();
+        }
+
+        function resetAccessibilitySettings() {
+            prefs = { theme: 'crimson-55', scale: 1, looseSpacing: false };
+            savePrefs();
+            applyAccessibilityPrefs();
+            showToast('Przywrócono domyślne ustawienia czytelności.');
+        }
+
+        // ==========================================
+        // ZWIJANIE NAWIGACJI I KATEGORII (MOBILE + DESKTOP)
+        // ==========================================
+        function toggleMobileNav() {
+            mobileNavOpen = !mobileNavOpen;
+            syncMobileNavVisibility();
+        }
+
+        function toggleNavCollapsed() {
+            if (window.innerWidth < 1024) {
+                mobileNavOpen = !mobileNavOpen;
+            } else {
+                navCollapsedOnDesktop = !navCollapsedOnDesktop;
+            }
+            syncMobileNavVisibility();
+        }
+
+        function syncMobileNavVisibility() {
+            const bar = document.getElementById('nav-tabs-bar');
+            const label = document.getElementById('nav-collapse-label');
+            const arrow = document.getElementById('nav-collapse-arrow');
+            const mobileBtn = document.getElementById('mobile-nav-toggle-btn');
+            const mobileLabel = document.getElementById('mobile-nav-toggle-label');
+
+            const isHidden = window.innerWidth < 1024 ? !mobileNavOpen : navCollapsedOnDesktop;
+            if (bar) { bar.classList.toggle('nav-hidden', isHidden); bar.setAttribute('aria-hidden', String(isHidden)); }
+            if (label) label.textContent = isHidden ? 'Pokaż pasek' : 'Schowaj pasek';
+            if (arrow) arrow.textContent = isHidden ? '▾' : '▴';
+            if (mobileBtn) mobileBtn.setAttribute('aria-expanded', String(!isHidden));
+            if (mobileLabel) mobileLabel.textContent = isHidden ? 'Sekcje' : 'Ukryj';
+        }
+
+        function toggleWikiDrawer() {
+            wikiDrawerOpenOnMobile = !wikiDrawerOpenOnMobile;
+            syncWikiDrawerVisibility();
+        }
+
+        function syncWikiDrawerVisibility() {
+            const content = document.getElementById('wiki-drawer-content');
+            const label = document.getElementById('wiki-drawer-label');
+            if (!content || !label) return;
+            if (window.innerWidth >= 1024) {
+                content.classList.remove('hidden');
+            } else {
+                content.classList.toggle('hidden', !wikiDrawerOpenOnMobile);
+                label.textContent = wikiDrawerOpenOnMobile ? 'Zwiń' : 'Rozwiń';
+            }
+        }
+
+        // ==========================================
+        // BAZA DANYCH
+        // ==========================================
+        function loadDatabase() {
+            const seedEl = document.getElementById('wiki-seed-data');
+            const seedData = JSON.parse(seedEl.textContent);
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    db = {
+                        config: { ...seedData.config, ...(parsed.config || {}) },
+                        home: { ...seedData.home, ...(parsed.home || {}) },
+                        announcements: parsed.announcements || seedData.announcements,
+                        articles: parsed.articles || seedData.articles,
+                        files: parsed.files || seedData.files,
+                        links: parsed.links || seedData.links
+                    };
+                } else {
+                    db = seedData;
+                }
+            } catch (_) {
+                db = seedData;
+            }
+        }
+
+        function saveDatabase() {
+            if (!isEditor) return;
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+                updateCounters();
+                applyDiscordUrls();
+                return true;
+            } catch (_) {
+                showToast('Brak miejsca w pamięci przeglądarki — plik jest za duży.');
+                return false;
+            }
+        }
+
+        function renderAll() {
+            renderHome();
+            renderAnnouncements();
+            renderWikiList();
+            renderCurrentArticle();
+            renderFiles();
+            renderLinks();
+        }
+
+        function applyDiscordUrls() {
+            const url = db.config?.discordUrl || 'https://discord.gg/sXFHZYu6Px';
+            ['header-discord-btn', 'home-discord-cta', 'home-discord-tile', 'main-discord-cta'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.href = url;
+            });
+        }
+
+        function updateCounters() {
+            document.getElementById('count-announcements').textContent = String(db.announcements.length).padStart(2, '0');
+            document.getElementById('count-wiki').textContent = String(db.articles.length).padStart(2, '0');
+            document.getElementById('count-files').textContent = String(db.files.length).padStart(2, '0');
+        }
+
+        // ==========================================
+        // WYSZUKIWANIE GLOBALNE
+        // ==========================================
+        const fold1 = c => (c === 'ł' || c === 'Ł') ? 'l' : c.normalize('NFD')[0].toLowerCase();
+        const fold = s => { s = String(s || ''); let o = ''; for (let i = 0; i < s.length; i++) o += fold1(s[i]); return o; };
+        let searchIndex = [], searchHits = [], searchActive = 0;
+
+        function buildSearchIndex() {
+            const e = [];
+            e.push({ kind: 'Strona główna', title: db.home.title, text: db.home.body, go: () => switchTab('home') });
+            db.announcements.forEach(a => e.push({ kind: 'Ogłoszenia', meta: a.signature, title: a.title, text: `${a.tag} ${a.body}`, go: () => switchTab('announcements') }));
+            db.articles.forEach(a => e.push({ kind: 'Encyklopedia', meta: a.category, title: a.title, text: `${a.code} ${a.summary} ${a.body}`, go: () => { switchTab('wiki'); selectArticle(a.id); } }));
+            db.files.forEach(f => e.push({ kind: 'Pliki', meta: f.meta, title: f.title, text: `${f.desc} ${f.name || ''}`, go: () => switchTab('files') }));
+            db.links.forEach(l => e.push({ kind: 'Linki', meta: l.category, title: l.title, text: `${l.desc} ${l.url}`, go: () => switchTab('links') }));
+            e.forEach(x => { x.ft = fold(x.title); x.fx = fold(x.text); });
+            return e;
+        }
+
+        function openSearch() {
+            const m = document.getElementById('search-modal');
+            searchIndex = buildSearchIndex();
+            m.classList.remove('hidden'); m.classList.add('flex');
+            const inp = document.getElementById('search-input');
+            inp.value = ''; runSearch(); inp.focus();
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSearch() {
+            const m = document.getElementById('search-modal');
+            m.classList.add('hidden'); m.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        function searchSnippet(text, terms) {
+            const clean = String(text || '').replace(/[#>*]+/g, ' ').replace(/\s+/g, ' ').trim();
+            const f = fold(clean);
+            const hit = terms.map(t => f.indexOf(t)).filter(i => i >= 0).sort((a, b) => a - b)[0];
+            if (hit === undefined) return clean.slice(0, 110);
+            const s = Math.max(0, hit - 40);
+            return (s > 0 ? '…' : '') + clean.slice(s, s + 120) + (s + 120 < clean.length ? '…' : '');
+        }
+
+        function hl(text, terms) {
+            const t = String(text || ''), f = fold(t), r = [];
+            terms.forEach(term => { let i = f.indexOf(term); while (i !== -1) { r.push([i, i + term.length]); i = f.indexOf(term, i + term.length); } });
+            r.sort((a, b) => a[0] - b[0]);
+            const m = [];
+            r.forEach(x => { const l = m[m.length - 1]; if (l && x[0] <= l[1]) l[1] = Math.max(l[1], x[1]); else m.push([x[0], x[1]]); });
+            let o = '', p = 0;
+            m.forEach(([s, e]) => { o += escapeHTML(t.slice(p, s)) + '<mark>' + escapeHTML(t.slice(s, e)) + '</mark>'; p = e; });
+            return o + escapeHTML(t.slice(p));
+        }
+
+        function runSearch() {
+            const raw = document.getElementById('search-input').value.trim();
+            const box = document.getElementById('search-results');
+            const terms = fold(raw).split(/\s+/).filter(Boolean);
+            searchActive = 0;
+
+            if (!terms.length) {
+                searchHits = [
+                    { kind: 'Przejdź do', title: 'Strona główna', go: () => switchTab('home') },
+                    { kind: 'Przejdź do', title: 'Ogłoszenia', go: () => switchTab('announcements') },
+                    { kind: 'Przejdź do', title: 'Encyklopedia 55', go: () => switchTab('wiki') },
+                    { kind: 'Przejdź do', title: 'Pliki i dokumenty', go: () => switchTab('files') },
+                    { kind: 'Przejdź do', title: 'Linki i Discord', go: () => switchTab('links') }
+                ];
+            } else {
+                searchHits = searchIndex.map(x => {
+                    const all = x.ft + ' ' + x.fx;
+                    if (!terms.every(t => all.includes(t))) return null;
+                    let score = 0;
+                    terms.forEach(t => { score += x.ft.includes(t) ? 3 : 1; });
+                    if (x.ft.startsWith(terms[0])) score += 2;
+                    return { ...x, score };
+                }).filter(Boolean).sort((a, b) => b.score - a.score).slice(0, 14);
+            }
+
+            if (!searchHits.length) {
+                box.innerHTML = `<div class="px-4 py-8 text-center font-mono text-xs text-muted">Brak wyników dla <span class="text-crimson font-bold">${escapeHTML(raw)}</span>.<br>Spróbuj krótszej frazy lub innego słowa.</div>`;
+                return;
+            }
+
+            let html = '', last = null;
+            searchHits.forEach((x, i) => {
+                if (x.kind !== last) { html += `<div class="search-group">${escapeHTML(x.kind)}</div>`; last = x.kind; }
+                const snippet = terms.length && x.text ? searchSnippet(x.text, terms) : '';
+                html += `<button type="button" role="option" data-i="${i}" class="search-item${i === 0 ? ' active' : ''}" onmouseenter="setSearchActive(${i})" onclick="chooseSearch(${i})">
+                    <div class="flex items-center justify-between gap-3">
+                        <span class="font-serif text-base font-bold text-crimson-bright">${hl(x.title, terms)}</span>
+                        ${x.meta ? `<span class="font-mono text-[10px] text-muted shrink-0">${escapeHTML(x.meta)}</span>` : ''}
+                    </div>
+                    ${snippet ? `<div class="text-xs text-muted mt-0.5 leading-relaxed">${hl(snippet, terms)}</div>` : ''}
+                </button>`;
+            });
+            box.innerHTML = html;
+        }
+
+        function setSearchActive(i) {
+            searchActive = i;
+            document.querySelectorAll('#search-results .search-item').forEach(el => el.classList.toggle('active', Number(el.dataset.i) === i));
+        }
+
+        function chooseSearch(i) {
+            const hit = searchHits[i];
+            if (!hit) return;
+            closeSearch();
+            hit.go();
+        }
+
+        function searchKeydown(e) {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (!searchHits.length) return;
+                setSearchActive((searchActive + (e.key === 'ArrowDown' ? 1 : -1) + searchHits.length) % searchHits.length);
+                document.querySelector(`#search-results [data-i="${searchActive}"]`)?.scrollIntoView({ block: 'nearest' });
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                chooseSearch(searchActive);
+            }
+        }
+
+        window.addEventListener('keydown', (e) => {
+            const open = !document.getElementById('search-modal').classList.contains('hidden');
+            if (e.key === 'Escape' && open) { closeSearch(); return; }
+            const tag = (e.target.tagName || '').toLowerCase();
+            const typing = ['input', 'textarea', 'select'].includes(tag) || e.target.isContentEditable;
+            if (!open && ((e.key === '/' && !typing) || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'))) {
+                e.preventDefault();
+                openSearch();
+            }
+        });
+
+        // ==========================================
+        // NAZWA KARTY PRZEGLĄDARKI + WSKAŹNIK ZAKŁADKI
+        // ==========================================
+        const BASE_TITLE = 'my55.pl — Kolektyw Miłośników 55';
+        const TAB_TITLES = { home: null, announcements: 'Ogłoszenia', wiki: 'Encyklopedia 55', files: 'Pliki i dokumenty', links: 'Linki i Discord' };
+        let titleTimer = null;
+
+        function typeTitle(section) {
+            clearInterval(titleTimer);
+            const full = section ? `my55.pl — ${section}` : BASE_TITLE;
+            if (matchMedia('(prefers-reduced-motion: reduce)').matches) { document.title = full; return; }
+            let i = 0;
+            titleTimer = setInterval(() => {
+                i++;
+                document.title = full.slice(0, i) + (i < full.length ? '▍' : '');
+                if (i >= full.length) clearInterval(titleTimer);
+            }, 55);
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) { clearInterval(titleTimer); document.title = '55 // wróć na my55.pl'; }
+            else typeTitle(TAB_TITLES[activeTabName]);
+        });
+
+        function moveNavIndicator() {
+            const b = document.getElementById('tab-btn-' + activeTabName);
+            const i = document.getElementById('nav-indicator');
+            if (!b || !i || !b.offsetWidth) return;
+            i.style.left = b.offsetLeft + 'px';
+            i.style.width = b.offsetWidth + 'px';
+            i.style.top = (b.offsetTop + b.offsetHeight - 2) + 'px';
+        }
+
+        // ==========================================
+        // AUTORYZACJA I NAWIGACJA
+        // ==========================================
+        function openAuthModal() {
+            if (isEditor) return;
+            const modal = document.getElementById('auth-modal');
+            const input = document.getElementById('auth-password-input');
+            input.value = '';
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => input.focus(), 50);
+        }
+
+        function closeAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function submitChairmanAuth() {
+            const val = document.getElementById('auth-password-input').value.trim();
+            if (val === (db.config?.adminPassword || '55')) {
+                isEditor = true;
+                document.body.classList.add('editor-mode');
+                closeAuthModal();
+                renderAll();
+                showToast('Odblokowano tryb Przewodniczącego.');
+            } else {
+                showToast('Nieprawidłowy klucz dostępu.');
+            }
+        }
+
+        function lockAdminMode() {
+            isEditor = false;
+            isEditingArticle = false;
+            document.body.classList.remove('editor-mode');
+            ['announcement-editor-container', 'article-edit-container', 'new-file-form-container', 'new-link-form-container'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = '';
+            });
+            document.getElementById('home-editor-block').classList.add('hidden');
+            document.getElementById('home-display-block').classList.remove('hidden');
+            renderAll();
+            showToast('Wrócono do widoku publicznego.');
+        }
+
+        function switchTab(tabName) {
+            activeTabName = tabName;
+            const sections = ['home', 'announcements', 'wiki', 'files', 'links'];
+            sections.forEach(sec => {
+                const viewEl = document.getElementById(`view-${sec}`);
+                const btnEl = document.getElementById(`tab-btn-${sec}`);
+                const active = sec === tabName;
+                viewEl.classList.toggle('hidden', !active);
+                btnEl.classList.toggle('border-crimson', active);
+                btnEl.classList.toggle('bg-crimson-dark', active);
+                btnEl.classList.toggle('text-crimson-bright', active);
+                btnEl.classList.toggle('border-crimson-border', !active);
+                btnEl.classList.toggle('bg-panel/70', !active);
+                btnEl.classList.toggle('text-ink', !active);
+            });
+            if (tabName === 'wiki' && window.innerWidth < 1024) {
+                wikiDrawerOpenOnMobile = false;
+                syncWikiDrawerVisibility();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            moveNavIndicator();
+            typeTitle(TAB_TITLES[tabName]);
+        }
+
+        // ==========================================
+        // STRONA GŁÓWNA
+        // ==========================================
+        function renderHome() {
+            document.getElementById('home-badge-text').textContent = db.home.badge;
+            document.getElementById('home-hero-title').textContent = db.home.title;
+            document.getElementById('home-hero-body').innerHTML = formatWikiMarkdown(db.home.body);
+            document.getElementById('home-stat-status').textContent = db.home.status;
+            document.getElementById('home-count-announcements').textContent = db.announcements.length;
+            document.getElementById('home-count-wiki').textContent = db.articles.length;
+            document.getElementById('home-count-files').textContent = db.files.length;
+
+            const adminCtrl = document.getElementById('home-admin-controls');
+            adminCtrl.innerHTML = isEditor
+                ? `<button type="button" onclick="openHomeEdit()" class="px-3 py-1 border border-crimson bg-crimson-dark text-crimson-bright hover:bg-crimson hover:text-white font-mono text-[11px] font-bold uppercase cursor-pointer">Edytuj</button>`
+                : '';
+
+            const latestContainer = document.getElementById('home-latest-announcements');
+            latestContainer.innerHTML = '';
+            const recent = [...db.announcements].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)).slice(0, 3);
+
+            recent.forEach(ann => {
+                const plain = (ann.body || '').replace(/[#>*\-]+/g, ' ').replace(/\s+/g, ' ').trim();
+                const excerpt = plain.length > 105 ? plain.slice(0, 105).trim() + '...' : plain;
+                const card = document.createElement('article');
+                card.className = 'bg-obsidian border border-crimson-border hover:border-crimson p-4 flex flex-col justify-between gap-3 transition-colors';
+                card.innerHTML = `
+                    <div class="space-y-1.5">
+                        <div class="flex items-center justify-between gap-2 font-mono text-[10px]">
+                            <span class="px-1.5 py-0.5 bg-crimson text-white font-bold">${escapeHTML(ann.signature)}</span>
+                            <span class="text-muted">${escapeHTML(ann.date)}</span>
+                        </div>
+                        <h3 class="font-serif text-base font-bold text-crimson-bright leading-snug">${escapeHTML(ann.title)}</h3>
+                        <p class="text-xs text-muted leading-relaxed">${escapeHTML(excerpt)}</p>
+                    </div>
+                    <button type="button" onclick="switchTab('announcements')" class="text-left font-mono text-[11px] text-crimson hover:underline font-bold uppercase cursor-pointer">
+                        Czytaj →
+                    </button>
+                `;
+                latestContainer.appendChild(card);
+            });
+        }
+
+        function openHomeEdit() {
+            if (!isEditor) return;
+            document.getElementById('edit-home-badge').value = db.home.badge;
+            document.getElementById('edit-home-status').value = db.home.status;
+            document.getElementById('edit-home-title').value = db.home.title;
+            document.getElementById('edit-home-body').value = db.home.body;
+            document.getElementById('edit-home-organ').value = db.home.organ;
+            document.getElementById('edit-home-base').value = db.home.base;
+            document.getElementById('home-display-block').classList.add('hidden');
+            document.getElementById('home-editor-block').classList.remove('hidden');
+        }
+
+        function cancelHomeEdit() {
+            document.getElementById('home-editor-block').classList.add('hidden');
+            document.getElementById('home-display-block').classList.remove('hidden');
+        }
+
+        function saveHomeEdit() {
+            if (!isEditor) return;
+            db.home.badge = document.getElementById('edit-home-badge').value.trim().toUpperCase() || 'MY55.PL';
+            db.home.status = document.getElementById('edit-home-status').value.trim().toUpperCase() || 'AKTYWNY';
+            db.home.title = document.getElementById('edit-home-title').value.trim() || 'Witamy na my55.pl';
+            db.home.body = document.getElementById('edit-home-body').value;
+            db.home.organ = document.getElementById('edit-home-organ').value.trim().toUpperCase() || 'KOIKL-55';
+            db.home.base = document.getElementById('edit-home-base').value.trim().toUpperCase() || 'KM-55';
+            saveDatabase();
+            cancelHomeEdit();
+            renderHome();
+            showToast('Zapisano stronę główną.');
+        }
+
+        // ==========================================
+        // OGŁOSZENIA: KAFELKI / LISTA, SORTOWANIE, FILTRY
+        // ==========================================
+        function setAnnouncementsLayout(mode) {
+            announcementsLayout = mode === 'list' ? 'list' : 'grid';
+            const btnGrid = document.getElementById('btn-layout-grid');
+            const btnList = document.getElementById('btn-layout-list');
+
+            if (announcementsLayout === 'grid') {
+                btnGrid.className = 'px-2.5 py-1 flex items-center gap-1.5 font-mono text-[11px] uppercase cursor-pointer bg-crimson text-white font-bold';
+                btnList.className = 'px-2.5 py-1 flex items-center gap-1.5 font-mono text-[11px] uppercase cursor-pointer text-muted hover:text-ink';
+            } else {
+                btnList.className = 'px-2.5 py-1 flex items-center gap-1.5 font-mono text-[11px] uppercase cursor-pointer bg-crimson text-white font-bold';
+                btnGrid.className = 'px-2.5 py-1 flex items-center gap-1.5 font-mono text-[11px] uppercase cursor-pointer text-muted hover:text-ink';
+            }
+
+            renderAnnouncements();
+        }
+
+        function setAnnouncementFilter(tag) {
+            activeAnnouncementTag = tag;
+            renderAnnouncements();
+        }
+
+        function renderAnnouncementFilters() {
+            const container = document.getElementById('announcements-category-filters');
+            if (!container) return;
+            const tags = ['WSZYSTKIE', ...new Set(db.announcements.map(a => (a.tag || 'OGÓLNE').toUpperCase()))];
+            if (!tags.includes(activeAnnouncementTag)) activeAnnouncementTag = 'WSZYSTKIE';
+
+            container.innerHTML = '';
+            tags.forEach(tag => {
+                const active = activeAnnouncementTag === tag;
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.onclick = () => setAnnouncementFilter(tag);
+                btn.className = `px-2.5 py-1 border font-mono text-[10px] uppercase tracking-wider shrink-0 cursor-pointer transition-colors ${
+                    active
+                        ? 'border-crimson bg-crimson-dark text-crimson-bright font-bold'
+                        : 'border-crimson-border bg-void text-muted hover:border-crimson hover:text-ink'
+                }`;
+                btn.textContent = tag;
+                container.appendChild(btn);
+            });
+        }
+
+        function getSortedAndFilteredAnnouncements() {
+            const sortBy = document.getElementById('announcements-sort-select')?.value || 'newest';
+            let items = [...db.announcements];
+
+            if (activeAnnouncementTag !== 'WSZYSTKIE') {
+                items = items.filter(a => (a.tag || 'OGÓLNE').toUpperCase() === activeAnnouncementTag);
+            }
+
+            items.sort((a, b) => {
+                if (sortBy === 'priority') {
+                    const pDiff = (b.priority || 1) - (a.priority || 1);
+                    if (pDiff !== 0) return pDiff;
+                    return (b.timestamp || 0) - (a.timestamp || 0);
+                }
+                if (sortBy === 'oldest') {
+                    return (a.timestamp || 0) - (b.timestamp || 0);
+                }
+                return (b.timestamp || 0) - (a.timestamp || 0);
+            });
+
+            return items;
+        }
+
+        function renderAnnouncements() {
+            const headerActions = document.getElementById('announcements-header-actions');
+            headerActions.innerHTML = isEditor
+                ? `<button type="button" onclick="openAnnouncementEditor()" class="px-4 py-2 border border-crimson bg-crimson-dark hover:bg-crimson hover:text-white text-crimson-bright font-mono text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer">+ Nowe ogłoszenie</button>`
+                : '';
+
+            renderAnnouncementFilters();
+
+            const listEl = document.getElementById('announcements-list');
+            listEl.className = announcementsLayout === 'grid'
+                ? 'grid grid-cols-1 md:grid-cols-2 gap-5'
+                : 'flex flex-col gap-4';
+
+            const items = getSortedAndFilteredAnnouncements();
+            listEl.innerHTML = '';
+
+            if (items.length === 0) {
+                listEl.innerHTML = `<div class="col-span-full bg-obsidian border border-dashed border-crimson-border p-8 text-center font-mono text-xs text-muted">Brak ogłoszeń w wybranej kategorii.</div>`;
+                return;
+            }
+
+            items.forEach(ann => {
+                const isGrid = announcementsLayout === 'grid';
+                const card = document.createElement('article');
+                card.className = isGrid
+                    ? 'bg-obsidian border border-crimson-border hover:border-crimson p-5 sm:p-6 flex flex-col justify-between transition-colors'
+                    : 'bg-obsidian border border-crimson-border hover:border-crimson p-5 sm:p-6 transition-colors';
+
+                const priorityBadge = (ann.priority || 1) >= 3
+                    ? `<span class="px-1.5 py-0.5 border border-crimson text-crimson font-bold">WAŻNE</span>`
+                    : '';
+
+                const adminButtonsHTML = isEditor
+                    ? `<div class="flex items-center gap-2 font-mono text-xs">
+                           <button type="button" onclick="openAnnouncementEditor('${ann.id}')" class="px-2.5 py-1 border border-crimson text-crimson-bright hover:bg-crimson hover:text-white uppercase cursor-pointer">Edytuj</button>
+                           <button type="button" onclick="deletePost('${ann.id}')" class="px-2.5 py-1 border border-crimson-border text-muted hover:text-crimson uppercase cursor-pointer">Usuń</button>
+                       </div>`
+                    : '';
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-crimson-border/70 pb-3 mb-3.5">
+                            <div class="flex flex-wrap items-center gap-2 font-mono text-[10px]">
+                                <span class="px-2 py-0.5 bg-crimson text-white font-bold">${escapeHTML(ann.signature)}</span>
+                                <span class="px-2 py-0.5 border border-crimson-border bg-panel text-crimson-bright">${escapeHTML(ann.tag || 'OGŁOSZENIE')}</span>
+                                ${priorityBadge}
+                                <span class="text-muted">${escapeHTML(ann.date)}</span>
+                            </div>
+                            ${adminButtonsHTML}
+                        </div>
+                        <h3 class="font-serif text-xl font-bold text-crimson-bright mb-3 leading-snug">${escapeHTML(ann.title)}</h3>
+                        <div class="wiki-prose text-sm">
+                            ${formatWikiMarkdown(ann.body)}
+                        </div>
+                    </div>
+                `;
+                listEl.appendChild(card);
+            });
+        }
+
+        function openAnnouncementEditor(annId = null) {
+            if (!isEditor) return;
+            const container = document.getElementById('announcement-editor-container');
+            const isEdit = Boolean(annId);
+            const item = isEdit ? db.announcements.find(a => a.id === annId) : null;
+            if (isEdit && !item) return;
+
+            const nextNum = String(db.announcements.length + 1).padStart(2, '0');
+            const today = new Date().toLocaleDateString('pl-PL');
+
+            container.innerHTML = `
+                <div class="bg-obsidian border border-[var(--border-strong)] p-6 space-y-4">
+                    <div class="font-mono text-xs font-bold uppercase text-crimson border-b border-crimson-border pb-2">
+                        ${isEdit ? `Edycja: ${escapeHTML(item.signature)}` : 'Nowe ogłoszenie'}
+                    </div>
+                    <input type="hidden" id="ann-edit-id" value="${isEdit ? escapeHTML(item.id) : ''}">
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block font-mono text-[10px] uppercase text-muted mb-1">Sygnatura</label>
+                            <input type="text" id="ann-signature" value="${isEdit ? escapeHTML(item.signature) : `DEKRET NR ${nextNum}/55`}" class="wiki-input w-full px-3 py-2 font-mono text-xs uppercase">
+                        </div>
+                        <div>
+                            <label class="block font-mono text-[10px] uppercase text-muted mb-1">Data</label>
+                            <input type="text" id="ann-date" value="${isEdit ? escapeHTML(item.date) : today}" class="wiki-input w-full px-3 py-2 font-mono text-xs">
+                        </div>
+                        <div>
+                            <label class="block font-mono text-[10px] uppercase text-muted mb-1">Kategoria</label>
+                            <input type="text" id="ann-tag" value="${isEdit ? escapeHTML(item.tag) : 'KOMUNIKAT'}" class="wiki-input w-full px-3 py-2 font-mono text-xs uppercase">
+                        </div>
+                        <div>
+                            <label class="block font-mono text-[10px] uppercase text-muted mb-1">Priorytet</label>
+                            <select id="ann-priority" class="wiki-input w-full px-3 py-2 font-mono text-xs">
+                                <option value="1" ${(isEdit ? item.priority : 1) === 1 ? 'selected' : ''}>Standardowy</option>
+                                <option value="3" ${(isEdit ? item.priority : 1) >= 3 ? 'selected' : ''}>Ważne</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block font-mono text-[10px] uppercase text-muted mb-1">Tytuł</label>
+                        <input type="text" id="ann-title" value="${isEdit ? escapeHTML(item.title) : ''}" class="wiki-input w-full px-3 py-2 font-serif text-lg font-bold">
+                    </div>
+                    <div>
+                        <label class="block font-mono text-[10px] uppercase text-muted mb-1">Treść</label>
+                        <textarea id="ann-body" rows="6" class="wiki-input w-full p-3 font-mono text-sm">${isEdit ? escapeHTML(item.body) : ''}</textarea>
+                    </div>
+                    <div class="flex justify-end gap-2 font-mono text-xs">
+                        <button type="button" onclick="closeAnnouncementEditor()" class="px-4 py-2 border border-crimson-border text-ink uppercase cursor-pointer">Anuluj</button>
+                        <button type="button" onclick="saveAnnouncement()" class="px-5 py-2 bg-crimson text-white font-bold uppercase cursor-pointer">Zapisz</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function closeAnnouncementEditor() {
+            document.getElementById('announcement-editor-container').innerHTML = '';
+        }
+
+        function saveAnnouncement() {
+            if (!isEditor) return;
+            const editId = document.getElementById('ann-edit-id').value;
+            const signature = document.getElementById('ann-signature').value.trim().toUpperCase() || 'KOMUNIKAT // 55';
+            const date = document.getElementById('ann-date').value.trim() || new Date().toLocaleDateString('pl-PL');
+            const tag = document.getElementById('ann-tag').value.trim().toUpperCase() || 'OGŁOSZENIE';
+            const priority = parseInt(document.getElementById('ann-priority').value, 10) || 1;
+            const title = document.getElementById('ann-title').value.trim();
+            const body = document.getElementById('ann-body').value;
+
+            if (!title) {
+                showToast('Podaj tytuł ogłoszenia.');
+                return;
+            }
+
+            if (editId) {
+                const idx = db.announcements.findIndex(a => a.id === editId);
+                if (idx !== -1) {
+                    db.announcements[idx] = { ...db.announcements[idx], signature, date, tag, priority, title, body };
+                }
+            } else {
+                db.announcements.unshift({
+                    id: 'ann-' + Date.now(),
+                    signature,
+                    date,
+                    timestamp: Date.now(),
+                    priority,
+                    tag,
+                    title,
+                    body
+                });
+            }
+
+            closeAnnouncementEditor();
+            saveDatabase();
+            renderHome();
+            renderAnnouncements();
+            showToast('Zapisano ogłoszenie.');
+        }
+
+        function deletePost(id) {
+            if (!isEditor) return;
+            openConfirmModal('Usunąć to ogłoszenie?', () => {
+                db.announcements = db.announcements.filter(a => a.id !== id);
+                saveDatabase();
+                renderHome();
+                renderAnnouncements();
+                showToast('Usunięto ogłoszenie.');
+            });
+        }
+
+        // ==========================================
+        // ENCYKLOPEDIA / KATEGORIE
+        // ==========================================
+        function setWikiCategory(cat) {
+            activeWikiCategory = cat;
+            renderWikiList();
+        }
+
+        function renderWikiList() {
+            const sidebarAdmin = document.getElementById('wiki-sidebar-admin-actions');
+            sidebarAdmin.innerHTML = isEditor
+                ? `<button type="button" onclick="createNewArticle()" class="w-full py-2 px-3 border border-crimson bg-crimson-dark hover:bg-crimson hover:text-white text-crimson-bright font-mono text-xs font-bold uppercase cursor-pointer">+ Nowe hasło</button>`
+                : '';
+
+            const pillsEl = document.getElementById('wiki-category-pills');
+            const categories = ['WSZYSTKIE', ...new Set(db.articles.map(a => (a.category || 'INNE').toUpperCase()))];
+            if (!categories.includes(activeWikiCategory)) activeWikiCategory = 'WSZYSTKIE';
+
+            pillsEl.innerHTML = '';
+            categories.forEach(cat => {
+                const active = activeWikiCategory === cat;
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.onclick = () => setWikiCategory(cat);
+                b.className = `px-2 py-1 border uppercase cursor-pointer transition-colors ${
+                    active
+                        ? 'border-crimson bg-crimson-dark text-crimson-bright font-bold'
+                        : 'border-crimson-border bg-void text-muted hover:border-crimson hover:text-ink'
+                }`;
+                b.textContent = cat;
+                pillsEl.appendChild(b);
+            });
+
+            const listEl = document.getElementById('wiki-sidebar-list');
+            const query = (document.getElementById('wiki-search')?.value || '').toLowerCase().trim();
+            listEl.innerHTML = '';
+
+            const filtered = db.articles.filter(art => {
+                const matchCat = activeWikiCategory === 'WSZYSTKIE' || (art.category || '').toUpperCase() === activeWikiCategory;
+                const matchQuery = !query || art.title.toLowerCase().includes(query) || art.body.toLowerCase().includes(query);
+                return matchCat && matchQuery;
+            });
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = `<div class="font-mono text-xs text-muted py-3 text-center border border-dashed border-crimson-border">Brak haseł.</div>`;
+                return;
+            }
+
+            filtered.forEach(art => {
+                const active = art.id === currentArticleId;
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.onclick = () => selectArticle(art.id);
+                btn.className = `w-full text-left p-2.5 border transition-colors cursor-pointer ${
+                    active ? 'border-crimson bg-crimson-dark text-crimson-bright' : 'border-transparent hover:border-crimson-border bg-panel/70 text-ink'
+                }`;
+                btn.innerHTML = `
+                    <div class="flex items-center justify-between font-mono text-[10px] text-muted">
+                        <span>${escapeHTML(art.code)}</span>
+                        <span>${escapeHTML(art.category)}</span>
+                    </div>
+                    <div class="font-sans text-xs font-semibold mt-0.5 truncate">${escapeHTML(art.title)}</div>
+                `;
+                listEl.appendChild(btn);
+            });
+        }
+
+        function selectArticle(id) {
+            if (isEditingArticle) cancelEditMode();
+            currentArticleId = id;
+            if (window.innerWidth < 1024) {
+                wikiDrawerOpenOnMobile = false;
+                syncWikiDrawerVisibility();
+            }
+            renderWikiList();
+            renderCurrentArticle();
+        }
+
+        function renderCurrentArticle() {
+            const art = db.articles.find(a => a.id === currentArticleId) || db.articles[0];
+            const viewMode = document.getElementById('article-view-mode');
+            const editContainer = document.getElementById('article-edit-container');
+            const adminActions = document.getElementById('wiki-article-admin-actions');
+
+            adminActions.innerHTML = isEditor && art
+                ? `<button id="btn-toggle-edit" type="button" onclick="toggleEditMode()" class="px-3 py-1 border border-crimson bg-crimson-dark text-crimson-bright hover:bg-crimson hover:text-white uppercase font-bold cursor-pointer">${isEditingArticle ? 'Podgląd' : 'Edytuj'}</button>
+                   <button type="button" onclick="deleteArticle()" class="px-3 py-1 border border-crimson-border text-muted hover:text-crimson uppercase cursor-pointer">Usuń</button>`
+                : '';
+
+            if (!art) return;
+            document.getElementById('article-code').textContent = art.code;
+            document.getElementById('article-category').textContent = art.category;
+            document.getElementById('article-updated').textContent = art.updated;
+            document.getElementById('view-article-title').textContent = art.title;
+            document.getElementById('view-article-summary').textContent = art.summary || '';
+            document.getElementById('view-article-body').innerHTML = formatWikiMarkdown(art.body);
+            viewMode.classList.remove('hidden');
+            editContainer.innerHTML = '';
+            isEditingArticle = false;
+        }
+
+        function toggleEditMode() {
+            if (!isEditor) return;
+            const art = db.articles.find(a => a.id === currentArticleId);
+            if (!art) return;
+            if (isEditingArticle) {
+                cancelEditMode();
+                return;
+            }
+            isEditingArticle = true;
+            document.getElementById('article-view-mode').classList.add('hidden');
+            document.getElementById('article-edit-container').innerHTML = `
+                <div class="p-6 space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="sm:col-span-2">
+                            <label class="block font-mono text-[10px] uppercase text-muted mb-1">Tytuł</label>
+                            <input type="text" id="edit-article-title" value="${escapeHTML(art.title)}" class="wiki-input w-full px-3 py-2 font-serif text-lg font-bold">
+                        </div>
+                        <div>
+                            <label class="block font-mono text-[10px] uppercase text-muted mb-1">Kategoria</label>
+                            <input type="text" id="edit-article-category" value="${escapeHTML(art.category)}" class="wiki-input w-full px-3 py-2 font-mono text-xs uppercase">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block font-mono text-[10px] uppercase text-muted mb-1">Streszczenie</label>
+                        <input type="text" id="edit-article-summary" value="${escapeHTML(art.summary)}" class="wiki-input w-full px-3 py-2 font-mono text-xs">
+                    </div>
+                    <div>
+                        <label class="block font-mono text-[10px] uppercase text-muted mb-1">Treść</label>
+                        <textarea id="edit-article-body" rows="12" class="wiki-input w-full p-3 font-mono text-sm">${escapeHTML(art.body)}</textarea>
+                    </div>
+                    <div class="flex justify-end gap-2 font-mono text-xs">
+                        <button type="button" onclick="cancelEditMode()" class="px-4 py-2 border border-crimson-border text-ink uppercase cursor-pointer">Anuluj</button>
+                        <button type="button" onclick="saveEdit()" class="px-5 py-2 bg-crimson text-white font-bold uppercase cursor-pointer">Zapisz</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function cancelEditMode() {
+            isEditingArticle = false;
+            renderCurrentArticle();
+        }
+
+        function saveEdit() {
+            if (!isEditor) return;
+            const art = db.articles.find(a => a.id === currentArticleId);
+            if (!art) return;
+            const title = document.getElementById('edit-article-title').value.trim();
+            if (!title) return;
+            art.title = title;
+            art.category = document.getElementById('edit-article-category').value.trim().toUpperCase() || 'OGÓLNE';
+            art.summary = document.getElementById('edit-article-summary').value.trim();
+            art.body = document.getElementById('edit-article-body').value;
+            art.updated = `AKTUALIZACJA: ${new Date().toLocaleDateString('pl-PL')}`;
+            saveDatabase();
+            renderWikiList();
+            renderCurrentArticle();
+            showToast('Zapisano hasło.');
+        }
+
+        function createNewArticle() {
+            if (!isEditor) return;
+            const num = db.articles.length + 1;
+            const id = 'art-' + Date.now();
+            db.articles.push({
+                id,
+                code: `HASŁO-${String(num).padStart(2, '0')}`,
+                category: 'NOWA KATEGORIA',
+                title: `Nowe Hasło #${num}`,
+                summary: 'Krótki opis hasła.',
+                updated: 'ZATWIERDZONO PRZEZ KOIKL-55',
+                body: 'Wpisz treść hasła.'
+            });
+            currentArticleId = id;
+            saveDatabase();
+            renderWikiList();
+            renderCurrentArticle();
+            toggleEditMode();
+        }
+
+        function deleteArticle() {
+            if (!isEditor || db.articles.length <= 1) return;
+            openConfirmModal('Usunąć to hasło?', () => {
+                db.articles = db.articles.filter(a => a.id !== currentArticleId);
+                currentArticleId = db.articles[0].id;
+                saveDatabase();
+                renderWikiList();
+                renderCurrentArticle();
+                showToast('Usunięto hasło.');
+            });
+        }
+
+        function formatWikiMarkdown(rawText) {
+            if (!rawText) return '';
+            const lines = rawText.split('\n');
+            let html = '';
+            let inList = false;
+
+            lines.forEach(line => {
+                const trimmed = line.trim();
+                if (!trimmed) {
+                    if (inList) { html += '</ul>'; inList = false; }
+                    return;
+                }
+                if (trimmed.startsWith('## ')) {
+                    if (inList) { html += '</ul>'; inList = false; }
+                    html += `<h2>${escapeHTML(trimmed.slice(3))}</h2>`;
+                } else if (trimmed.startsWith('### ')) {
+                    if (inList) { html += '</ul>'; inList = false; }
+                    html += `<h3>${escapeHTML(trimmed.slice(4))}</h3>`;
+                } else if (trimmed.startsWith('> ')) {
+                    if (inList) { html += '</ul>'; inList = false; }
+                    html += `<blockquote>${escapeHTML(trimmed.slice(2))}</blockquote>`;
+                } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+                    if (!inList) { html += '<ul>'; inList = true; }
+                    html += `<li>${escapeHTML(trimmed.slice(2))}</li>`;
+                } else {
+                    if (inList) { html += '</ul>'; inList = false; }
+                    html += `<p>${escapeHTML(trimmed)}</p>`;
+                }
+            });
+            if (inList) html += '</ul>';
+            return html;
+        }
+
+        // ==========================================
+        // PLIKI I LINKI
+        // ==========================================
+        function normalizeFilePath(rawInput) {
+            const val = (rawInput || '').trim();
+            if (!val || val === '#') return '#';
+            if (/^(https?:\/\/|data:|blob:)/i.test(val)) return val;
+            return val.replace(/^\/+/, '');
+        }
+
+        const MAX_FILE_BYTES = 3 * 1024 * 1024;
+        let pendingFile = null;
+
+        function formatBytes(n) {
+            if (!n) return '';
+            return n < 1024 ? n + ' B' : n < 1048576 ? Math.round(n / 1024) + ' KB' : (n / 1048576).toFixed(1) + ' MB';
+        }
+
+        function renderFiles() {
+            const headerActions = document.getElementById('files-header-actions');
+            headerActions.innerHTML = isEditor
+                ? `<button type="button" onclick="toggleNewFileForm()" class="px-4 py-2 border border-crimson bg-crimson-dark text-crimson-bright hover:bg-crimson hover:text-white font-mono text-xs font-bold uppercase cursor-pointer transition-colors">+ Dodaj plik</button>`
+                : '';
+
+            const grid = document.getElementById('files-grid');
+            grid.innerHTML = '';
+            if (!db.files.length) {
+                grid.innerHTML = `<div class="col-span-full bg-obsidian border border-dashed border-crimson-border p-8 text-center font-mono text-xs text-muted">Brak dokumentów do pobrania.</div>`;
+                return;
+            }
+            db.files.forEach(file => {
+                const url = normalizeFilePath(file.url);
+                const isData = /^data:/i.test(url);
+                const isHttp = /^https?:\/\//i.test(url);
+                const nameRaw = file.name || (isData || isHttp ? '' : url.split('/').pop());
+                const ext = nameRaw.includes('.') ? nameRaw.split('.').pop().toUpperCase().slice(0, 5) : (isHttp ? 'LINK' : 'PLIK');
+                const downloadName = nameRaw || file.title;
+                const detail = [formatBytes(file.size), file.added ? new Date(file.added).toLocaleDateString('pl-PL') : ''].filter(Boolean).join(' · ');
+                const card = document.createElement('div');
+                card.className = 'bg-obsidian border border-crimson-border hover:border-crimson p-5 flex flex-col justify-between transition-colors';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between font-mono text-[10px] text-muted mb-3">
+                            <span class="px-1.5 py-0.5 bg-crimson text-white font-bold">${escapeHTML(ext)}</span>
+                            <span class="truncate ml-2">${escapeHTML(file.meta)}</span>
+                            ${isEditor ? `<button type="button" onclick="deleteFile('${file.id}')" class="text-crimson uppercase cursor-pointer ml-2">[USUŃ]</button>` : ''}
+                        </div>
+                        <h3 class="font-serif text-lg font-bold text-crimson-bright mb-2">${escapeHTML(file.title)}</h3>
+                        <p class="text-xs text-muted leading-relaxed mb-4">${escapeHTML(file.desc)}</p>
+                    </div>
+                    <div class="pt-3 border-t border-crimson-border/60 flex items-center justify-between gap-3 font-mono text-xs">
+                        <span class="text-[11px] text-muted truncate">${escapeHTML(detail || (url === '#' ? 'Wewnętrzny' : ''))}</span>
+                        ${url === '#'
+                            ? `<span class="text-[11px] text-muted uppercase">Brak pliku</span>`
+                            : isHttp
+                                ? `<a href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 border border-crimson text-crimson-bright hover:bg-crimson hover:text-white uppercase font-bold transition-colors shrink-0">Otwórz ↗</a>`
+                                : `<a href="${escapeHTML(url)}" download="${escapeHTML(downloadName)}" onclick="showToast('Pobieranie: ${escapeHTML(downloadName).replace(/'/g, '')}')" class="px-3 py-1.5 border border-crimson text-crimson-bright hover:bg-crimson hover:text-white uppercase font-bold transition-colors shrink-0">Pobierz ↓</a>`}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function toggleNewFileForm() {
+            if (!isEditor) return;
+            const c = document.getElementById('new-file-form-container');
+            pendingFile = null;
+            if (c.innerHTML.trim()) { c.innerHTML = ''; return; }
+            c.innerHTML = `
+                <div class="bg-obsidian border border-[var(--border-strong)] p-5 space-y-3 font-mono text-xs">
+                    <label id="file-drop" class="drop-zone flex flex-col items-center justify-center gap-1 py-8 px-4 text-center cursor-pointer"
+                        ondragover="event.preventDefault(); this.classList.add('drag')" ondragleave="this.classList.remove('drag')"
+                        ondrop="event.preventDefault(); this.classList.remove('drag'); handleFileChosen(event.dataTransfer.files[0])">
+                        <span id="file-drop-title" class="text-crimson-bright font-bold">Przeciągnij plik tutaj lub kliknij, aby wybrać</span>
+                        <span id="file-drop-sub" class="text-muted">Maks. 3 MB. Większe pliki wgraj na hosting i wklej link poniżej.</span>
+                        <input type="file" class="hidden" onchange="handleFileChosen(this.files[0])">
+                    </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <input type="text" id="file-title" placeholder="Nazwa dokumentu" class="wiki-input px-3 py-2">
+                        <input type="text" id="file-meta" placeholder="Kategoria / sygnatura (np. UCHWAŁA)" class="wiki-input px-3 py-2">
+                    </div>
+                    <input type="text" id="file-desc" placeholder="Krótki opis" class="wiki-input w-full px-3 py-2">
+                    <input type="text" id="file-url" placeholder="...albo link do pliku (https://...)" class="wiki-input w-full px-3 py-2">
+                    <div class="flex justify-end gap-2">
+                        <button type="button" onclick="toggleNewFileForm()" class="px-3 py-1.5 border border-crimson-border uppercase cursor-pointer">Anuluj</button>
+                        <button type="button" onclick="addFileItem()" class="px-4 py-1.5 bg-crimson text-white font-bold uppercase cursor-pointer">Dodaj plik</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleFileChosen(file) {
+            if (!file) return;
+            if (file.size > MAX_FILE_BYTES) {
+                showToast('Plik jest za duży (maks. 3 MB). Wgraj go na hosting i wklej link.');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = () => {
+                pendingFile = { name: file.name, size: file.size, data: reader.result };
+                document.getElementById('file-drop-title').textContent = file.name;
+                document.getElementById('file-drop-sub').textContent = formatBytes(file.size) + ' — gotowy do dodania';
+                const base = file.name.replace(/\.[^.]+$/, '');
+                const t = document.getElementById('file-title');
+                const m = document.getElementById('file-meta');
+                if (!t.value.trim()) t.value = base;
+                if (!m.value.trim()) m.value = (file.name.split('.').pop() || 'PLIK').toUpperCase();
+            };
+            reader.onerror = () => showToast('Nie udało się odczytać pliku.');
+            reader.readAsDataURL(file);
+        }
+
+        function addFileItem() {
+            if (!isEditor) return;
+            const title = document.getElementById('file-title').value.trim();
+            const linkVal = document.getElementById('file-url').value;
+            if (!title) { showToast('Podaj nazwę dokumentu.'); return; }
+            if (!pendingFile && !linkVal.trim()) { showToast('Wybierz plik albo wklej link.'); return; }
+            db.files.unshift({
+                id: 'file-' + Date.now(),
+                title,
+                meta: (document.getElementById('file-meta').value.trim() || 'DOKUMENT').toUpperCase(),
+                url: pendingFile ? pendingFile.data : normalizeFilePath(linkVal),
+                name: pendingFile ? pendingFile.name : '',
+                size: pendingFile ? pendingFile.size : 0,
+                added: Date.now(),
+                desc: document.getElementById('file-desc').value.trim()
+            });
+            if (!saveDatabase()) { db.files.shift(); return; }
+            pendingFile = null;
+            document.getElementById('new-file-form-container').innerHTML = '';
+            renderFiles();
+            showToast('Dodano. Wyeksportuj index.html, aby plik widzieli wszyscy.');
+        }
+
+        function deleteFile(id) {
+            if (!isEditor) return;
+            openConfirmModal('Usunąć dokument?', () => {
+                db.files = db.files.filter(f => f.id !== id);
+                saveDatabase();
+                renderFiles();
+            });
+        }
+
+        function renderLinks() {
+            const headerActions = document.getElementById('links-header-actions');
+            headerActions.innerHTML = isEditor
+                ? `<button type="button" onclick="toggleNewLinkForm()" class="px-4 py-2 border border-crimson bg-crimson-dark text-crimson-bright hover:bg-crimson hover:text-white font-mono text-xs font-bold uppercase cursor-pointer">+ Dodaj link</button>`
+                : '';
+
+            const list = document.getElementById('links-list');
+            list.innerHTML = '';
+            db.links.forEach(link => {
+                const row = document.createElement('div');
+                row.className = 'bg-obsidian border border-crimson-border hover:border-crimson p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors';
+                row.innerHTML = `
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 font-mono text-[10px]">
+                            <span class="px-1.5 py-0.5 bg-crimson-dark text-crimson font-bold">${escapeHTML(link.category)}</span>
+                            <span class="text-muted truncate max-w-xs sm:max-w-md">${escapeHTML(link.url)}</span>
+                        </div>
+                        <h4 class="font-serif text-lg font-bold text-crimson-bright">${escapeHTML(link.title)}</h4>
+                        ${link.desc ? `<p class="text-xs text-muted">${escapeHTML(link.desc)}</p>` : ''}
+                    </div>
+                    <div class="flex items-center gap-2 font-mono text-xs shrink-0">
+                        ${isEditor ? `<button type="button" onclick="deleteLink('${link.id}')" class="px-2.5 py-2 border border-crimson-border text-muted hover:text-crimson uppercase cursor-pointer">Usuń</button>` : ''}
+                        <a href="${escapeHTML(link.url)}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 border border-crimson bg-crimson-dark text-crimson-bright hover:bg-crimson hover:text-white uppercase font-bold">Przejdź ↗</a>
+                    </div>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        function toggleNewLinkForm() {
+            if (!isEditor) return;
+            const c = document.getElementById('new-link-form-container');
+            if (c.innerHTML.trim()) { c.innerHTML = ''; return; }
+            c.innerHTML = `
+                <div class="bg-obsidian border border-[var(--border-strong)] p-5 space-y-3 font-mono text-xs">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <input type="text" id="link-title" placeholder="Nazwa" class="wiki-input px-3 py-2">
+                        <input type="text" id="link-category" placeholder="Kategoria" class="wiki-input px-3 py-2">
+                        <input type="text" id="link-url" placeholder="https://..." class="wiki-input px-3 py-2">
+                    </div>
+                    <input type="text" id="link-desc" placeholder="Opis" class="wiki-input w-full px-3 py-2">
+                    <div class="flex justify-end gap-2">
+                        <button type="button" onclick="toggleNewLinkForm()" class="px-3 py-1.5 border border-crimson-border uppercase cursor-pointer">Anuluj</button>
+                        <button type="button" onclick="addLinkItem()" class="px-4 py-1.5 bg-crimson text-white font-bold uppercase cursor-pointer">Zapisz</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function addLinkItem() {
+            if (!isEditor) return;
+            const title = document.getElementById('link-title').value.trim();
+            if (!title) return;
+            db.links.unshift({
+                id: 'link-' + Date.now(),
+                title,
+                category: (document.getElementById('link-category').value.trim() || 'LINK').toUpperCase(),
+                url: document.getElementById('link-url').value.trim() || 'https://',
+                desc: document.getElementById('link-desc').value.trim() || ''
+            });
+            document.getElementById('new-link-form-container').innerHTML = '';
+            saveDatabase();
+            renderLinks();
+            showToast('Dodano link.');
+        }
+
+        function deleteLink(id) {
+            if (!isEditor) return;
+            openConfirmModal('Usunąć link?', () => {
+                db.links = db.links.filter(l => l.id !== id);
+                saveDatabase();
+                renderLinks();
+            });
+        }
+
+        // ==========================================
+        // EKSPORT / IMPORT / RESET / POWIADOMIENIA
+        // ==========================================
+        function openExportModal() {
+            if (!isEditor) return;
+            document.getElementById('export-password-input').value = db.config?.adminPassword || '55';
+            document.getElementById('export-discord-input').value = db.config?.discordUrl || 'https://discord.gg/sXFHZYu6Px';
+            const modal = document.getElementById('export-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeExportModal() {
+            const modal = document.getElementById('export-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function confirmExportHTML() {
+            if (!isEditor) return;
+            const pass = document.getElementById('export-password-input').value.trim();
+            const disc = document.getElementById('export-discord-input').value.trim();
+            if (pass) db.config.adminPassword = pass;
+            if (disc) db.config.discordUrl = disc;
+            saveDatabase();
+            closeExportModal();
+
+            const cloneDoc = document.documentElement.cloneNode(true);
+            ['#export-modal', '#auth-modal', '#confirm-modal', '#accessibility-popover', '#search-modal'].forEach(sel => {
+                const el = cloneDoc.querySelector(sel);
+                if (el) { el.classList.remove('flex'); el.classList.add('hidden'); }
+            });
+            cloneDoc.querySelector('body')?.classList.remove('editor-mode');
+            const ttl = cloneDoc.querySelector('title'); if (ttl) ttl.textContent = BASE_TITLE;
+            cloneDoc.querySelector('body')?.style.removeProperty('overflow');
+            const seed = cloneDoc.querySelector('#wiki-seed-data');
+            if (seed) seed.textContent = '\n' + JSON.stringify(db, null, 4) + '\n';
+
+            const blob = new Blob(['<!DOCTYPE html>\n' + cloneDoc.outerHTML], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'index.html';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            showToast('Wyeksportowano index.html');
+        }
+
+        function exportJSON() {
+            if (!isEditor) return;
+            const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'my55-backup.json';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        function importJSON(e) {
+            if (!isEditor) return;
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = ev => {
+                try {
+                    const data = JSON.parse(ev.target.result);
+                    if (data.articles && data.files && data.links) {
+                        db = { ...db, ...data };
+                        saveDatabase();
+                        currentArticleId = db.articles[0]?.id || null;
+                        renderAll();
+                        showToast('Wczytano dane JSON.');
+                    }
+                } catch (_) {
+                    showToast('Błąd pliku JSON.');
+                }
+            };
+            reader.readAsText(file);
+            e.target.value = '';
+        }
+
+        function resetToDefaults() {
+            if (!isEditor) return;
+            openConfirmModal('Przywrócić domyślną treść?', () => {
+                localStorage.removeItem(STORAGE_KEY);
+                db = JSON.parse(document.getElementById('wiki-seed-data').textContent);
+                currentArticleId = db.articles[0]?.id || null;
+                updateCounters();
+                applyDiscordUrls();
+                renderAll();
+                showToast('Przywrócono ustawienia domyślne.');
+            });
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'bg-obsidian border border-[var(--border-strong)] px-4 py-3 shadow-xl font-mono text-xs text-crimson-bright flex items-center gap-2.5';
+            toast.innerHTML = `<span class="w-2 h-2 bg-crimson shrink-0"></span><span>${escapeHTML(message)}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.25s ease';
+                setTimeout(() => toast.remove(), 250);
+            }, 2800);
+        }
+
+        let confirmCallback = null;
+        function openConfirmModal(message, onAccept) {
+            document.getElementById('confirm-message').textContent = message;
+            confirmCallback = onAccept;
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        document.getElementById('confirm-cancel').onclick = () => {
+            document.getElementById('confirm-modal').classList.add('hidden');
+            document.getElementById('confirm-modal').classList.remove('flex');
+            confirmCallback = null;
+        };
+
+        document.getElementById('confirm-accept').onclick = () => {
+            document.getElementById('confirm-modal').classList.add('hidden');
+            document.getElementById('confirm-modal').classList.remove('flex');
+            if (confirmCallback) confirmCallback();
+            confirmCallback = null;
+        };
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+    </script>
+
+</body></html>
