@@ -1,0 +1,2090 @@
+<!DOCTYPE html>
+<html lang="pl"><head><script data-bard-client-injected="true">(function(firebaseConfig, initialAuthToken, appId) {
+        window.__firebase_config = firebaseConfig;
+        window.__initial_auth_token = initialAuthToken;
+        window.__app_id = appId;
+            })("\n{\n  \"apiKey\": \"AIzaSyCqyCcs2R2e7AegGjvFAwG98wlamtbHvZY\",\n  \"authDomain\": \"bard-frontend.firebaseapp.com\",\n  \"projectId\": \"bard-frontend\",\n  \"storageBucket\": \"bard-frontend.firebasestorage.app\",\n  \"messagingSenderId\": \"175205271074\",\n  \"appId\": \"1:175205271074:web:2b7bd4d34d33bf38e6ec7b\"\n}\n","eyJhbGciOiJSUzI1NiIsImtpZCI6IjExNjRiNzdiNDMzZDdhMDAyMWI4NjE4YjhjYTU3ZTMyZGI5MWUxMTMiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiJmaXJlYmFzZS1hZG1pbnNkay1mYnN2Y0BiYXJkLWZyb250ZW5kLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9pZGVudGl0eXRvb2xraXQuZ29vZ2xlYXBpcy5jb20vZ29vZ2xlLmlkZW50aXR5LmlkZW50aXR5dG9vbGtpdC52MS5JZGVudGl0eVRvb2xraXQiLCJ1aWQiOiIwMDc0MjE4Mzk3OTM0MTc5MjI4MCIsImlzcyI6ImZpcmViYXNlLWFkbWluc2RrLWZic3ZjQGJhcmQtZnJvbnRlbmQuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJjbGFpbXMiOnsiYXBwSWQiOiJjX2Q5YWNjZTllYTVjOWU3ZGZfd2lraS1rbTU1Lmh0bWwtODM4In0sImV4cCI6MTc5NTU1MDU3NCwiaWF0IjoxNzk1NTQ2OTc0LCJhbGciOiJSUzI1NiJ9.QBMtzCadY6bQcbGTwA1YHeZjggruWn65xNrYosQhewYkzOU87RegSGncg4HRsTEkLI81vYolkW2StyEhKfaKnhsk5FcUQDCSVXahP0xhY0_Y71vi94Z86VZz3Qrj-tuDKWiK-tjGVMfk--1sUmV23nfxddovhOzvy_HAinbQ6UNSylC_anQq6rviQVIN7oSmcsf1GQVZFSKqvDAJNQ8BByDDd5k_n9A40jKiTDqI32uRoabEsUQ04nW_oALMmL54UoJIUtSsizwJRhJE3_4peugEjN-gxtMSw_1jXqNjRcGz-3B5OObIFqrdFEU2Y02xMNP3Y72eeOUfHTprfkEquA","c_d9acce9ea5c9e7df_wiki-km55.html-838")</script><script data-bard-client-injected="true">
+  document.addEventListener('input', (event) => {
+    if (event.target && (event.target.isContentEditable || event.target.hasAttribute('contenteditable'))) {
+      const clonedDoc = document.cloneNode(true);
+      const injectedScripts = clonedDoc.querySelectorAll('[data-bard-client-injected="true"]');
+      injectedScripts.forEach(el => el.remove());
+      window.parent.postMessage({
+        type: 'inlineEdit',
+        html: '<!DOCTYPE html>\n' + clonedDoc.documentElement.outerHTML
+      }, '*');
+    }
+  });
+</script><script data-bard-client-injected="true">(function(){'use strict';window.addEventListener("message",a=>{a.data&&a.data.type==="SUPPLEMENTAL_DATA_UPDATE"&&window.dispatchEvent(new CustomEvent("supplementaldataupdate",{detail:a.data.data}))});}).call(this);
+</script><script data-bard-client-injected="true">(function() {
+  const SCROLL_KEYS = new Set([
+    'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight',
+    ' ', 'Spacebar', 'PageUp', 'PageDown', 'Home', 'End',
+  ]);
+  const HORIZONTAL_KEYS = new Set(['ArrowLeft', 'ArrowRight']);
+
+  function isTextEntryTarget(target) {
+    if (!target) return false;
+    const tagName = target.tagName;
+    return tagName === 'INPUT' || tagName === 'TEXTAREA' ||
+        tagName === 'SELECT' || target.isContentEditable === true;
+  }
+
+  // An element absorbs the key only if it both overflows on the axis being
+  // scrolled and is configured to scroll on that axis. The cheap dimension
+  // test runs first because getComputedStyle forces a style recalc, and this
+  // runs on every keypress. Each axis is read from its own longhand: the
+  // 'overflow' shorthand serializes as two values when the axes differ, which
+  // is the common 'overflow-x: hidden; overflow-y: auto' pane.
+  function canScroll(node, horizontal) {
+    const overflows = horizontal ? node.scrollWidth > node.clientWidth
+                                 : node.scrollHeight > node.clientHeight;
+    if (!overflows) return false;
+    const style = window.getComputedStyle(node);
+    const overflow = horizontal ? style.overflowX : style.overflowY;
+    return overflow === 'auto' || overflow === 'scroll';
+  }
+
+  // Walks up from the event target so nested scrollers keep their behavior.
+  // <body> is included because pages that pin the root height make it the
+  // scroll container.
+  function hasScrollableAncestor(target, horizontal) {
+    let node = target;
+    while (node && node !== document.documentElement) {
+      if (canScroll(node, horizontal)) return true;
+      node = node.parentElement;
+    }
+    return false;
+  }
+
+  function rootCanScroll(horizontal) {
+    const scroller = document.scrollingElement || document.documentElement;
+    if (!scroller) return false;
+    // Tolerate a pixel of rounding so subpixel layouts do not look scrollable.
+    return horizontal ? scroller.scrollWidth > window.innerWidth + 1
+                      : scroller.scrollHeight > window.innerHeight + 1;
+  }
+
+  window.addEventListener('keydown', function(event) {
+    if (!SCROLL_KEYS.has(event.key)) return;
+    if (event.defaultPrevented) return;
+    // Alt and Meta turn arrows into browser history navigation, and Ctrl is
+    // reserved for shortcuts, so none of them are scroll intent.
+    if (event.altKey || event.metaKey || event.ctrlKey) return;
+
+    const target = event.target;
+    if (isTextEntryTarget(target)) return;
+
+    // Anything that can still absorb the scroll gets to keep it.
+    const horizontal = HORIZONTAL_KEYS.has(event.key);
+    if (rootCanScroll(horizontal)) return;
+    if (hasScrollableAncestor(target, horizontal)) return;
+
+    event.preventDefault();
+  }, {capture: true, passive: false});
+})();</script><script data-bard-client-injected="true">(function() {
+  // Ensure this script is executed only once
+  if (window.firebaseAuthBridgeScriptLoaded) {
+    return;
+  }
+  window.firebaseAuthBridgeScriptLoaded = true;
+
+  let nextTokenPromiseId = 0;
+
+  // Stores { resolve, reject } for ongoing token requests
+  const pendingTokenPromises = {};
+
+  // Listen for messages from the Host Application
+  window.addEventListener('message', function(event) {
+
+    const messageData = event.data;
+
+  if (messageData && messageData.type === 'RESOLVE_NEW_FIREBASE_TOKEN') {
+      const { success, token, error, promiseId } = messageData ?? {};
+      if (pendingTokenPromises[promiseId]) {
+        if (success) {
+          pendingTokenPromises[promiseId].resolve(token);
+        } else {
+          pendingTokenPromises[promiseId].reject(new Error(error || 'Token refresh failed from host.'));
+        }
+        delete pendingTokenPromises[promiseId];
+      }
+    }
+  });
+
+  // Expose a function for the Generated App to request a new Firebase token
+  window.requestNewFirebaseToken = function() {
+    const currentPromiseId = nextTokenPromiseId++;
+    const promise = new Promise((resolve, reject) => {
+      pendingTokenPromises[currentPromiseId] = { resolve, reject };
+    });
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'REQUEST_NEW_FIREBASE_TOKEN',
+        promiseId: currentPromiseId
+      }, '*');
+    } else {
+      pendingTokenPromises[currentPromiseId].reject(new Error('No parent window to request token from.'));
+      delete pendingTokenPromises[currentPromiseId];
+    }
+    return promise;
+  };
+})();</script><script data-bard-client-injected="true">
+let realOriginalGetUserMedia = null;
+if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+  realOriginalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+}
+
+(function() {
+  if (navigator.mediaDevices && navigator.mediaDevices.__proto__) {
+    try {
+      Object.defineProperty(navigator.mediaDevices.__proto__, 'getUserMedia', {
+        get: function() {
+          return undefined; // Or throw an error
+        },
+        configurable: false
+      });
+    } catch (error) {
+      console.error("Error defining prototype getter:", error);
+    }
+  }
+})();
+
+(function() {
+  const pendingMediaResolvers = {};
+  let nextMediaPromiseId = 0;
+
+  function requestMediaPermissions(constraints) {
+    const mediaPromiseId = nextMediaPromiseId++;
+    const promise = new Promise((resolve, reject) => {
+      pendingMediaResolvers[mediaPromiseId] = (granted) => {
+        delete pendingMediaResolvers[mediaPromiseId];
+        resolve(granted);
+      };
+    });
+
+    window.parent.postMessage({
+      type: 'requestMediaPermission',
+      constraints: constraints,
+      promiseId: mediaPromiseId,
+    }, '*');
+
+    return promise;
+  }
+
+  let originalGetUserMedia = realOriginalGetUserMedia;
+
+  function interceptGetUserMedia() {
+    if (navigator.mediaDevices) {
+      Object.defineProperty(navigator.mediaDevices, 'getUserMedia', {
+        value: function(constraints) {
+          return requestMediaPermissions(constraints).then((granted) => {
+            if (granted) {
+              if (originalGetUserMedia) {
+                return originalGetUserMedia(constraints);
+              } else {
+                throw new Error("Original getUserMedia not available.");
+              }
+            } else {
+              throw new DOMException('Permission denied', 'NotAllowedError');
+            }
+          });
+        },
+        writable: false,
+        configurable: false
+      });
+    }
+  }
+
+  interceptGetUserMedia();
+
+  const observer = new MutationObserver(function(mutationsList, observer) {
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'reconfigured' && mutation.name === 'getUserMedia' && mutation.object === navigator.mediaDevices) {
+        interceptGetUserMedia();
+      } else if (mutation.type === 'attributes' && mutation.attributeName === 'getUserMedia' && mutation.target === navigator.mediaDevices) {
+        interceptGetUserMedia();
+      } else if (mutation.type === 'childList' && mutation.addedNodes) {
+        mutation.addedNodes.forEach(node => {
+          if (node === navigator.mediaDevices) {
+            interceptGetUserMedia();
+          }
+        });
+      }
+    }
+  });
+
+  function interceptSpeechRecognition() {
+    if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+      return;
+    }
+
+    const OriginalSpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    const SpeechRecognitionWrapper = function(...args) {
+      const recognizer = new OriginalSpeechRecognition(...args);
+      const originalStart = recognizer.start.bind(recognizer);
+
+      recognizer.start = function() {
+        requestMediaPermissions({ audio: true }).then(granted => {
+          if (granted) {
+            originalStart();
+          } else {
+            const errorEvent = new SpeechRecognitionErrorEvent('error');
+            errorEvent.error = 'not-allowed'; // This is the standard error for permission denial.
+            recognizer.dispatchEvent(errorEvent);
+          }
+        });
+      };
+
+      return recognizer;
+    };
+
+    SpeechRecognitionWrapper.prototype = OriginalSpeechRecognition.prototype;
+    SpeechRecognitionWrapper.prototype.constructor = SpeechRecognitionWrapper;
+
+    if (window.SpeechRecognition) {
+      window.SpeechRecognition = SpeechRecognitionWrapper;
+    }
+    if (window.webkitSpeechRecognition) {
+      window.webkitSpeechRecognition = SpeechRecognitionWrapper;
+    }
+  }
+
+  interceptSpeechRecognition();
+
+  window.addEventListener('message', function(event) {
+    if (event.data) {
+      if (event.data.type === 'resolveMediaPermission') {
+        const { promiseId, granted } = event.data;
+        if (pendingMediaResolvers[promiseId]) {
+          pendingMediaResolvers[promiseId](granted);
+        }
+      }
+    }
+  });
+
+})();</script><script ws-interception-config="{&quot;parentOrigin&quot;:&quot;https://gemini.google.com&quot;,&quot;proxiedDomains&quot;:[]}" data-bard-client-injected="true">(function(){'use strict';var u=typeof Object.defineProperties=="function"?Object.defineProperty:function(b,d,e){if(b==Array.prototype||b==Object.prototype)return b;b[d]=e.value;return b};function v(b){b=["object"==typeof globalThis&&globalThis,b,"object"==typeof window&&window,"object"==typeof self&&self,"object"==typeof global&&global];for(var d=0;d<b.length;++d){var e=b[d];if(e&&e.Math==Math)return e}throw Error("Cannot find global object");}var w=v(this);
+function y(b,d){if(d)a:{var e=w;b=b.split(".");for(var h=0;h<b.length-1;h++){var k=b[h];if(!(k in e))break a;e=e[k]}b=b[b.length-1];h=e[b];d=d(h);d!=h&&d!=null&&u(e,b,{configurable:!0,writable:!0,value:d})}}function z(b){function d(h){return b.next(h)}function e(h){return b.throw(h)}return new Promise(function(h,k){function m(n){n.done?h(n.value):Promise.resolve(n.value).then(d,e).then(m,k)}m(b.next())})}y("globalThis",function(b){return b||w});/*
+
+ Copyright The Closure Library Authors.
+ SPDX-License-Identifier: Apache-2.0
+*/
+function A(b,d){function e(){}e.prototype=d.prototype;b.i=d.prototype;b.prototype=new e;b.prototype.constructor=b;b.h=function(h,k,m){for(var n=Array(arguments.length-2),p=2;p<arguments.length;p++)n[p-2]=arguments[p];return d.prototype[k].apply(h,n)}};function B(b,d,e="*"){function h(a){if(typeof a==="string")return F.encode(a).buffer;if(a instanceof ArrayBuffer)return a.slice(0);if(ArrayBuffer.isView(a))return a.buffer.slice(a.byteOffset,a.byteOffset+a.byteLength);throw Error("Invalid data type");}function k(a){a=h(a);var f={type:"send",data:new Uint8Array(a)},g;(g=r)==null||g.postMessage(f,[a])}function m(){if(!r)throw Error("Data port not captured yet.");r.onmessage=a=>{if(a.data.type==="message"){a=new MessageEvent("message",{data:G.decode(a.data.data)});
+let f;(f=c.onmessage)==null||f.call(c,a);c.dispatchEvent(a)}}}function n(){if(!t)throw Error("Control port not captured yet.");t.onmessage=a=>{switch(a.data.type){case "open":l=1;var f=new Event("open"),g;(g=c.onopen)==null||g.call(c,f);c.dispatchEvent(f);q.forEach(H=>{k(H)});q=[];break;case "close":g=a.data;l=3;g=new CloseEvent("close",{code:g.code,reason:g.reason,wasClean:g.wasClean});(f=c.onclose)==null||f.call(c,g);c.dispatchEvent(g);break;case "error":l=3;f=new Event("error");let x;(x=c.onerror)==
+null||x.call(c,f);c.dispatchEvent(f)}}}function p(a){return z(function*(){var f=new MessageChannel;t=f.port1;var g=new MessageChannel;r=g.port1;n();m();window.parent.postMessage({type:"websocket_open",portOrdering:["control","data"],url:b,protocols:a||[],connectionId:I},e,[f.port2,g.port2])}())}var c=Reflect.construct(EventTarget,[],new.target);c.CONNECTING=0;c.OPEN=1;c.CLOSING=2;c.CLOSED=3;c.url=b;c.binaryType="arraybuffer";c.protocol="";c.extensions="";var l=0,t=null,r=null,q=[],F=new TextEncoder,
+G=new TextDecoder;c.onopen=null;c.onmessage=null;c.onclose=null;c.onerror=null;Object.defineProperty(c,"readyState",{get:()=>l,enumerable:!0,configurable:!0});Object.defineProperty(c,"bufferedAmount",{get:()=>{var a=0;q.forEach(f=>{a+=typeof f==="string"?f.length:f.byteLength});return a},enumerable:!0,configurable:!0});var I=function(){var a;return((a=globalThis.crypto)==null?0:a.randomUUID)?globalThis.crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,f=>{var g=Math.random()*
+16|0;return(f==="x"?g:g&3|8).toString(16)})}();c.send=a=>{if(l===1)a instanceof Blob?a.arrayBuffer().then(f=>{k(f)}):k(a);else if(l===0)if(typeof a==="string")q.push(a);else if(a instanceof ArrayBuffer||ArrayBuffer.isView(a))q.push(h(a));else throw Error("Sending Blob is not supported before the connection is open.");else console.debug("WebSocket send called in CLOSING or CLOSED state; ignored.")};c.close=(a=1E3,f="")=>{if(l!==2&&l!==3){l=2;a={type:"close",code:a,reason:f,wasClean:a===1E3};var g;
+(g=t)==null||g.postMessage(a)}};Promise.resolve().then(()=>p(d));return c}A(B,EventTarget);var C=document.currentScript,D=C==null?void 0:C.getAttribute("ws-interception-config");if(!D)throw Error("WebSocket Interceptor: Missing ws-interception-config attribute in the script tag.");var E=JSON.parse(D);if(!E.parentOrigin||typeof E.parentOrigin!=="string")throw Error("WebSocket Interceptor: Invalid parentOrigin in ws-interception-config");
+(function(b){var d=Object.getOwnPropertyDescriptor(window,"WebSocket");if(!d||d.writable||d.configurable)d=Object.assign(function(e,h){try{let k=(new URL(e)).hostname;if(b.proxiedDomains.some(m=>k===m||k.endsWith(`.${m}`)))return new B(e,h,b.parentOrigin)}catch(k){throw window.parent.postMessage({type:"websocket_blocked",url:e,reason:"blocked_invalid_url"},b.parentOrigin),new DOMException(`WebSocket connection to '${e}' is not allowed in Canvas.`,"SecurityError");}window.parent.postMessage({type:"websocket_blocked",
+url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMException(`WebSocket connection to '${e}' is not allowed in Canvas.`,"SecurityError");},{CONNECTING:0,OPEN:1,CLOSING:2,CLOSED:3}),Object.defineProperty(window,"WebSocket",{value:d,writable:!1,configurable:!1})})({proxiedDomains:E.proxiedDomains||[],parentOrigin:E.parentOrigin});}).call(this);
+</script><script data-bard-client-injected="true">((function(modelInformation) {
+  const originalFetch = window.fetch;
+  // TODO: b/421908508 - Move these out of the script and match all generative AI model calls.
+  let googleLlmBaseApiUrls = [
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':streamGenerateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':generateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predict',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predictLongRunning',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageEditModelName + ':generateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageTransformModelName + ':generateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predict',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predictLongRunning',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.ttsModelName + ':generateContent',
+  ];
+  modelInformation.deprecatedTextModelNames.forEach((modelName) => {
+    googleLlmBaseApiUrls.push(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
+    );
+  });
+  modelInformation.deprecatedImageModelNames.forEach((modelName) => {
+    googleLlmBaseApiUrls.push(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':predict',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':predictLongRunning',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
+    );
+  });
+  modelInformation.deprecatedGenerateImageModelNames.forEach((modelName) => {
+    googleLlmBaseApiUrls.push(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
+    );
+  });
+  modelInformation.deprecatedImageTransformModelNames.forEach((modelName) => {
+    googleLlmBaseApiUrls.push(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
+    );
+  });
+
+  const pendingFetchResolvers = {};
+  let nextPromiseId = 0;
+
+  function handleStringInput(input, optionsArgument) {
+    const actualUrl = input;
+    const fetchCallArgs = [actualUrl, optionsArgument];
+    const effectiveOptions = optionsArgument || {};
+    const bodyForApiKeyCheck = effectiveOptions.body;
+    const bodyForPostMessage = effectiveOptions.body;
+    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
+  }
+
+  function handleRequestInput(input, optionsArgument) {
+    const actualUrl = input.url;
+    const fetchCallArgs = [input, optionsArgument];
+    const effectiveOptions = { method: input.method, headers: new Headers(input.headers) };
+    let bodyForApiKeyCheck;
+    let bodyForPostMessage;
+
+    if (optionsArgument) {
+      if (optionsArgument.method) effectiveOptions.method = optionsArgument.method;
+      if (optionsArgument.headers) effectiveOptions.headers = new Headers(optionsArgument.headers);
+      if ('body' in optionsArgument) {
+        bodyForApiKeyCheck = optionsArgument.body;
+        bodyForPostMessage = optionsArgument.body;
+      } else {
+        bodyForApiKeyCheck = undefined;
+        bodyForPostMessage = input.body;
+      }
+    } else {
+      bodyForApiKeyCheck = undefined;
+      bodyForPostMessage = input.body;
+    }
+    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
+  }
+
+  window.fetch = function(input, optionsArgument) {
+    let actualUrl;
+    let fetchCallArgs;
+    let effectiveOptions = {};
+    let bodyForApiKeyCheck;
+    let bodyForPostMessage;
+
+    if (typeof input === 'string') {
+      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleStringInput(input, optionsArgument));
+    } else if (input instanceof Request) {
+      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleRequestInput(input, optionsArgument));
+    } else {
+      return originalFetch.apply(window, [input, optionsArgument]);
+    }
+
+    effectiveOptions.method = effectiveOptions.method || 'GET';
+    if (!effectiveOptions.headers) {
+      effectiveOptions.headers = new Headers();
+    }
+
+
+    if (typeof actualUrl === 'string' && googleLlmBaseApiUrls.some((url) => actualUrl.startsWith(url))) {
+      let apiKeyIsNull = true;
+
+      const regex = new RegExp("models/([^:]+)");
+      const modelNameMatch = actualUrl.match(regex);
+      const modelName = modelNameMatch ? modelNameMatch[1] : 'unspecified';
+
+
+      try {
+        const urlObject = new URL(actualUrl);  // Use URL object for robust parsing
+        const apiKeyParam = urlObject.searchParams.get('key');
+        if (apiKeyParam) {
+          apiKeyIsNull = false;
+        }
+      } catch (e) {
+        // Continue checks even if URL parsing fails
+      }
+
+      if (apiKeyIsNull && effectiveOptions.headers) {
+        const h = new Headers(effectiveOptions.headers);
+        const apiKeyHeaderValue = h.get('X-API-Key') || h.get('x-api-key');
+        if (apiKeyHeaderValue) {
+          apiKeyIsNull = false;
+          return originalFetch.apply(window, fetchCallArgs);
+        }
+      }
+
+      if (apiKeyIsNull && effectiveOptions.method && ['POST', 'PUT', 'PATCH'].includes(effectiveOptions.method.toUpperCase()) && typeof bodyForApiKeyCheck === 'string') {
+        try {
+          const bodyData = JSON.parse(bodyForApiKeyCheck);
+          if (bodyData && bodyData.apiKey) {
+            apiKeyIsNull = false;
+            return originalFetch.apply(window, fetchCallArgs);
+          }
+        } catch (e) {
+          // Ignore JSON parsing errors
+        }
+      }
+
+      if(apiKeyIsNull) {
+        const promiseId = nextPromiseId++;
+        const promise = new Promise((resolve) => {
+          pendingFetchResolvers[promiseId] = (resolvedResponse) => {
+            delete pendingFetchResolvers[promiseId];
+            resolve(resolvedResponse);
+          };
+        });
+
+        let serializedBodyForPostMessage;
+        if (typeof bodyForPostMessage === 'string' || bodyForPostMessage == null) {
+            serializedBodyForPostMessage = bodyForPostMessage;
+        } else if (bodyForPostMessage instanceof ReadableStream) {
+            serializedBodyForPostMessage = null;
+        } else {
+            try {
+                serializedBodyForPostMessage = JSON.stringify(bodyForPostMessage);
+            } catch (e) {
+                serializedBodyForPostMessage = null;
+            }
+        }
+
+        const messageOptions = {
+            method: effectiveOptions.method,
+            headers: Object.fromEntries(new Headers(effectiveOptions.headers).entries()),
+            body: serializedBodyForPostMessage
+        };
+
+        window.parent.postMessage({
+          type: 'requestFetch',
+          url: actualUrl,
+          modelName: modelName,
+          options: messageOptions,
+          promiseId: promiseId,
+        }, '*');
+
+        return promise;
+      }
+      return originalFetch.apply(window, fetchCallArgs);
+    }
+    return originalFetch.apply(window, fetchCallArgs);
+  };
+
+  window.addEventListener('message', function(event) {
+    if (event.data && event.data.type === 'resolveFetch') {
+      const { promiseId, response } = event.data;
+      if (pendingFetchResolvers[promiseId]) {
+        try {
+          const reconstructedResponse = new Response(response.body, {
+            status: response.status,
+            statusText: response.statusText,
+            headers: new Headers(response.headers),
+          });
+          pendingFetchResolvers[promiseId](reconstructedResponse);
+        } catch (error) {
+          pendingFetchResolvers[promiseId](new Response(null, { status: 500, statusText: "Interceptor Response Reconstruction Error" }));
+        }
+      }
+    }
+  });
+
+}))({"textModelName":"gemini-3-flash-preview","imageModelName":"imagen-4.0-generate-001","imageEditModelName":"gemini-3.1-flash-image","imageTransformModelName":"gemini-3-pro-image","videoModelName":"veo-2.0-generate-001","ttsModelName":"gemini-2.5-flash-preview-tts","deprecatedTextModelNames":["gemini-2.0-flash","gemini-2.5-flash","gemini-2.5-flash-preview-04-17","gemini-2.5-flash-preview-05-20","gemini-2.5-flash-preview-09-2025"],"deprecatedImageModelNames":["imagen-3.0-generate-001","imagen-3.0-generate-002"],"deprecatedGenerateImageModelNames":["gemini-2.5-flash-image-preview","gemini-2.5-flash-image","gemini-3.1-flash-image-preview"],"deprecatedImageTransformModelNames":["gemini-3-pro-image-preview-11-2025"]})</script><script data-bard-client-injected="true">(function() {
+  const OVERLAY_SELECTOR =
+    'dialog[open], [role="dialog"], [role="alertdialog"], [role="menu"], [role="listbox"], [role="combobox"]';
+
+  function isVisibleOverlay(element) {
+    if (element.closest('[hidden], [aria-hidden="true"], [inert]')) {
+      return false;
+    }
+    if (window.getComputedStyle(element).visibility === 'hidden') {
+      return false;
+    }
+    for (let cur = element; cur; cur = cur.parentElement) {
+      if (window.getComputedStyle(cur).display === 'none') {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function hasOpenOverlay() {
+    const candidates = document.querySelectorAll(OVERLAY_SELECTOR);
+    for (let i = 0; i < candidates.length; i++) {
+      if (isVisibleOverlay(candidates[i])) {
+        return true;
+      }
+    }
+    try {
+      if (document.querySelector('[popover]:popover-open')) {
+        return true;
+      }
+    } catch (e) {
+      // Ignore engines that do not support :popover-open.
+    }
+    return false;
+  }
+
+  function isNonEmptySearchInput(target) {
+    return (
+      Boolean(target) &&
+      target.tagName === 'INPUT' &&
+      typeof target.type === 'string' &&
+      target.type.toLowerCase() === 'search' &&
+      typeof target.value === 'string' &&
+      target.value.length > 0
+    );
+  }
+
+  function shouldIgnoreEscape(event) {
+    return (
+      event.key !== 'Escape' ||
+      event.altKey ||
+      event.ctrlKey ||
+      event.metaKey ||
+      event.shiftKey ||
+      event.isComposing ||
+      event.repeat ||
+      event.keyCode === 229 ||
+      isNonEmptySearchInput(event.target)
+    );
+  }
+
+  let shouldIgnoreCaptureState = false;
+
+  window.addEventListener(
+    'keydown',
+    function(event) {
+      if (event.key === 'Escape') {
+        shouldIgnoreCaptureState =
+          hasOpenOverlay() || isNonEmptySearchInput(event.target);
+      }
+    },
+    {capture: true},
+  );
+
+  window.addEventListener('keydown', function(event) {
+    if (
+      shouldIgnoreEscape(event) ||
+      event.defaultPrevented ||
+      shouldIgnoreCaptureState
+    ) {
+      return;
+    }
+    const wasBlockedOnCapture = shouldIgnoreCaptureState;
+    queueMicrotask(function() {
+      if (event.defaultPrevented || wasBlockedOnCapture) {
+        return;
+      }
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({'type': 'escapeKey'}, '*');
+      }
+    });
+  });
+})();</script><script data-bard-client-injected="true">(function() {
+  function normalizeSlug(str) {
+    try {
+      return str
+        .trim()
+        .toLowerCase()
+        .replace(/[^p{L}p{N}s_-]/gu, '')
+        .replace(/s+/g, '-');
+    } catch (e) {
+      return str
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9s_-]/g, '')
+        .replace(/s+/g, '-');
+    }
+  }
+
+  function findTargetElement(hash) {
+    if (!hash || hash === '#') {
+      return null;
+    }
+    const rawId = hash.startsWith('#') ? hash.slice(1) : hash;
+    let decodedId = rawId;
+    try {
+      decodedId = decodeURIComponent(rawId);
+    } catch (e) {
+      // Ignore URI malformed errors.
+    }
+
+    // 1. Direct ID match (raw and decoded).
+    let target = document.getElementById(rawId) || document.getElementById(decodedId);
+    if (target) {
+      return target;
+    }
+
+    // 2. Name attribute match (<a name="...">).
+    try {
+      if (typeof CSS !== 'undefined' && CSS.escape) {
+        target =
+          document.querySelector('[name="' + CSS.escape(rawId) + '"]') ||
+          document.querySelector('[name="' + CSS.escape(decodedId) + '"]');
+      } else {
+        const namedElements = document.getElementsByName(rawId);
+        if (namedElements && namedElements.length > 0) {
+          return namedElements[0];
+        }
+      }
+    } catch (e) {
+      // Ignore querySelector syntax errors.
+    }
+    if (target) {
+      return target;
+    }
+
+    // 3. Match heading text by slug (for Markdown TOCs where headings lack explicit IDs).
+    const targetSlug = normalizeSlug(decodedId);
+    if (targetSlug) {
+      for (const heading of document.querySelectorAll('h1, h2, h3, h4, h5, h6')) {
+        if (normalizeSlug(heading.textContent || '') === targetSlug) {
+          return heading;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  document.addEventListener('click', function(event) {
+    const target = event.target;
+    const anchor = target && typeof target.closest === 'function' ? target.closest('a') : null;
+    if (!anchor) {
+      return;
+    }
+
+    const href = anchor.getAttribute('href');
+    if (
+      !href ||
+      href.trim().toLowerCase().startsWith('javascript:') ||
+      anchor.hasAttribute('download')
+    ) {
+      return;
+    }
+
+    // Check if the link is an in-page hash / anchor link.
+    if (href.startsWith('#')) {
+      event.preventDefault();
+      const targetElement = findTargetElement(href);
+      if (targetElement) {
+        targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
+      }
+      return;
+    }
+
+    // Check if the URL has the same origin/pathname but with a hash.
+    try {
+      const url = new URL(anchor.href, window.location.href);
+      if (
+        url.hash &&
+        url.origin === window.location.origin &&
+        url.pathname === window.location.pathname
+      ) {
+        event.preventDefault();
+        const targetElement = findTargetElement(url.hash);
+        if (targetElement) {
+          targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
+        }
+        return;
+      }
+    } catch (e) {
+      // Fall through if URL parsing fails.
+    }
+
+    // For all external or full navigation links, prevent iframe-level navigation
+    // (which breaks in AGSA WebView or sandboxed iframes) and ensure they open
+    // safely in a new tab/window.
+    if (anchor.target !== '_blank') {
+      event.preventDefault();
+      window.open(anchor.href, '_blank', 'noopener,noreferrer');
+    }
+  }, {capture: true});
+})();</script><script data-bard-client-injected="true">(function(){'use strict';function a(){window.parent.postMessage({type:"interaction"},"*")}window.addEventListener("click",a,{capture:!0,passive:!0});window.addEventListener("touchstart",a,{capture:!0,passive:!0});window.addEventListener("keydown",a,{capture:!0,passive:!0});}).call(this);
+</script><script data-bard-client-injected="true">(function() {
+  const originalConsoleLog = console.log;
+  const originalConsoleError = console.error;
+
+    /**
+   * Normalizes an error event or a promise rejection reason into a structured error object.
+   * @param {*} errorEventOrReason The error object or reason.
+   * @return {object} Structured error data { message, name, stack }.
+   */
+  function getErrorObject(errorEventOrReason) {
+    if (errorEventOrReason instanceof Error) {
+      return {
+        message: errorEventOrReason.message,
+        name: errorEventOrReason.name,
+        stack: errorEventOrReason.stack,
+      };
+    }
+    // Fallback for non-Error objects.
+    try {
+      return {
+        message: JSON.stringify(errorEventOrReason),
+        name: 'UnknownErrorType',
+        stack: null,
+      };
+    } catch (e) {
+      return {
+        message: String(errorEventOrReason),
+        name: 'UnknownErrorTypeNonStringifiable',
+        stack: null,
+      };
+    }
+  }
+
+  /**
+   * Converts an array of arguments (from log/error) into a single string.
+   * Handles Error objects specially to include their message and stack.
+   * @param {Array<*>} args - Arguments passed to console methods.
+   * @return {string} A string representation of the arguments.
+   */
+  function stringifyArgs(args) {
+    return args
+      .map((arg) => {
+        if (arg instanceof Error) {
+          const {message, stack} = arg;
+          return `Error: ${message}${stack ? ('\nStack: ' + stack) : ''}`;
+        }
+        if (typeof arg === 'object' && arg !== null) {
+          try {
+            return JSON.stringify(arg);
+          } catch (error) {
+            return '[Circular Object]';
+          }
+        } else {
+          return String(arg);
+        }
+      })
+      .join(' ');
+  }
+
+  console.log = function(...args) {
+    const logString = stringifyArgs(args);
+    window.parent.postMessage({ type: 'log', message: logString }, '*');
+    originalConsoleLog.apply(console, args);
+  };
+
+  console.error = function(...args) {
+    let errorData;
+    if (args.length > 0 && args[0] instanceof Error) {
+      const err = args[0];
+      // If the first arg is an Error, capture its details.
+      errorData = {
+        type: 'error',
+        source: 'CONSOLE_ERROR',
+        ...getErrorObject(err),
+        rawArgsString: stringifyArgs(args.slice(1)),
+        timestamp: new Date().toISOString(),
+      };
+    } else {
+      // If not an Error object, treat all args as a general error message.
+      errorData = {
+        type: 'error',
+        source: 'CONSOLE_ERROR',
+        message: stringifyArgs(args),
+        name: 'ConsoleLoggedError',
+        stack: null,
+        timestamp: new Date().toISOString(),
+      };
+    }
+    window.parent.postMessage(errorData, '*');
+    originalConsoleError.apply(console, args);
+  };
+
+  // Listen for global unhandled synchronous errors.
+  window.addEventListener('error', function(event) {
+    const errorDetails = event.error ? getErrorObject(event.error) : {
+      message: event.message,
+      name: 'GlobalError',
+      stack: null,
+      filename: event.filename,
+      lineno: event.lineno,
+      colno: event.colno,
+    };
+
+    window.parent.postMessage({
+      type: 'error',
+      source: 'global',
+      ...errorDetails,
+      message: errorDetails.message || event.message,
+      timestamp: new Date().toISOString(),
+    }, '*');
+  });
+
+  // Listen for unhandled promise rejections (asynchronous errors).
+  window.addEventListener('unhandledrejection', function(event) {
+    const errorDetails = getErrorObject(event.reason);
+
+    window.parent.postMessage({
+      type: 'error',
+      source: 'unhandledrejection',
+      ...errorDetails,
+      message: errorDetails.message || 'Unhandled Promise Rejection',
+      timestamp: new Date().toISOString(),
+    }, '*');
+  });
+
+})();</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOiKL-55 // Archiwum Kolektywu Miłośników 55</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts: Space Mono, Inter, Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Playfair+Display:ital,wght@0,600;0,700;1,600&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        void: '#050505',
+                        obsidian: '#0a0a0a',
+                        panel: '#0e0e0e',
+                        crimson: {
+                            DEFAULT: '#e60000',
+                            bright: '#ff1a1a',
+                            muted: '#990000',
+                            dark: '#330000',
+                            border: '#4d0000'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                        mono: ['Space Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar for Brutalist Black & Red Aesthetic */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4d0000;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #e60000;
+        }
+
+        body {
+            background-color: #050505;
+            color: #e60000;
+            selection-background-color: #e60000;
+            selection-color: #050505;
+        }
+
+        ::selection {
+            background: #e60000;
+            color: #050505;
+        }
+
+        /* Subtle CRT / Archival grid texture */
+        .bg-archival-grid {
+            background-size: 32px 32px;
+            background-image: 
+                linear-gradient(to right, rgba(77, 0, 0, 0.12) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(77, 0, 0, 0.12) 1px, transparent 1px);
+        }
+
+        /* Crisp input & textarea styles */
+        .wiki-input {
+            background-color: #080808;
+            border: 1px solid #4d0000;
+            color: #ff1a1a;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .wiki-input:focus {
+            outline: none;
+            border-color: #ff1a1a;
+            box-shadow: 0 0 0 1px #ff1a1a;
+        }
+
+        /* Formatted Wiki Content */
+        .wiki-prose p {
+            margin-bottom: 1.15rem;
+            line-height: 1.75;
+            color: #e60000;
+        }
+        .wiki-prose h2 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #ff1a1a;
+            border-bottom: 1px solid #4d0000;
+            padding-bottom: 0.4rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .wiki-prose h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #ff1a1a;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .wiki-prose blockquote {
+            border-left: 3px solid #e60000;
+            padding-left: 1rem;
+            margin: 1.25rem 0;
+            font-style: italic;
+            color: #ff1a1a;
+            background: rgba(51, 0, 0, 0.25);
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+        .wiki-prose ul {
+            list-style-type: square;
+            padding-left: 1.5rem;
+            margin-bottom: 1.15rem;
+        }
+        .wiki-prose li {
+            margin-bottom: 0.4rem;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Inter, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:Space Mono, monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.sticky{position:sticky}.inset-0{inset:0px}.bottom-5{bottom:1.25rem}.right-5{right:1.25rem}.top-0{top:0px}.z-30{z-index:30}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-1\.5{margin-bottom:0.375rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-12{margin-top:3rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-12{height:3rem}.max-h-\[55vh\]{max-height:55vh}.min-h-\[65vh\]{min-height:65vh}.min-h-screen{min-height:100vh}.w-12{width:3rem}.w-full{width:100%}.max-w-4xl{max-width:56rem}.max-w-7xl{max-width:80rem}.max-w-md{max-width:28rem}.max-w-\[60\%\]{max-width:60%}.max-w-xs{max-width:20rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;user-select:none}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-8 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem * var(--tw-space-y-reverse))}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-l-2{border-left-width:2px}.border-t{border-top-width:1px}.border-crimson{--tw-border-opacity:1;border-color:rgb(230 0 0 / var(--tw-border-opacity, 1))}.border-crimson-border{--tw-border-opacity:1;border-color:rgb(77 0 0 / var(--tw-border-opacity, 1))}.border-crimson-border\/60{border-color:rgb(77 0 0 / 0.6)}.border-transparent{border-color:transparent}.bg-black\/85{background-color:rgb(0 0 0 / 0.85)}.bg-crimson{--tw-bg-opacity:1;background-color:rgb(230 0 0 / var(--tw-bg-opacity, 1))}.bg-crimson-dark\/15{background-color:rgb(51 0 0 / 0.15)}.bg-crimson-dark\/30{background-color:rgb(51 0 0 / 0.3)}.bg-crimson-dark\/35{background-color:rgb(51 0 0 / 0.35)}.bg-obsidian{--tw-bg-opacity:1;background-color:rgb(10 10 10 / var(--tw-bg-opacity, 1))}.bg-obsidian\/95{background-color:rgb(10 10 10 / 0.95)}.bg-panel{--tw-bg-opacity:1;background-color:rgb(14 14 14 / var(--tw-bg-opacity, 1))}.bg-void{--tw-bg-opacity:1;background-color:rgb(5 5 5 / var(--tw-bg-opacity, 1))}.bg-crimson-dark\/25{background-color:rgb(51 0 0 / 0.25)}.bg-panel\/60{background-color:rgb(14 14 14 / 0.6)}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-2\.5{padding:0.625rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.pb-2{padding-bottom:0.5rem}.pb-3{padding-bottom:0.75rem}.pb-6{padding-bottom:1.5rem}.pl-3{padding-left:0.75rem}.pl-4{padding-left:1rem}.pr-1{padding-right:0.25rem}.pt-2{padding-top:0.5rem}.pt-3{padding-top:0.75rem}.text-left{text-align:left}.text-center{text-align:center}.font-mono{font-family:Space Mono, monospace}.font-sans{font-family:Inter, sans-serif}.font-serif{font-family:Playfair Display, serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-\[8px\]{font-size:8px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-none{line-height:1}.leading-relaxed{line-height:1.625}.tracking-\[0\.2em\]{letter-spacing:0.2em}.tracking-tight{letter-spacing:-0.025em}.tracking-tighter{letter-spacing:-0.05em}.tracking-wide{letter-spacing:0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-crimson{--tw-text-opacity:1;color:rgb(230 0 0 / var(--tw-text-opacity, 1))}.text-crimson-bright{--tw-text-opacity:1;color:rgb(255 26 26 / var(--tw-text-opacity, 1))}.text-crimson-muted{--tw-text-opacity:1;color:rgb(153 0 0 / var(--tw-text-opacity, 1))}.text-crimson\/75{color:rgb(230 0 0 / 0.75)}.text-crimson\/80{color:rgb(230 0 0 / 0.8)}.text-crimson\/85{color:rgb(230 0 0 / 0.85)}.text-crimson\/90{color:rgb(230 0 0 / 0.9)}.text-void{--tw-text-opacity:1;color:rgb(5 5 5 / var(--tw-text-opacity, 1))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.placeholder\:text-crimson-muted::placeholder{--tw-text-opacity:1;color:rgb(153 0 0 / var(--tw-text-opacity, 1))}.hover\:border-crimson:hover{--tw-border-opacity:1;border-color:rgb(230 0 0 / var(--tw-border-opacity, 1))}.hover\:border-crimson-border:hover{--tw-border-opacity:1;border-color:rgb(77 0 0 / var(--tw-border-opacity, 1))}.hover\:bg-crimson:hover{--tw-bg-opacity:1;background-color:rgb(230 0 0 / var(--tw-bg-opacity, 1))}.hover\:bg-crimson-bright:hover{--tw-bg-opacity:1;background-color:rgb(255 26 26 / var(--tw-bg-opacity, 1))}.hover\:text-crimson-bright:hover{--tw-text-opacity:1;color:rgb(255 26 26 / var(--tw-text-opacity, 1))}.hover\:text-void:hover{--tw-text-opacity:1;color:rgb(5 5 5 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:text-crimson{--tw-text-opacity:1;color:rgb(230 0 0 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:text-crimson-bright{--tw-text-opacity:1;color:rgb(255 26 26 / var(--tw-text-opacity, 1))}@media (min-width: 640px){.sm\:col-span-2{grid-column:span 2 / span 2}.sm\:inline{display:inline}.sm\:max-w-md{max-width:28rem}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}.sm\:p-10{padding:2.5rem}.sm\:p-8{padding:2rem}.sm\:p-5{padding:1.25rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:items-center{align-items:center}.md\:justify-between{justify-content:space-between}}@media (min-width: 1024px){.lg\:col-span-4{grid-column:span 4 / span 4}.lg\:col-span-8{grid-column:span 8 / span 8}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.lg\:px-8{padding-left:2rem;padding-right:2rem}}@media (min-width: 1280px){.xl\:col-span-3{grid-column:span 3 / span 3}.xl\:col-span-9{grid-column:span 9 / span 9}}</style></head>
+<body class="min-h-screen flex flex-col bg-void text-crimson font-sans antialiased bg-archival-grid">
+
+    <!-- Toast Notification Container (Replaces alert()) -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Custom Confirmation Modal (Replaces confirm()) -->
+    <div id="confirm-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 backdrop-blur-xs p-4">
+        <div class="w-full max-w-md bg-obsidian border border-crimson p-6 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-crimson-border pb-3 mb-4">
+                <span class="font-mono text-xs uppercase tracking-widest text-crimson-bright">DECYZJA KOMITETU // POTWIERDZENIE</span>
+                <span class="font-mono text-xs text-crimson-muted">[KOiKL-55]</span>
+            </div>
+            <p id="confirm-message" class="text-sm leading-relaxed text-crimson mb-6">Czy na pewno chcesz usunąć ten element z archiwum?</p>
+            <div class="flex justify-end gap-3 font-mono text-xs">
+                <button id="confirm-cancel" class="px-4 py-2 border border-crimson-border text-crimson hover:border-crimson hover:text-crimson-bright transition-colors uppercase cursor-pointer">
+                    Anuluj
+                </button>
+                <button id="confirm-accept" class="px-4 py-2 bg-crimson text-void font-bold hover:bg-crimson-bright transition-colors uppercase cursor-pointer">
+                    Zatwierdź
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Institutional Header -->
+    <header class="border-b border-crimson-border bg-obsidian/95 sticky top-0 z-30 backdrop-blur-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between py-4 gap-4 border-b border-crimson-border/60">
+                <!-- Emblem & Title -->
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 border-2 border-crimson flex flex-col items-center justify-center bg-void shrink-0 select-none">
+                        <span class="font-mono font-bold text-lg leading-none text-crimson-bright tracking-tighter">55</span>
+                        <span class="font-mono text-[8px] tracking-widest uppercase text-crimson mt-0.5">KM-55</span>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono text-[10px] uppercase tracking-[0.2em] px-1.5 py-0.5 border border-crimson-border bg-crimson-dark/30 text-crimson-bright">
+                                ARCHIWUM CENTRALNE
+                            </span>
+                            <span class="font-mono text-xs text-crimson-muted hidden sm:inline">SYGN. KOiKL-55/WIKI</span>
+                        </div>
+                        <h1 class="font-serif text-xl sm:text-2xl font-bold tracking-tight text-crimson-bright mt-0.5">
+                            Komitet Ochrony i Kultu Liczby 55
+                        </h1>
+                        <p class="font-mono text-[11px] text-crimson/80 uppercase tracking-wider">
+                            Organ Naczelny przy Kolektywie Miłośników 55
+                        </p>
+                    </div>
+                </div>
+
+                <!-- System Action Buttons (Export / Reset) -->
+                <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
+                    <button onclick="exportHTML()" class="px-3 py-2 border border-crimson bg-crimson-dark/30 text-crimson-bright hover:bg-crimson hover:text-void transition-colors uppercase tracking-wider cursor-pointer" title="Pobierz cały plik HTML z zapisanymi zmianami">
+                        Zapisz jako HTML
+                    </button>
+                    <button onclick="exportJSON()" class="px-3 py-2 border border-crimson-border text-crimson hover:border-crimson hover:text-crimson-bright transition-colors uppercase tracking-wider cursor-pointer" title="Eksportuj bazę danych JSON">
+                        Eksport JSON
+                    </button>
+                    <label class="px-3 py-2 border border-crimson-border text-crimson hover:border-crimson hover:text-crimson-bright transition-colors uppercase tracking-wider cursor-pointer" title="Wczytaj plik JSON">
+                        Import
+                        <input type="file" id="import-json-input" accept=".json" class="hidden" onchange="importJSON(event)">
+                    </label>
+                </div>
+            </div>
+
+            <!-- Top Navigation Cards / Tabs -->
+            <nav aria-label="Główna nawigacja archiwum" class="grid grid-cols-2 lg:grid-cols-4 gap-2 py-3">
+                <button onclick="switchTab('wiki')" id="tab-btn-wiki" class="nav-card group text-left p-3 border border-crimson bg-crimson-dark/35 transition-all cursor-pointer">
+                    <div class="flex items-center justify-between font-mono text-[10px] uppercase tracking-widest text-crimson-muted group-hover:text-crimson">
+                        <span>DZIAŁ 01</span>
+                        <span id="count-wiki">04 WPISÓW</span>
+                    </div>
+                    <div class="font-mono text-sm font-bold uppercase tracking-wide text-crimson-bright mt-1">
+                        Artykuły / Wiki
+                    </div>
+                </button>
+
+                <button onclick="switchTab('files')" id="tab-btn-files" class="nav-card group text-left p-3 border border-crimson-border bg-void hover:border-crimson transition-all cursor-pointer">
+                    <div class="flex items-center justify-between font-mono text-[10px] uppercase tracking-widest text-crimson-muted group-hover:text-crimson">
+                        <span>DZIAŁ 02</span>
+                        <span id="count-files">03 PLIKÓW</span>
+                    </div>
+                    <div class="font-mono text-sm font-bold uppercase tracking-wide text-crimson group-hover:text-crimson-bright mt-1">
+                        Dokumenty i Pliki
+                    </div>
+                </button>
+
+                <button onclick="switchTab('links')" id="tab-btn-links" class="nav-card group text-left p-3 border border-crimson-border bg-void hover:border-crimson transition-all cursor-pointer">
+                    <div class="flex items-center justify-between font-mono text-[10px] uppercase tracking-widest text-crimson-muted group-hover:text-crimson">
+                        <span>DZIAŁ 03</span>
+                        <span id="count-links">03 LINKÓW</span>
+                    </div>
+                    <div class="font-mono text-sm font-bold uppercase tracking-wide text-crimson group-hover:text-crimson-bright mt-1">
+                        Linki Zewnętrzne
+                    </div>
+                </button>
+
+                <button onclick="switchTab('about')" id="tab-btn-about" class="nav-card group text-left p-3 border border-crimson-border bg-void hover:border-crimson transition-all cursor-pointer">
+                    <div class="flex items-center justify-between font-mono text-[10px] uppercase tracking-widest text-crimson-muted group-hover:text-crimson">
+                        <span>DZIAŁ 04</span>
+                        <span>STATUS: AKTYWNY</span>
+                    </div>
+                    <div class="font-mono text-sm font-bold uppercase tracking-wide text-crimson group-hover:text-crimson-bright mt-1">
+                        O Komitecie
+                    </div>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- ========================================================= -->
+        <!-- SECTION 1: WIKI / ARTICLES                                -->
+        <!-- ========================================================= -->
+        <section id="view-wiki" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- Left Sidebar: Index & Search -->
+            <aside class="lg:col-span-4 xl:col-span-3 bg-obsidian border border-crimson-border p-4 flex flex-col gap-4">
+                <div class="flex items-center justify-between border-b border-crimson-border pb-2">
+                    <span class="font-mono text-xs font-bold uppercase tracking-wider text-crimson-bright">Spis Hasłowy</span>
+                    <span class="font-mono text-[10px] text-crimson-muted">INDEKS</span>
+                </div>
+
+                <!-- Search Bar -->
+                <div>
+                    <input type="text" id="wiki-search" oninput="renderWikiList()" placeholder="Szukaj w archiwum..." class="wiki-input w-full px-3 py-2 text-xs font-mono placeholder:text-crimson-muted">
+                </div>
+
+                <!-- Add New Article Button -->
+                <button onclick="createNewArticle()" class="w-full py-2.5 px-3 border border-crimson bg-crimson-dark/30 hover:bg-crimson hover:text-void text-crimson-bright font-mono text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer">
+                    + Dodaj nowy wpis
+                </button>
+
+                <!-- Article List -->
+                <nav id="wiki-sidebar-list" class="flex flex-col gap-1.5 max-h-[55vh] overflow-y-auto pr-1"><button class="w-full text-left p-2.5 border transition-colors cursor-pointer border-crimson bg-crimson-dark/35 text-crimson-bright">
+                    <div class="flex items-center justify-between font-mono text-[10px] text-crimson-muted">
+                        <span>DOK-01</span>
+                        <span>DOKTRYNA</span>
+                    </div>
+                    <div class="font-sans text-xs font-semibold mt-0.5 truncate">Manifest Liczby 55</div>
+                </button><button class="w-full text-left p-2.5 border transition-colors cursor-pointer border-transparent hover:border-crimson-border bg-panel/60 text-crimson">
+                    <div class="flex items-center justify-between font-mono text-[10px] text-crimson-muted">
+                        <span>DOK-02</span>
+                        <span>STRUKTURA</span>
+                    </div>
+                    <div class="font-sans text-xs font-semibold mt-0.5 truncate">Struktura KOiKL-55 i Kolektywu</div>
+                </button><button class="w-full text-left p-2.5 border transition-colors cursor-pointer border-transparent hover:border-crimson-border bg-panel/60 text-crimson">
+                    <div class="flex items-center justify-between font-mono text-[10px] text-crimson-muted">
+                        <span>DOK-03</span>
+                        <span>STATUT</span>
+                    </div>
+                    <div class="font-sans text-xs font-semibold mt-0.5 truncate">Statut i Hierarchia Stopni</div>
+                </button><button class="w-full text-left p-2.5 border transition-colors cursor-pointer border-transparent hover:border-crimson-border bg-panel/60 text-crimson">
+                    <div class="flex items-center justify-between font-mono text-[10px] text-crimson-muted">
+                        <span>DOK-04</span>
+                        <span>REJESTR</span>
+                    </div>
+                    <div class="font-sans text-xs font-semibold mt-0.5 truncate">Rejestr Zjawisk i Obserwacji 55</div>
+                </button></nav>
+
+                <!-- Quick Formatting Cheat Sheet -->
+                <div class="border-t border-crimson-border pt-3 mt-1 font-mono text-[11px] text-crimson/75 space-y-1">
+                    <div class="uppercase text-crimson-bright font-bold">Formatowanie tekstu:</div>
+                    <div>## Nagłówek sekcji</div>
+                    <div>### Podtytuł</div>
+                    <div>&gt; Cytat / Dekret</div>
+                    <div>- Punkt listy</div>
+                </div>
+            </aside>
+
+            <!-- Right Main Panel: Article Reader / Inline Editor -->
+            <article class="lg:col-span-8 xl:col-span-9 bg-obsidian border border-crimson-border min-h-[65vh] flex flex-col">
+                
+                <!-- Article Top Metadata Bar -->
+                <div class="border-b border-crimson-border px-6 py-4 flex flex-wrap items-center justify-between gap-4 bg-panel">
+                    <div class="font-mono text-xs text-crimson-muted flex flex-wrap items-center gap-3">
+                        <span id="article-code" class="text-crimson-bright font-bold">DOK-01</span>
+                        <span>//</span>
+                        <span id="article-category">DOKTRYNA</span>
+                        <span>//</span>
+                        <span id="article-updated">ARCHIWUM GŁÓWNE</span>
+                    </div>
+
+                    <div class="flex items-center gap-2 font-mono text-xs">
+                        <button id="btn-toggle-edit" onclick="toggleEditMode()" class="px-3.5 py-1.5 border border-crimson bg-crimson-dark/30 text-crimson-bright hover:bg-crimson hover:text-void transition-colors uppercase font-bold cursor-pointer">Edytuj wpis</button>
+                        <button id="btn-delete-article" onclick="deleteCurrentArticle()" class="px-3 py-1.5 border border-crimson-border text-crimson-muted hover:border-crimson hover:text-crimson-bright transition-colors uppercase cursor-pointer">
+                            Usuń
+                        </button>
+                    </div>
+                </div>
+
+                <!-- VIEW MODE -->
+                <div id="article-view-mode" class="p-6 sm:p-8 flex-1">
+                    <h2 id="view-article-title" class="font-serif text-2xl sm:text-4xl font-bold text-crimson-bright tracking-tight mb-3">Manifest Liczby 55</h2>
+                    <div id="view-article-summary" class="font-mono text-xs sm:text-sm text-crimson/85 border-l-2 border-crimson pl-3 py-1 mb-6 bg-crimson-dark/15">Podstawowy dokument programowy Kolektywu Miłośników 55 oraz Komitetu Ochrony i Kultu Liczby 55.</div>
+                    <div id="view-article-body" class="wiki-prose text-base"><p>Liczba 55 nie jest przypadkowym zbiorem dwóch cyfr. Stanowi ona idealną symetrię, równowagę oraz punkt odniesienia dla wszystkich członków naszego Kolektywu.</p><h2>Założenia fundamentalne</h2><p>Każde wystąpienie liczby 55 w przestrzeni publicznej, zegarach, numeracji czy dokumentacji podlega szczególnej uwadze i ochronie ze strony organów Komitetu.</p><blockquote>W świecie pełnym chaosu i przypadkowych wartości, podwójna piątka pozostaje stałym punktem orientacyjnym.</blockquote><h2>Cele działalności</h2><ul><li>Dokumentowanie wszelkich przejawów obecności liczby 55 w codzienności.</li><li>Zrzeszanie osób rozumiejących wagę i estetykę liczby 55 w ramach Kolektywu Miłośników 55.</li><li>Dbanie o należyty szacunek wobec symboliki 55 poprzez działania Komitetu Ochrony i Kultu.</li></ul></div>
+                </div>
+
+                <!-- EDIT MODE -->
+                <div id="article-edit-mode" class="p-6 sm:p-8 flex-1 hidden flex-col gap-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="sm:col-span-2">
+                            <label class="block font-mono text-[11px] uppercase tracking-wider text-crimson-bright mb-1.5">Tytuł wpisu</label>
+                            <input type="text" id="edit-article-title" class="wiki-input w-full px-3 py-2 font-serif text-lg font-bold">
+                        </div>
+                        <div>
+                            <label class="block font-mono text-[11px] uppercase tracking-wider text-crimson-bright mb-1.5">Kategoria / Dział</label>
+                            <input type="text" id="edit-article-category" class="wiki-input w-full px-3 py-2 font-mono text-xs uppercase" placeholder="np. STATUT, REJESTR">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-mono text-[11px] uppercase tracking-wider text-crimson-bright mb-1.5">Krótki opis / Lead (wyświetlany pod tytułem)</label>
+                        <input type="text" id="edit-article-summary" class="wiki-input w-full px-3 py-2 font-mono text-xs">
+                    </div>
+
+                    <div class="flex-1 flex flex-col">
+                        <label class="block font-mono text-[11px] uppercase tracking-wider text-crimson-bright mb-1.5">Treść główna (wpisz swój tekst poniżej)</label>
+                        <textarea id="edit-article-body" rows="14" class="wiki-input w-full p-4 font-mono text-sm leading-relaxed flex-1"></textarea>
+                    </div>
+
+                    <div class="flex items-center justify-end gap-3 pt-2 border-t border-crimson-border font-mono text-xs">
+                        <button onclick="cancelEditMode()" class="px-4 py-2 border border-crimson-border text-crimson hover:border-crimson hover:text-crimson-bright uppercase cursor-pointer">
+                            Anuluj zmiany
+                        </button>
+                        <button onclick="saveArticleChanges()" class="px-5 py-2 bg-crimson text-void font-bold hover:bg-crimson-bright uppercase cursor-pointer">
+                            Zapisz w archiwum
+                        </button>
+                    </div>
+                </div>
+
+            </article>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- SECTION 2: DOCUMENTS & FILES                              -->
+        <!-- ========================================================= -->
+        <section id="view-files" class="hidden space-y-6">
+            <div class="bg-obsidian border border-crimson-border p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <span class="font-mono text-[10px] uppercase tracking-widest text-crimson-muted">REPOZYTORIUM PLIKÓW</span>
+                    <h2 class="font-serif text-2xl font-bold text-crimson-bright mt-0.5">Dokumenty, Dekrety i Załączniki</h2>
+                    <p class="font-mono text-xs text-crimson/80 mt-1">Dodawaj odnośniki do plików PDF, dokumentów Google, obrazów lub wzorów pism Komitetu.</p>
+                </div>
+                <button onclick="toggleNewFileForm()" class="px-4 py-2.5 border border-crimson bg-crimson-dark/30 hover:bg-crimson hover:text-void text-crimson-bright font-mono text-xs font-bold uppercase tracking-wider transition-colors shrink-0 cursor-pointer">
+                    + Dodaj plik / dokument
+                </button>
+            </div>
+
+            <!-- Add/Edit File Form -->
+            <div id="new-file-form" class="hidden bg-obsidian border border-crimson p-6 space-y-4">
+                <div class="font-mono text-xs font-bold uppercase text-crimson-bright border-b border-crimson-border pb-2">
+                    Rejestracja nowego dokumentu w repozytorium
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block font-mono text-[11px] uppercase text-crimson mb-1">Nazwa dokumentu</label>
+                        <input type="text" id="file-title" placeholder="np. Dekret nr 01/55" class="wiki-input w-full px-3 py-2 font-mono text-xs">
+                    </div>
+                    <div>
+                        <label class="block font-mono text-[11px] uppercase text-crimson mb-1">Sygnatura / Typ pliku</label>
+                        <input type="text" id="file-meta" placeholder="np. PDF // UCHWAŁA" class="wiki-input w-full px-3 py-2 font-mono text-xs">
+                    </div>
+                    <div>
+                        <label class="block font-mono text-[11px] uppercase text-crimson mb-1">Adres URL pliku (lub #)</label>
+                        <input type="text" id="file-url" placeholder="https://..." class="wiki-input w-full px-3 py-2 font-mono text-xs">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-mono text-[11px] uppercase text-crimson mb-1">Opis zawartości</label>
+                    <input type="text" id="file-desc" placeholder="Krótki opis czego dotyczy ten plik..." class="wiki-input w-full px-3 py-2 font-mono text-xs">
+                </div>
+                <div class="flex justify-end gap-2 font-mono text-xs">
+                    <button onclick="toggleNewFileForm()" class="px-4 py-2 border border-crimson-border text-crimson hover:border-crimson uppercase cursor-pointer">Anuluj</button>
+                    <button onclick="addFileItem()" class="px-4 py-2 bg-crimson text-void font-bold hover:bg-crimson-bright uppercase cursor-pointer">Zapisz plik</button>
+                </div>
+            </div>
+
+            <!-- Files Grid -->
+            <div id="files-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"><div class="bg-obsidian border border-crimson-border hover:border-crimson p-5 flex flex-col justify-between transition-colors">
+                    <div>
+                        <div class="flex items-center justify-between font-mono text-[10px] text-crimson-muted mb-2">
+                            <span>DOKUMENT // SYGN. 01/55</span>
+                            <button onclick="deleteFileItem('file-1')" class="text-crimson-muted hover:text-crimson-bright uppercase cursor-pointer">[USUŃ]</button>
+                        </div>
+                        <h3 class="font-serif text-lg font-bold text-crimson-bright mb-2">Uchwała Założycielska KOiKL-55</h3>
+                        <p class="text-xs text-crimson/85 leading-relaxed mb-4">Oficjalny akt powołania Komitetu Ochrony i Kultu Liczby 55 przy Kolektywie Miłośników 55.</p>
+                    </div>
+                    <div class="pt-3 border-t border-crimson-border/60 flex items-center justify-between font-mono text-xs">
+                        <span class="text-[10px] text-crimson-muted truncate max-w-[60%]">#</span>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="px-3 py-1 border border-crimson text-crimson-bright hover:bg-crimson hover:text-void transition-colors uppercase font-bold">
+                            Otwórz →
+                        </a>
+                    </div>
+                </div><div class="bg-obsidian border border-crimson-border hover:border-crimson p-5 flex flex-col justify-between transition-colors">
+                    <div>
+                        <div class="flex items-center justify-between font-mono text-[10px] text-crimson-muted mb-2">
+                            <span>SZABLON // ARCHIWUM</span>
+                            <button onclick="deleteFileItem('file-2')" class="text-crimson-muted hover:text-crimson-bright uppercase cursor-pointer">[USUŃ]</button>
+                        </div>
+                        <h3 class="font-serif text-lg font-bold text-crimson-bright mb-2">Wzór Legitymacji Członkowskiej KM-55</h3>
+                        <p class="text-xs text-crimson/85 leading-relaxed mb-4">Dokument potwierdzający przynależność do Kolektywu Miłośników 55.</p>
+                    </div>
+                    <div class="pt-3 border-t border-crimson-border/60 flex items-center justify-between font-mono text-xs">
+                        <span class="text-[10px] text-crimson-muted truncate max-w-[60%]">#</span>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="px-3 py-1 border border-crimson text-crimson-bright hover:bg-crimson hover:text-void transition-colors uppercase font-bold">
+                            Otwórz →
+                        </a>
+                    </div>
+                </div><div class="bg-obsidian border border-crimson-border hover:border-crimson p-5 flex flex-col justify-between transition-colors">
+                    <div>
+                        <div class="flex items-center justify-between font-mono text-[10px] text-crimson-muted mb-2">
+                            <span>WYTYCZNE // WERSJA 1.0</span>
+                            <button onclick="deleteFileItem('file-3')" class="text-crimson-muted hover:text-crimson-bright uppercase cursor-pointer">[USUŃ]</button>
+                        </div>
+                        <h3 class="font-serif text-lg font-bold text-crimson-bright mb-2">Księga Znaków i Identyfikacji 55</h3>
+                        <p class="text-xs text-crimson/85 leading-relaxed mb-4">Zasady stosowania barw czerni i czerwieni oraz sygnetu 55 w materiałach grupy.</p>
+                    </div>
+                    <div class="pt-3 border-t border-crimson-border/60 flex items-center justify-between font-mono text-xs">
+                        <span class="text-[10px] text-crimson-muted truncate max-w-[60%]">#</span>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="px-3 py-1 border border-crimson text-crimson-bright hover:bg-crimson hover:text-void transition-colors uppercase font-bold">
+                            Otwórz →
+                        </a>
+                    </div>
+                </div></div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- SECTION 3: EXTERNAL LINKS                                 -->
+        <!-- ========================================================= -->
+        <section id="view-links" class="hidden space-y-6">
+            <div class="bg-obsidian border border-crimson-border p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <span class="font-mono text-[10px] uppercase tracking-widest text-crimson-muted">KATALOG ZEWNĘTRZNY</span>
+                    <h2 class="font-serif text-2xl font-bold text-crimson-bright mt-0.5">Linki i Kanały Łączności</h2>
+                    <p class="font-mono text-xs text-crimson/80 mt-1">Zbiór oficjalnych odnośników Kolektywu Miłośników 55 oraz powiązanych zasobów.</p>
+                </div>
+                <button onclick="toggleNewLinkForm()" class="px-4 py-2.5 border border-crimson bg-crimson-dark/30 hover:bg-crimson hover:text-void text-crimson-bright font-mono text-xs font-bold uppercase tracking-wider transition-colors shrink-0 cursor-pointer">
+                    + Dodaj nowy link
+                </button>
+            </div>
+
+            <!-- Add Link Form -->
+            <div id="new-link-form" class="hidden bg-obsidian border border-crimson p-6 space-y-4">
+                <div class="font-mono text-xs font-bold uppercase text-crimson-bright border-b border-crimson-border pb-2">
+                    Dodaj odnośnik do katalogu
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block font-mono text-[11px] uppercase text-crimson mb-1">Nazwa odnośnika</label>
+                        <input type="text" id="link-title" placeholder="np. Główny Serwer Łączności" class="wiki-input w-full px-3 py-2 font-mono text-xs">
+                    </div>
+                    <div>
+                        <label class="block font-mono text-[11px] uppercase text-crimson mb-1">Kategoria</label>
+                        <input type="text" id="link-category" placeholder="np. KOMUNIKACJA / SOCIAL" class="wiki-input w-full px-3 py-2 font-mono text-xs">
+                    </div>
+                    <div>
+                        <label class="block font-mono text-[11px] uppercase text-crimson mb-1">Adres URL</label>
+                        <input type="text" id="link-url" placeholder="https://..." class="wiki-input w-full px-3 py-2 font-mono text-xs">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-mono text-[11px] uppercase text-crimson mb-1">Adnotacja</label>
+                    <input type="text" id="link-desc" placeholder="Krótki opis odnośnika..." class="wiki-input w-full px-3 py-2 font-mono text-xs">
+                </div>
+                <div class="flex justify-end gap-2 font-mono text-xs">
+                    <button onclick="toggleNewLinkForm()" class="px-4 py-2 border border-crimson-border text-crimson hover:border-crimson uppercase cursor-pointer">Anuluj</button>
+                    <button onclick="addLinkItem()" class="px-4 py-2 bg-crimson text-void font-bold hover:bg-crimson-bright uppercase cursor-pointer">Dodaj link</button>
+                </div>
+            </div>
+
+            <!-- Links List -->
+            <div id="links-list" class="space-y-3"><div class="bg-obsidian border border-crimson-border hover:border-crimson p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 font-mono text-[10px]">
+                            <span class="px-1.5 py-0.5 border border-crimson-border bg-crimson-dark/25 text-crimson-bright">KOMUNIKACJA</span>
+                            <span class="text-crimson-muted truncate max-w-xs sm:max-w-md">https://discord.com</span>
+                        </div>
+                        <h3 class="font-serif text-lg font-bold text-crimson-bright">Główny Kanał Łączności Kolektywu (Discord / Grupa)</h3>
+                        <p class="text-xs text-crimson/85">Miejsce codziennych narad członków Kolektywu Miłośników 55.</p>
+                    </div>
+                    <div class="flex items-center gap-2 font-mono text-xs shrink-0">
+                        <button onclick="deleteLinkItem('link-1')" class="px-2.5 py-2 border border-crimson-border text-crimson-muted hover:border-crimson hover:text-crimson-bright uppercase cursor-pointer">
+                            Usuń
+                        </button>
+                        <a href="https://discord.com" target="_blank" rel="noopener noreferrer" class="px-4 py-2 border border-crimson bg-crimson-dark/30 text-crimson-bright hover:bg-crimson hover:text-void transition-colors uppercase font-bold">
+                            Przejdź ↗
+                        </a>
+                    </div>
+                </div><div class="bg-obsidian border border-crimson-border hover:border-crimson p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 font-mono text-[10px]">
+                            <span class="px-1.5 py-0.5 border border-crimson-border bg-crimson-dark/25 text-crimson-bright">PUBLICYSTYKA</span>
+                            <span class="text-crimson-muted truncate max-w-xs sm:max-w-md">https://x.com</span>
+                        </div>
+                        <h3 class="font-serif text-lg font-bold text-crimson-bright">Oficjalny Profil Komitetu (Social Media)</h3>
+                        <p class="text-xs text-crimson/85">Komunikaty prasowe oraz ogłoszenia Komitetu Ochrony i Kultu Liczby 55.</p>
+                    </div>
+                    <div class="flex items-center gap-2 font-mono text-xs shrink-0">
+                        <button onclick="deleteLinkItem('link-2')" class="px-2.5 py-2 border border-crimson-border text-crimson-muted hover:border-crimson hover:text-crimson-bright uppercase cursor-pointer">
+                            Usuń
+                        </button>
+                        <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="px-4 py-2 border border-crimson bg-crimson-dark/30 text-crimson-bright hover:bg-crimson hover:text-void transition-colors uppercase font-bold">
+                            Przejdź ↗
+                        </a>
+                    </div>
+                </div><div class="bg-obsidian border border-crimson-border hover:border-crimson p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 font-mono text-[10px]">
+                            <span class="px-1.5 py-0.5 border border-crimson-border bg-crimson-dark/25 text-crimson-bright">ZASOBY</span>
+                            <span class="text-crimson-muted truncate max-w-xs sm:max-w-md">https://drive.google.com</span>
+                        </div>
+                        <h3 class="font-serif text-lg font-bold text-crimson-bright">Zewnętrzne Repozytorium Mediów 55</h3>
+                        <p class="text-xs text-crimson/85">Dysk z grafikami, pieczęciami i materiałami archiwalnymi.</p>
+                    </div>
+                    <div class="flex items-center gap-2 font-mono text-xs shrink-0">
+                        <button onclick="deleteLinkItem('link-3')" class="px-2.5 py-2 border border-crimson-border text-crimson-muted hover:border-crimson hover:text-crimson-bright uppercase cursor-pointer">
+                            Usuń
+                        </button>
+                        <a href="https://drive.google.com" target="_blank" rel="noopener noreferrer" class="px-4 py-2 border border-crimson bg-crimson-dark/30 text-crimson-bright hover:bg-crimson hover:text-void transition-colors uppercase font-bold">
+                            Przejdź ↗
+                        </a>
+                    </div>
+                </div></div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- SECTION 4: ABOUT / INSTITUTIONAL INFO                     -->
+        <!-- ========================================================= -->
+        <section id="view-about" class="hidden">
+            <div class="bg-obsidian border border-crimson-border p-6 sm:p-10 max-w-4xl mx-auto space-y-8">
+                <div class="border-b border-crimson-border pb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <span class="font-mono text-xs uppercase tracking-[0.2em] text-crimson-muted">KARTA INSTYTUCJONALNA</span>
+                        <h2 class="font-serif text-3xl font-bold text-crimson-bright mt-1">Struktura Organu i Zasady Archiwum</h2>
+                    </div>
+                    <div class="border border-crimson px-3 py-2 font-mono text-xs text-center shrink-0">
+                        <div class="text-crimson-bright font-bold">STATUS: 55/55</div>
+                        <div class="text-[10px] text-crimson-muted">PIECZĘĆ ZATWIERDZONA</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
+                    <div class="border border-crimson-border p-5 bg-panel">
+                        <div class="text-crimson-muted uppercase mb-1">BAZA SPOŁECZNA</div>
+                        <div class="text-base font-bold text-crimson-bright mb-2">Kolektyw Miłośników 55 (KM-55)</div>
+                        <p class="text-crimson/85 leading-relaxed font-sans text-sm">
+                            Ogół zrzeszonych sympatyków, obserwatorów i entuzjastów liczby 55. Kolektyw stanowi fundament ruchu oraz przestrzeń wymiany spostrzeżeń.
+                        </p>
+                    </div>
+                    <div class="border border-crimson-border p-5 bg-panel">
+                        <div class="text-crimson-muted uppercase mb-1">ORGAN NACZELNY</div>
+                        <div class="text-base font-bold text-crimson-bright mb-2">Komitet Ochrony i Kultu Liczby 55 (KOiKL-55)</div>
+                        <p class="text-crimson/85 leading-relaxed font-sans text-sm">
+                            Ciało decyzyjne powołane przy Kolektywie. Odpowiada za czystość doktryny, rejestrację zjawisk, nadawanie stopni oraz prowadzenie niniejszego archiwum.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="border border-crimson-border p-5 bg-crimson-dark/15 space-y-3">
+                    <h3 class="font-mono text-xs font-bold uppercase tracking-wider text-crimson-bright">Instrukcja obsługi archiwum</h3>
+                    <ul class="font-mono text-xs text-crimson/90 space-y-2 list-square pl-4">
+                        <li>Wszystkie wpisy, pliki i linki możesz edytować bezpośrednio na tej stronie – zmiany zapisują się automatycznie w pamięci Twojej przeglądarki.</li>
+                        <li>Aby przenieść swoją Wikipedię na inny komputer lub wrzucić ją na hosting (np. GitHub Pages, Netlify), kliknij <strong>„Zapisz jako HTML”</strong> w prawym górnym rogu – pobierzesz gotowy, pojedynczy plik ze wszystkimi Twoimi tekstami w środku.</li>
+                        <li>W razie potrzeby możesz wyczyścić bazę do ustawień początkowych przyciskiem poniżej.</li>
+                    </ul>
+                    <div class="pt-3">
+                        <button onclick="resetToDefaults()" class="px-4 py-2 border border-crimson-border text-crimson-muted hover:border-crimson hover:text-crimson-bright font-mono text-xs uppercase transition-colors cursor-pointer">
+                            Przywróć wpisy domyślne
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-crimson-border bg-obsidian py-4 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 font-mono text-[11px] text-crimson-muted">
+            <div>KOiKL-55 // KOMITET OCHRONY I KULTU LICZBY 55</div>
+            <div>KOLEKTYW MIŁOŚNIKÓW 55 (KM-55) — WSZELKIE PRAWA ZASTRZEŻONE</div>
+        </div>
+    </footer>
+
+    <!-- Application Data & Logic -->
+    <script id="wiki-seed-data" type="application/json">
+{
+    "articles": [
+        {
+            "id": "art-1",
+            "code": "DOK-01",
+            "category": "DOKTRYNA",
+            "title": "Manifest Liczby 55",
+            "summary": "Podstawowy dokument programowy Kolektywu Miłośników 55 oraz Komitetu Ochrony i Kultu Liczby 55.",
+            "updated": "ARCHIWUM GŁÓWNE",
+            "body": "Liczba 55 nie jest przypadkowym zbiorem dwóch cyfr. Stanowi ona idealną symetrię, równowagę oraz punkt odniesienia dla wszystkich członków naszego Kolektywu.\n\n## Założenia fundamentalne\n\nKażde wystąpienie liczby 55 w przestrzeni publicznej, zegarach, numeracji czy dokumentacji podlega szczególnej uwadze i ochronie ze strony organów Komitetu.\n\n> W świecie pełnym chaosu i przypadkowych wartości, podwójna piątka pozostaje stałym punktem orientacyjnym.\n\n## Cele działalności\n\n- Dokumentowanie wszelkich przejawów obecności liczby 55 w codzienności.\n- Zrzeszanie osób rozumiejących wagę i estetykę liczby 55 w ramach Kolektywu Miłośników 55.\n- Dbanie o należyty szacunek wobec symboliki 55 poprzez działania Komitetu Ochrony i Kultu."
+        },
+        {
+            "id": "art-2",
+            "code": "DOK-02",
+            "category": "STRUKTURA",
+            "title": "Struktura KOiKL-55 i Kolektywu",
+            "summary": "Podział kompetencji pomiędzy bazą członkowską (KM-55) a organem zarządzającym (KOiKL-55).",
+            "updated": "ARCHIWUM GŁÓWNE",
+            "body": "Organizacja funkcjonuje w oparciu o dwustopniowy model instytucjonalny, łączący otwartą wspólnotę z dyscypliną organu nadzorczego.\n\n## 1. Kolektyw Miłośników 55 (KM-55)\n\nStanowi szeroką bazę społeczną ruchu. Do Kolektywu należy każdy zatwierdzony sympatyk liczby 55, który czynnie uczestniczy w życiu grupy oraz zgłasza nowe obserwacje.\n\n## 2. Komitet Ochrony i Kultu Liczby 55 (KOiKL-55)\n\nNajwyższy organ wykonawczy i strażniczy powołany przy Kolektywie. Do wyłącznych kompetencji Komitetu należy:\n\n- Wydawanie oficjalnych dekretów i komunikatów.\n- Prowadzenie Centralnego Archiwum (niniejszej Wiki).\n- Nadawanie stopni oraz wyróżnień zasłużonym aktywistom KM-55."
+        },
+        {
+            "id": "art-3",
+            "code": "DOK-03",
+            "category": "STATUT",
+            "title": "Statut i Hierarchia Stopni",
+            "summary": "Zasady przynależności, obowiązki członków oraz tabela rang obowiązująca w strukturach.",
+            "updated": "ARCHIWUM GŁÓWNE",
+            "body": "Niniejszy tekst jest szablonem gotowym do uzupełnienia Twoimi własnymi zasadami. Kliknij przycisk „Edytuj wpis” w prawym górnym rogu tego okna, aby wpisać własny regulamin.\n\n## Hierarchia wewnętrzna\n\n- Kandydat na Miłośnika – osoba w okresie próbnym.\n- Członek Kolektywu (KM-55) – pełnoprawny uczestnik wspólnoty.\n- Aktywista Terenowy – osoba aktywnie dokumentująca liczbę 55.\n- Członek Komitetu (KOiKL-55) – przedstawiciel organu naczelnego."
+        },
+        {
+            "id": "art-4",
+            "code": "DOK-04",
+            "category": "REJESTR",
+            "title": "Rejestr Zjawisk i Obserwacji 55",
+            "summary": "Kronika najważniejszych wydarzeń, dat i miejsc powiązanych z liczbą 55.",
+            "updated": "ARCHIWUM GŁÓWNE",
+            "body": "W tym miejscu możesz prowadzić kronikę swojej grupy, zapisywać ważne daty, memy, wewnętrzne historie lub rekordy.\n\n## Wpis #001 – Powołanie Komitetu\n\nOficjalne zawiązanie Kolektywu Miłośników 55 oraz powołanie Komitetu Ochrony i Kultu Liczby 55 w celu uporządkowania wiedzy i zrzeszenia wyznawców."
+        }
+    ],
+    "files": [
+        {
+            "id": "file-1",
+            "title": "Uchwała Założycielska KOiKL-55",
+            "meta": "DOKUMENT // SYGN. 01/55",
+            "desc": "Oficjalny akt powołania Komitetu Ochrony i Kultu Liczby 55 przy Kolektywie Miłośników 55.",
+            "url": "#"
+        },
+        {
+            "id": "file-2",
+            "title": "Wzór Legitymacji Członkowskiej KM-55",
+            "meta": "SZABLON // ARCHIWUM",
+            "desc": "Dokument potwierdzający przynależność do Kolektywu Miłośników 55.",
+            "url": "#"
+        },
+        {
+            "id": "file-3",
+            "title": "Księga Znaków i Identyfikacji 55",
+            "meta": "WYTYCZNE // WERSJA 1.0",
+            "desc": "Zasady stosowania barw czerni i czerwieni oraz sygnetu 55 w materiałach grupy.",
+            "url": "#"
+        }
+    ],
+    "links": [
+        {
+            "id": "link-1",
+            "title": "Główny Kanał Łączności Kolektywu (Discord / Grupa)",
+            "category": "KOMUNIKACJA",
+            "desc": "Miejsce codziennych narad członków Kolektywu Miłośników 55.",
+            "url": "https://discord.com"
+        },
+        {
+            "id": "link-2",
+            "title": "Oficjalny Profil Komitetu (Social Media)",
+            "category": "PUBLICYSTYKA",
+            "desc": "Komunikaty prasowe oraz ogłoszenia Komitetu Ochrony i Kultu Liczby 55.",
+            "url": "https://x.com"
+        },
+        {
+            "id": "link-3",
+            "title": "Zewnętrzne Repozytorium Mediów 55",
+            "category": "ZASOBY",
+            "desc": "Dysk z grafikami, pieczęciami i materiałami archiwalnymi.",
+            "url": "https://drive.google.com"
+        }
+    ]
+}
+</script>
+
+    <script>
+        const STORAGE_KEY = 'koikl55_wiki_database_v1';
+        let db = { articles: [], files: [], links: [] };
+        let currentArticleId = null;
+        let isEditing = false;
+
+        // Initialize Application
+        window.addEventListener('DOMContentLoaded', () => {
+            loadDatabase();
+            if (db.articles.length > 0) {
+                currentArticleId = db.articles[0].id;
+            }
+            updateCounters();
+            renderWikiList();
+            renderCurrentArticle();
+            renderFiles();
+            renderLinks();
+        });
+
+        // Load from localStorage or embedded seed JSON
+        function loadDatabase() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    db = JSON.parse(saved);
+                } else {
+                    const seedEl = document.getElementById('wiki-seed-data');
+                    db = JSON.parse(seedEl.textContent);
+                }
+            } catch (e) {
+                console.error('Błąd odczytu bazy danych:', e);
+                const seedEl = document.getElementById('wiki-seed-data');
+                db = JSON.parse(seedEl.textContent);
+            }
+        }
+
+        function saveDatabase() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+                updateCounters();
+            } catch (e) {
+                showToast('Błąd zapisu w pamięci przeglądarki.');
+            }
+        }
+
+        function updateCounters() {
+            document.getElementById('count-wiki').textContent = `${String(db.articles.length).padStart(2, '0')} WPISÓW`;
+            document.getElementById('count-files').textContent = `${String(db.files.length).padStart(2, '0')} PLIKÓW`;
+            document.getElementById('count-links').textContent = `${String(db.links.length).padStart(2, '0')} LINKÓW`;
+        }
+
+        // Navigation Tab Switching
+        function switchTab(tabName) {
+            const sections = ['wiki', 'files', 'links', 'about'];
+            sections.forEach(sec => {
+                const viewEl = document.getElementById(`view-${sec}`);
+                const btnEl = document.getElementById(`tab-btn-${sec}`);
+                if (sec === tabName) {
+                    viewEl.classList.remove('hidden');
+                    btnEl.classList.remove('border-crimson-border', 'bg-void');
+                    btnEl.classList.add('border-crimson', 'bg-crimson-dark/35');
+                } else {
+                    viewEl.classList.add('hidden');
+                    btnEl.classList.remove('border-crimson', 'bg-crimson-dark/35');
+                    btnEl.classList.add('border-crimson-border', 'bg-void');
+                }
+            });
+        }
+
+        // ==========================================
+        // WIKI ARTICLES LOGIC
+        // ==========================================
+        function renderWikiList() {
+            const listEl = document.getElementById('wiki-sidebar-list');
+            const query = document.getElementById('wiki-search').value.toLowerCase().trim();
+            listEl.innerHTML = '';
+
+            const filtered = db.articles.filter(art => 
+                art.title.toLowerCase().includes(query) || 
+                art.category.toLowerCase().includes(query) ||
+                art.body.toLowerCase().includes(query)
+            );
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = `<div class="font-mono text-xs text-crimson-muted py-4 text-center border border-dashed border-crimson-border">Brak wyników w indeksie.</div>`;
+                return;
+            }
+
+            filtered.forEach(art => {
+                const isActive = art.id === currentArticleId;
+                const btn = document.createElement('button');
+                btn.onclick = () => selectArticle(art.id);
+                btn.className = `w-full text-left p-2.5 border transition-colors cursor-pointer ${
+                    isActive 
+                    ? 'border-crimson bg-crimson-dark/35 text-crimson-bright' 
+                    : 'border-transparent hover:border-crimson-border bg-panel/60 text-crimson'
+                }`;
+                btn.innerHTML = `
+                    <div class="flex items-center justify-between font-mono text-[10px] text-crimson-muted">
+                        <span>${escapeHTML(art.code)}</span>
+                        <span>${escapeHTML(art.category)}</span>
+                    </div>
+                    <div class="font-sans text-xs font-semibold mt-0.5 truncate">${escapeHTML(art.title)}</div>
+                `;
+                listEl.appendChild(btn);
+            });
+        }
+
+        function selectArticle(id) {
+            if (isEditing) {
+                cancelEditMode();
+            }
+            currentArticleId = id;
+            renderWikiList();
+            renderCurrentArticle();
+        }
+
+        function renderCurrentArticle() {
+            const art = db.articles.find(a => a.id === currentArticleId);
+            const viewMode = document.getElementById('article-view-mode');
+            const editMode = document.getElementById('article-edit-mode');
+
+            if (!art) {
+                document.getElementById('view-article-title').textContent = 'Brak wybranego wpisu';
+                document.getElementById('view-article-summary').textContent = 'Utwórz nowy wpis z menu po lewej stronie.';
+                document.getElementById('view-article-body').innerHTML = '';
+                return;
+            }
+
+            document.getElementById('article-code').textContent = art.code;
+            document.getElementById('article-category').textContent = art.category;
+            document.getElementById('article-updated').textContent = art.updated;
+
+            document.getElementById('view-article-title').textContent = art.title;
+            document.getElementById('view-article-summary').textContent = art.summary || '';
+            document.getElementById('view-article-body').innerHTML = formatWikiMarkdown(art.body);
+
+            viewMode.classList.remove('hidden');
+            editMode.classList.add('hidden');
+            editMode.classList.remove('flex');
+            isEditing = false;
+            document.getElementById('btn-toggle-edit').textContent = 'Edytuj wpis';
+        }
+
+        function toggleEditMode() {
+            const art = db.articles.find(a => a.id === currentArticleId);
+            if (!art) return;
+
+            if (isEditing) {
+                cancelEditMode();
+                return;
+            }
+
+            isEditing = true;
+            document.getElementById('edit-article-title').value = art.title;
+            document.getElementById('edit-article-category').value = art.category;
+            document.getElementById('edit-article-summary').value = art.summary;
+            document.getElementById('edit-article-body').value = art.body;
+
+            document.getElementById('article-view-mode').classList.add('hidden');
+            const editMode = document.getElementById('article-edit-mode');
+            editMode.classList.remove('hidden');
+            editMode.classList.add('flex');
+            document.getElementById('btn-toggle-edit').textContent = 'Podgląd';
+        }
+
+        function cancelEditMode() {
+            isEditing = false;
+            renderCurrentArticle();
+        }
+
+        function saveArticleChanges() {
+            const art = db.articles.find(a => a.id === currentArticleId);
+            if (!art) return;
+
+            const newTitle = document.getElementById('edit-article-title').value.trim();
+            if (!newTitle) {
+                showToast('Tytuł wpisu nie może być pusty.');
+                return;
+            }
+
+            art.title = newTitle;
+            art.category = document.getElementById('edit-article-category').value.trim().toUpperCase() || 'ARCHIWUM';
+            art.summary = document.getElementById('edit-article-summary').value.trim();
+            art.body = document.getElementById('edit-article-body').value;
+            
+            const now = new Date();
+            art.updated = `ZAKTUALIZOWANO: ${now.toLocaleDateString('pl-PL')} ${now.toLocaleTimeString('pl-PL', {hour: '2-digit', minute:'2-digit'})}`;
+
+            saveDatabase();
+            renderWikiList();
+            renderCurrentArticle();
+            showToast('Zapisano zmiany w archiwum KOiKL-55.');
+        }
+
+        function createNewArticle() {
+            const nextNum = db.articles.length + 1;
+            const newId = 'art-' + Date.now();
+            const newArt = {
+                id: newId,
+                code: `DOK-${String(nextNum).padStart(2, '0')}`,
+                category: 'NOWY WPIS',
+                title: `Nowy Artykuł Archiwalny #${nextNum}`,
+                summary: 'Krótki opis wprowadzający do zagadnienia.',
+                updated: 'UTWORZONO TERAZ',
+                body: 'Wpisz tutaj treść swojego artykułu.\n\n## Sekcja pierwsza\n\nMożesz dowolnie edytować ten tekst, dodawać nagłówki oraz listy punktowane.'
+            };
+
+            db.articles.push(newArt);
+            saveDatabase();
+            currentArticleId = newId;
+            renderWikiList();
+            renderCurrentArticle();
+            toggleEditMode();
+            showToast('Utworzono nowy wpis. Wprowadź treść.');
+        }
+
+        function deleteCurrentArticle() {
+            if (db.articles.length <= 1) {
+                showToast('W archiwum musi pozostać przynajmniej jeden dokument.');
+                return;
+            }
+            openConfirmModal('Czy na pewno chcesz trwale usunąć ten wpis z archiwum Komitetu?', () => {
+                db.articles = db.articles.filter(a => a.id !== currentArticleId);
+                currentArticleId = db.articles[0].id;
+                saveDatabase();
+                renderWikiList();
+                renderCurrentArticle();
+                showToast('Usunięto wpis z archiwum.');
+            });
+        }
+
+        // Lightweight safe Markdown-like parser for Wiki text
+        function formatWikiMarkdown(rawText) {
+            if (!rawText) return '';
+            const lines = rawText.split('\n');
+            let html = '';
+            let inList = false;
+
+            lines.forEach(line => {
+                const trimmed = line.trim();
+                if (!trimmed) {
+                    if (inList) {
+                        html += '</ul>';
+                        inList = false;
+                    }
+                    return;
+                }
+
+                if (trimmed.startsWith('## ')) {
+                    if (inList) { html += '</ul>'; inList = false; }
+                    html += `<h2>${escapeHTML(trimmed.substring(3))}</h2>`;
+                } else if (trimmed.startsWith('### ')) {
+                    if (inList) { html += '</ul>'; inList = false; }
+                    html += `<h3>${escapeHTML(trimmed.substring(4))}</h3>`;
+                } else if (trimmed.startsWith('> ')) {
+                    if (inList) { html += '</ul>'; inList = false; }
+                    html += `<blockquote>${escapeHTML(trimmed.substring(2))}</blockquote>`;
+                } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+                    if (!inList) {
+                        html += '<ul>';
+                        inList = true;
+                    }
+                    html += `<li>${escapeHTML(trimmed.substring(2))}</li>`;
+                } else {
+                    if (inList) { html += '</ul>'; inList = false; }
+                    html += `<p>${escapeHTML(trimmed)}</p>`;
+                }
+            });
+
+            if (inList) html += '</ul>';
+            return html;
+        }
+
+        // ==========================================
+        // FILES & DOCUMENTS LOGIC
+        // ==========================================
+        function toggleNewFileForm() {
+            const form = document.getElementById('new-file-form');
+            form.classList.toggle('hidden');
+        }
+
+        function addFileItem() {
+            const title = document.getElementById('file-title').value.trim();
+            const meta = document.getElementById('file-meta').value.trim() || 'DOKUMENT // PLIK';
+            const url = document.getElementById('file-url').value.trim() || '#';
+            const desc = document.getElementById('file-desc').value.trim() || 'Brak dodatkowego opisu.';
+
+            if (!title) {
+                showToast('Podaj nazwę dokumentu.');
+                return;
+            }
+
+            db.files.unshift({
+                id: 'file-' + Date.now(),
+                title,
+                meta: meta.toUpperCase(),
+                url,
+                desc
+            });
+
+            document.getElementById('file-title').value = '';
+            document.getElementById('file-meta').value = '';
+            document.getElementById('file-url').value = '';
+            document.getElementById('file-desc').value = '';
+            toggleNewFileForm();
+
+            saveDatabase();
+            renderFiles();
+            showToast('Dodano dokument do repozytorium.');
+        }
+
+        function deleteFileItem(id) {
+            openConfirmModal('Usunąć ten plik z wykazu dokumentów?', () => {
+                db.files = db.files.filter(f => f.id !== id);
+                saveDatabase();
+                renderFiles();
+                showToast('Usunięto plik.');
+            });
+        }
+
+        function renderFiles() {
+            const grid = document.getElementById('files-grid');
+            grid.innerHTML = '';
+
+            if (db.files.length === 0) {
+                grid.innerHTML = `<div class="col-span-full border border-dashed border-crimson-border p-8 text-center font-mono text-xs text-crimson-muted">Brak zarejestrowanych plików w repozytorium.</div>`;
+                return;
+            }
+
+            db.files.forEach(file => {
+                const card = document.createElement('div');
+                card.className = 'bg-obsidian border border-crimson-border hover:border-crimson p-5 flex flex-col justify-between transition-colors';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between font-mono text-[10px] text-crimson-muted mb-2">
+                            <span>${escapeHTML(file.meta)}</span>
+                            <button onclick="deleteFileItem('${file.id}')" class="text-crimson-muted hover:text-crimson-bright uppercase cursor-pointer">[USUŃ]</button>
+                        </div>
+                        <h3 class="font-serif text-lg font-bold text-crimson-bright mb-2">${escapeHTML(file.title)}</h3>
+                        <p class="text-xs text-crimson/85 leading-relaxed mb-4">${escapeHTML(file.desc)}</p>
+                    </div>
+                    <div class="pt-3 border-t border-crimson-border/60 flex items-center justify-between font-mono text-xs">
+                        <span class="text-[10px] text-crimson-muted truncate max-w-[60%]">${escapeHTML(file.url)}</span>
+                        <a href="${escapeHTML(file.url)}" target="_blank" rel="noopener noreferrer" class="px-3 py-1 border border-crimson text-crimson-bright hover:bg-crimson hover:text-void transition-colors uppercase font-bold">
+                            Otwórz &rarr;
+                        </a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // ==========================================
+        // EXTERNAL LINKS LOGIC
+        // ==========================================
+        function toggleNewLinkForm() {
+            const form = document.getElementById('new-link-form');
+            form.classList.toggle('hidden');
+        }
+
+        function addLinkItem() {
+            const title = document.getElementById('link-title').value.trim();
+            const category = document.getElementById('link-category').value.trim() || 'ODNOŚNIK';
+            const url = document.getElementById('link-url').value.trim() || 'https://';
+            const desc = document.getElementById('link-desc').value.trim() || '';
+
+            if (!title) {
+                showToast('Podaj nazwę odnośnika.');
+                return;
+            }
+
+            db.links.unshift({
+                id: 'link-' + Date.now(),
+                title,
+                category: category.toUpperCase(),
+                url,
+                desc
+            });
+
+            document.getElementById('link-title').value = '';
+            document.getElementById('link-category').value = '';
+            document.getElementById('link-url').value = '';
+            document.getElementById('link-desc').value = '';
+            toggleNewLinkForm();
+
+            saveDatabase();
+            renderLinks();
+            showToast('Dodano nowy odnośnik.');
+        }
+
+        function deleteLinkItem(id) {
+            openConfirmModal('Usunąć ten odnośnik z katalogu?', () => {
+                db.links = db.links.filter(l => l.id !== id);
+                saveDatabase();
+                renderLinks();
+                showToast('Usunięto odnośnik.');
+            });
+        }
+
+        function renderLinks() {
+            const list = document.getElementById('links-list');
+            list.innerHTML = '';
+
+            if (db.links.length === 0) {
+                list.innerHTML = `<div class="border border-dashed border-crimson-border p-8 text-center font-mono text-xs text-crimson-muted">Brak odnośników w katalogu.</div>`;
+                return;
+            }
+
+            db.links.forEach(link => {
+                const row = document.createElement('div');
+                row.className = 'bg-obsidian border border-crimson-border hover:border-crimson p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors';
+                row.innerHTML = `
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 font-mono text-[10px]">
+                            <span class="px-1.5 py-0.5 border border-crimson-border bg-crimson-dark/25 text-crimson-bright">${escapeHTML(link.category)}</span>
+                            <span class="text-crimson-muted truncate max-w-xs sm:max-w-md">${escapeHTML(link.url)}</span>
+                        </div>
+                        <h3 class="font-serif text-lg font-bold text-crimson-bright">${escapeHTML(link.title)}</h3>
+                        ${link.desc ? `<p class="text-xs text-crimson/85">${escapeHTML(link.desc)}</p>` : ''}
+                    </div>
+                    <div class="flex items-center gap-2 font-mono text-xs shrink-0">
+                        <button onclick="deleteLinkItem('${link.id}')" class="px-2.5 py-2 border border-crimson-border text-crimson-muted hover:border-crimson hover:text-crimson-bright uppercase cursor-pointer">
+                            Usuń
+                        </button>
+                        <a href="${escapeHTML(link.url)}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 border border-crimson bg-crimson-dark/30 text-crimson-bright hover:bg-crimson hover:text-void transition-colors uppercase font-bold">
+                            Przejdź &nearr;
+                        </a>
+                    </div>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        // ==========================================
+        // EXPORT / IMPORT / RESET UTILITIES
+        // ==========================================
+        // Exports a standalone HTML file containing all user edits baked into the seed JSON
+        function exportHTML() {
+            const cloneDoc = document.documentElement.cloneNode(true);
+            const seedScript = cloneDoc.querySelector('#wiki-seed-data');
+            if (seedScript) {
+                seedScript.textContent = '\n' + JSON.stringify(db, null, 4) + '\n';
+            }
+            const htmlContent = '<!DOCTYPE html>\n' + cloneDoc.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'wiki-km55-archiwum.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('Wygenerowano i pobrano gotowy plik HTML z Twoimi wpisami.');
+        }
+
+        function exportJSON() {
+            const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'koikl55-backup.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('Wyeksportowano kopię zapasową JSON.');
+        }
+
+        function importJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported.articles && imported.files && imported.links) {
+                        db = imported;
+                        saveDatabase();
+                        currentArticleId = db.articles[0]?.id || null;
+                        renderWikiList();
+                        renderCurrentArticle();
+                        renderFiles();
+                        renderLinks();
+                        showToast('Pomyślnie wczytano bazę danych z pliku.');
+                    } else {
+                        showToast('Nieprawidłowa struktura pliku JSON.');
+                    }
+                } catch (err) {
+                    showToast('Błąd podczas odczytu pliku JSON.');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function resetToDefaults() {
+            openConfirmModal('Czy na pewno chcesz przywrócić stan początkowy? Wszystkie Twoje niezapisane zmiany zostaną nadpisane.', () => {
+                localStorage.removeItem(STORAGE_KEY);
+                const seedEl = document.getElementById('wiki-seed-data');
+                db = JSON.parse(seedEl.textContent);
+                currentArticleId = db.articles[0].id;
+                updateCounters();
+                renderWikiList();
+                renderCurrentArticle();
+                renderFiles();
+                renderLinks();
+                showToast('Przywrócono domyślne wpisy Komitetu.');
+            });
+        }
+
+        // ==========================================
+        // UI HELPERS (Toast & Custom Confirm Modal)
+        // ==========================================
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'bg-obsidian border border-crimson px-4 py-3 shadow-xl font-mono text-xs text-crimson-bright flex items-center gap-3 pointer-events-auto';
+            toast.innerHTML = `
+                <span class="w-2 h-2 bg-crimson inline-block shrink-0"></span>
+                <span>${escapeHTML(message)}</span>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3200);
+        }
+
+        let confirmCallback = null;
+        function openConfirmModal(message, onAccept) {
+            document.getElementById('confirm-message').textContent = message;
+            confirmCallback = onAccept;
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        document.getElementById('confirm-cancel').onclick = () => {
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            confirmCallback = null;
+        };
+
+        document.getElementById('confirm-accept').onclick = () => {
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            if (confirmCallback) confirmCallback();
+            confirmCallback = null;
+        };
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+    </script>
+
+</body></html>
